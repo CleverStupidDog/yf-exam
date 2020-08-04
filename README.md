@@ -25,17 +25,18 @@
 其它等等。。。
 
 ### 快速运行
-1、安装JAVA1.8以上版本    
-2、将jar和配置文件放在同一个目录下面    
-3、安装MySQL和Redis，并修改application.yml    
-4、运行：java -jar exam-api.jar --Dspring.config.location=application.yml    
+
+1、安装JAVA1.8以上版本
+2、安装MySQL和Redis，并修改application.yml
+3、导入: exam-api/docs/云帆考试系统-数据库.sql到MySQL数据库
+4、运行：java -jar exam-api.jar --Dspring.config.location=application.yml   
+5、快速运行资源目录：exam-api/docs/快速运行    
 
 
 
-
-#### 演示
+### 演示
  
-完整版演示地址：http://exam.jeegen.com    
+完整版演示地址：https://exam.jeegen.com    
 QQ号：18365918   
 QQ交流群：865330294     
 微信：a18365918    
