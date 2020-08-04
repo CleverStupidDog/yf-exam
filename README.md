@@ -27,9 +27,9 @@
 
 
 #### 演示
-
-项目地址：https://gitee.com/davz/bool-exam    
-演示地址：http://exam.jeegen.com    
-QQ号：18365918        
+ 
+完整版演示地址：http://exam.jeegen.com    
+QQ号：18365918   
+QQ交流群：865330294     
 微信：a18365918    
 邮箱：18365918@qq.com    
