@@ -24,6 +24,12 @@
 在线学习、训练过程可以展示题目的详细解析等；
 其它等等。。。
 
+
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0812/140134_bd69c408_2189748.png "1.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0812/140145_2740a0f3_2189748.png "2.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0812/140153_17ff15eb_2189748.png "3.png")
+![输入图片说明](https://images.gitee.com/uploads/images/2020/0812/140204_47ff8a05_2189748.png "4.png")
+
 ### 快速运行
 快速运行资源目录：exam-api/docs/快速运行      
 1、安装JAVA1.8以上版本    
