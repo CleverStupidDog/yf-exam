@@ -1,38 +1,21 @@
-import request from '@/utils/request'
+import { post } from '@/utils/request'
 
 export function getRoutes() {
-  return request({
-    url: '/routes',
-    method: 'get'
-  })
+  return post('/routes', {})
 }
 
 export function getRoles() {
-  return request({
-    url: '/roles',
-    method: 'get'
-  })
+  return post('/roles', {})
 }
 
 export function addRole(data) {
-  return request({
-    url: '/role',
-    method: 'post',
-    data
-  })
+  return post('/role', data)
 }
 
 export function updateRole(id, data) {
-  return request({
-    url: `/role/${id}`,
-    method: 'put',
-    data
-  })
+  return post(`/role/${id}`, data)
 }
 
 export function deleteRole(id) {
-  return request({
-    url: `/role/${id}`,
-    method: 'delete'
-  })
+  return post(`/role/${id}`, {})
 }

@@ -1,9 +1,6 @@
-import request from '@/utils/request'
+import { post } from '@/utils/request'
 
 export function fetchList() {
-  return request({
-    url: '/sys/role/list',
-    method: 'post'
-  })
+  return post('/sys/role/list', {})
 }
 

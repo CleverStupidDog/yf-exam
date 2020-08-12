@@ -1,17 +1,11 @@
-import request from '@/utils/request'
+import { post } from '@/utils/request'
 
 /**
  * 题库详情
  * @param data
  */
 export function fetchDetail(id) {
-  const data = { id: id }
-
-  return request({
-    url: '/exam/exam/detail',
-    method: 'post',
-    data
-  })
+  return post('/exam/exam/detail',{ id: id })
 }
 
 /**
@@ -19,9 +13,5 @@ export function fetchDetail(id) {
  * @param data
  */
 export function saveData(data) {
-  return request({
-    url: '/exam/exam/save',
-    method: 'post',
-    data
-  })
+  return post('/exam/exam/save', data)
 }

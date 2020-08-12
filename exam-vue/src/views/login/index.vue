@@ -1,8 +1,5 @@
 <template>
 
-
-
-
   <div class="login-container">
 
     <div class="nav-line">

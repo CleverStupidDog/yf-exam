@@ -1,15 +1,11 @@
-import request from '@/utils/request'
+import { post } from '@/utils/request'
 
 /**
  * 创建试卷
  * @param data
  */
 export function createPaper(data) {
-  return request({
-    url: '/paper/paper/create-paper',
-    method: 'post',
-    data
-  })
+  return post('/paper/paper/create-paper', data)
 }
 
 /**
@@ -17,24 +13,15 @@ export function createPaper(data) {
  * @param data
  */
 export function paperDetail(data) {
-  return request({
-    url: '/paper/paper/paper-detail',
-    method: 'post',
-    data
-  })
+  return post('/paper/paper/paper-detail', data)
 }
-
 
 /**
  * 题目详情
  * @param data
  */
 export function quDetail(data) {
-  return request({
-    url: '/paper/paper/qu-detail',
-    method: 'post',
-    data
-  })
+  return post('/paper/paper/qu-detail', data)
 }
 
 /**
@@ -42,11 +29,7 @@ export function quDetail(data) {
  * @param data
  */
 export function fillAnswer(data) {
-  return request({
-    url: '/paper/paper/fill-answer',
-    method: 'post',
-    data
-  })
+  return post('/paper/paper/fill-answer', data)
 }
 
 /**
@@ -54,35 +37,21 @@ export function fillAnswer(data) {
  * @param data
  */
 export function handExam(data) {
-  return request({
-    url: '/paper/paper/hand-exam',
-    method: 'post',
-    data
-  })
+  return post('/paper/paper/hand-exam', data)
 }
-
 
 /**
  * 试卷详情
  * @param data
  */
 export function paperResult(data) {
-  return request({
-    url: '/paper/paper/paper-result',
-    method: 'post',
-    data
-  })
+  return post('/paper/paper/paper-result', data)
 }
-
 
 /**
  * 错题训练
  * @param data
  */
 export function training(data) {
-  return request({
-    url: '/paper/paper/training',
-    method: 'post',
-    data
-  })
+  return post('/paper/paper/training', data)
 }

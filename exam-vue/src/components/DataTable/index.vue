@@ -5,9 +5,11 @@
 
       <slot name="filter-content" />
 
-      <el-button v-if="options.addRoute" class="filter-item" style="float: right" type="primary" icon="el-icon-plus" @click="handleAdd">
-        添加
-      </el-button>
+      <el-row>
+        <el-col>
+          <el-button v-if="options.addRoute" type="primary" icon="el-icon-plus" @click="handleAdd">添加</el-button>
+        </el-col>
+      </el-row>
 
     </div>
 

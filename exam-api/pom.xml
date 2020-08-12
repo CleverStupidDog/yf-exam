@@ -25,6 +25,7 @@
         <lombok.version>1.18.4</lombok.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <alicloud.version>2.1.1.RELEASE</alicloud.version>
+        <poi.version>3.9</poi.version>
     </properties>
 
 
@@ -85,25 +86,6 @@
             <version>${mysql.driver.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.aliyun.oss</groupId>
-            <artifactId>aliyun-sdk-oss</artifactId>
-            <version>${oss.version}</version>
-        </dependency>
-
-        <!-- 阿里云邮件推送 -->
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-core</artifactId>
-            <version>${aliyun.sdk.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.aliyun</groupId>
-            <artifactId>aliyun-java-sdk-dm</artifactId>
-            <version>3.1.0</version>
-        </dependency>
-
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -136,6 +118,31 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.8</version>
+        </dependency>
+
+
+        <!-- poi office -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+
 
     </dependencies>
 

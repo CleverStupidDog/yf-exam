@@ -1,15 +1,11 @@
-import request from '@/utils/request'
+import { post } from '@/utils/request'
 
 /**
  * 题库详情
  * @param data
  */
 export function fetchDetail(data) {
-  return request({
-    url: '/qu/repo/detail',
-    method: 'post',
-    data
-  })
+  return post('/qu/repo/detail', data)
 }
 
 /**
@@ -17,11 +13,7 @@ export function fetchDetail(data) {
  * @param data
  */
 export function saveData(data) {
-  return request({
-    url: '/qu/repo/save',
-    method: 'post',
-    data
-  })
+  return post('/qu/repo/save', data)
 }
 
 /**
@@ -29,11 +21,7 @@ export function saveData(data) {
  * @param data
  */
 export function fetchList(data) {
-  return request({
-    url: '/qu/repo/list',
-    method: 'post',
-    data
-  })
+  return post('/qu/repo/list', data)
 }
 
 /**
@@ -41,9 +29,5 @@ export function fetchList(data) {
  * @param data
  */
 export function batchAction(data) {
-  return request({
-    url: '/qu/repo/batch-action',
-    method: 'post',
-    data
-  })
+  return post('/qu/repo/batch-action', data)
 }

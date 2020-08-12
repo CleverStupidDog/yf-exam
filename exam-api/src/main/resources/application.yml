@@ -18,3 +18,8 @@ spring:
     port: 6379
     password:
     timeout: 5000
+
+# 日志级别
+logging:
+  level:
+    root: debug

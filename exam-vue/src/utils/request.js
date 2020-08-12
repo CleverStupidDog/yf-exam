@@ -2,50 +2,46 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
+import querystring from 'querystring'
 
-// create an axios instance
-const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
-  // withCredentials: true, // send cookies when cross-domain requests
-  timeout: 60000 // request timeout
+// 请求实例
+const instance = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API,
+  timeout: 60000
 })
 
-// request interceptor
-service.interceptors.request.use(
-  config => {
-    // do something before request is sent
+/**
+ * 封装post请求 FormData方式
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+const formInstance = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API,
+  headers: { 'content-type': 'multipart/form-data' },
+  timeout: 120000
+})
 
+// 请求前置过滤器
+instance.interceptors.request.use(
+  config => {
     if (store.getters.token) {
-      // let each request carry token
-      // ['X-Token'] is a custom headers key
-      // please modify it according to the actual situation
       config.headers['token'] = getToken()
     }
     return config
   },
   error => {
-    // do something with request error
-    console.log(error) // for debug
+    console.log(error)
     return Promise.reject(error)
   }
 )
 
-// response interceptor
-service.interceptors.response.use(
-  /**
-   * If you want to get http information such as headers or status
-   * Please return  response => response
-  */
-
-  /**
-   * Determine the request status by custom code
-   * Here is just an example
-   * You can also judge the status by HTTP Status Code
-   */
+// 响应数据拦截并做通用处理
+instance.interceptors.response.use(
   response => {
     const res = response.data
 
-    // if the custom code is not 20000, it is judged as an error.
+    // 0为正确响应码
     if (res.code !== 0) {
       Message({
         message: res.msg || 'Error',
@@ -53,12 +49,12 @@ service.interceptors.response.use(
         duration: 5 * 1000
       })
 
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      // 登录超时响应码
+      if (res.code === 10010002) {
         // to re-login
-        MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
-          confirmButtonText: 'Re-Login',
-          cancelButtonText: 'Cancel',
+        MessageBox.confirm('登录超时，请重新登录！', '登录提示', {
+          confirmButtonText: '重新登录',
+          cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           store.dispatch('user/resetToken').then(() => {
@@ -72,7 +68,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    console.log('err' + error)
     Message({
       message: error.message,
       type: 'error',
@@ -82,4 +78,70 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+
+/**
+ * 下载
+ * @param url
+ * @param data
+ */
+export function download(url, data) {
+  // 构造完整地址
+  const fullUrl = process.env.VUE_APP_BASE_API + url + '?' + querystring.stringify(data)
+  // 创建链接并模拟点击
+  const a = document.createElement('a')
+  a.href = fullUrl
+  a.click()
+}
+
+/**
+ * 封装get方法
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function get(url, params = {}) {
+  return new Promise((resolve, reject) => {
+    instance.get(url, {
+      params: params
+    }).then(response => {
+      resolve(response)
+    })
+      .catch(err => {
+        reject(err)
+      })
+  })
+}
+
+/**
+ * 封装post请求
+ * @param url
+ * @param data
+ * @returns {Promise}
+ */
+export function post(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    instance.post(url, data)
+      .then(response => {
+        resolve(response)
+      }, err => {
+        reject(err)
+      })
+  })
+}
+
+/**
+ * 使用表单的方式POST数据
+ * @param url
+ * @param data
+ * @returns {Promise<any>}
+ */
+export function postForm(url, data = {}) {
+  return new Promise((resolve, reject) => {
+    formInstance.post(url, data)
+      .then(response => {
+        resolve(response)
+      }, err => {
+        reject(err)
+      })
+  })
+}

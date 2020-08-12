@@ -10,18 +10,32 @@
     >
       <template slot="filter-content">
 
-        <el-select v-model="listQuery.params.quType" class="filter-item" clearable>
-          <el-option
-            v-for="item in quTypes"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
 
-        <repo-select v-model="listQuery.params.repoId" :multi="false" />
 
-        <el-input v-model="listQuery.params.content" placeholder="题目内容" style="width: 200px;" class="filter-item" />
+
+        <el-row>
+          <el-col :span="24">
+
+            <el-select v-model="listQuery.params.quType" class="filter-item" clearable>
+              <el-option
+                v-for="item in quTypes"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+
+            <repo-select v-model="listQuery.params.repoIds" :multi="true" />
+
+            <el-input v-model="listQuery.params.content" placeholder="题目内容" style="width: 200px;" class="filter-item" />
+
+            <el-button-group class="filter-item" style="float:  right">
+              <el-button size="mini" icon="el-icon-upload2" @click="showImport">导入</el-button>
+              <el-button size="mini" icon="el-icon-download" @click="exportExcel">导出</el-button>
+            </el-button-group>
+
+          </el-col>
+        </el-row>
 
       </template>
 
@@ -79,6 +93,20 @@
 
     </el-dialog>
 
+    <el-dialog
+      title="导入试题"
+      :visible.sync="importVisible"
+      width="30%"
+    >
+
+      <el-row>
+        <el-button type="primary" @click="chooseFile">上传导入</el-button>
+        <el-button type="warning" @click="downloadTemplate">下载导入模板</el-button>
+        <input ref="upFile" class="file" name="file" type="file" style="display: none" @change="doImport">
+      </el-row>
+
+    </el-dialog>
+
   </div>
 
 </template>
@@ -87,6 +115,7 @@
 import DataTable from '@/components/DataTable'
 import RepoSelect from '@/components/RepoSelect'
 import { batchAction } from '@/api/qu/repo'
+import { exportExcel, importExcel, importTemplate } from '@/api/qu/qu'
 
 export default {
   name: 'QuList',
@@ -96,6 +125,7 @@ export default {
 
       dialogTitle: '加入题库',
       dialogVisible: false,
+      importVisible: false,
       dialogRepos: [],
       dialogQuIds: [],
       dialogFlag: false,
@@ -105,7 +135,8 @@ export default {
         size: 10,
         params: {
           content: '',
-          quType: ''
+          quType: '',
+          repoIds: []
         }
       },
 
@@ -125,7 +156,7 @@ export default {
         {
           value: 4,
           label: '简答题'
-        },
+        }
       ],
 
       options: {
@@ -196,6 +227,45 @@ export default {
 
         this.dialogVisible = false
         this.$refs.pagingTable.getList()
+      })
+    },
+
+    exportExcel() {
+      // 导出当前查询的数据
+      exportExcel(this.listQuery.params)
+    },
+
+    downloadTemplate(){
+      importTemplate();
+    },
+
+    showImport() {
+      this.importVisible = true
+    },
+
+    // 只是为了美化一下导入按钮
+    chooseFile: function() {
+      this.$refs.upFile.dispatchEvent(new MouseEvent('click'))
+    },
+
+    doImport(e) {
+      const file = e.target.files[0]
+      const param = new FormData()
+      param.append('file', file)
+      importExcel(param).then(res => {
+        if (res.data.code !== 0) {
+          this.$alert(res.data.msg, '导入信息', {
+            dangerouslyUseHTMLString: true
+          })
+        } else {
+          this.$message({
+            message: '数据导入成功！',
+            type: 'success'
+          })
+
+          this.importVisible = false
+          this.$refs.pagingTable.getList()
+        }
       })
     }
   }

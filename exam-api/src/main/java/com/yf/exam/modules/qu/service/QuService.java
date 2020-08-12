@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yf.exam.core.api.dto.PagingReqDTO;
 import com.yf.exam.modules.qu.dto.QuDTO;
+import com.yf.exam.modules.qu.dto.export.QuExportDTO;
 import com.yf.exam.modules.qu.dto.ext.QuDetailDTO;
+import com.yf.exam.modules.qu.dto.request.QuQueryReqDTO;
 import com.yf.exam.modules.qu.entity.Qu;
 
 import java.util.List;
@@ -24,7 +26,7 @@ public interface QuService extends IService<Qu> {
     * @param reqDTO
     * @return
     */
-    IPage<QuDTO> paging(PagingReqDTO<QuDTO> reqDTO);
+    IPage<QuDTO> paging(PagingReqDTO<QuQueryReqDTO> reqDTO);
 
     /**
      * 随机抽取题库的数据
@@ -51,4 +53,18 @@ public interface QuService extends IService<Qu> {
      * @param reqDTO
      */
     void save(QuDetailDTO reqDTO);
+
+    /**
+     * 查找导出列表
+     * @param query
+     * @return
+     */
+    List<QuExportDTO> listForExport(QuQueryReqDTO query);
+
+    /**
+     * 导入Excel
+     * @param dtoList
+     * @return
+     */
+    int importExcel(List<QuExportDTO> dtoList);
 }

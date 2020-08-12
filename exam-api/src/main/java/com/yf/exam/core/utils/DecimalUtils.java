@@ -264,8 +264,4 @@ public class DecimalUtils {
     public static BigDecimal legal(BigDecimal value) {
         return value == null ? ZERO : value;
     }
-
-    public static void main(String[] args) {
-        System.out.println(divide(new BigDecimal(10), 3));
-    }
 }
