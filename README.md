@@ -34,6 +34,13 @@ SpringBoot / Redis / Shiro / Vue / MySQL
 题库组卷：指定题库、分数、数量；题目、选项随机排序、杜绝作弊
 
 
+### 快速运行
+1、下载快速运行jar包：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)
+2、运行命令：java -jar exam-api.jar
+3、本地访问：http://localhost:8101
+
+
+
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1019/183158_72cefe61_2189748.jpeg "111.jpg")
 ![主界面](https://images.gitee.com/uploads/images/2020/1019/182239_4a87af30_2189748.jpeg "222.jpg")
