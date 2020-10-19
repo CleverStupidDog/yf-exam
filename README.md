@@ -38,7 +38,7 @@ Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-communit
 
 # 快速运行
 1、导入：docs/init_db.sql 到您安装好的MySQL    
-2、修改：docs/application.yml 配置信息（您安装的MySQL/Redis配置）    
+2、修改：docs/application.yml 配置信息（您安装的MySQL/Redis配置，注意：不要破坏了yml的文件结构，建议使用Notepad++或者EditPlus等功能较强的编辑器）    
 3、下载快速运行jar包到docs/目录中：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)    
 4、运行命令：java -jar exam-api.jar --Dspring.config.location=application.yml   
 5、本地访问：http://localhost:8101    
