@@ -38,9 +38,10 @@ Mysql5.7+  [Windows下载](https://cdn.yfhl.net/java-win/mysql-installer-communi
 
 
 ## 快速运行
-1、下载快速运行jar包：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)    
-2、运行命令：java -jar exam-api.jar    
-3、本地访问：http://localhost:8101    
+1、导入：docs/init_db.sql 到数据库
+2、下载快速运行jar包：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)    
+3、运行命令：java -jar exam-api.jar    
+4、本地访问：http://localhost:8101    
 
 
 
@@ -58,6 +59,8 @@ Mysql5.7+  [Windows下载](https://cdn.yfhl.net/java-win/mysql-installer-communi
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1019/183047_a31619cd_2189748.jpeg "1212.jpg")
 ### 演示
  
-完整版演示地址：https://exam.yfhl.net    
+
+# 商业版本
+演示地址：https://exam.yfhl.net    
 QQ交流群：865330294      
 邮箱：18365918@qq.com    
