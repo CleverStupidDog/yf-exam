@@ -45,10 +45,11 @@ Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-communit
 
 
 # 其它支持
-开源版本：待开放    
+开源版本：https://lite.yfhl.net  
 商业版本：https://exam.yfhl.net    
 QQ交流群：865330294      
 邮箱：18365918@qq.com   
+
 
 
 
