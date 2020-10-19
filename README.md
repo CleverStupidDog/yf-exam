@@ -11,7 +11,7 @@ SpringBoot / Redis / Shiro / Vue / MySQL
 
 ![登录页面](https://images.gitee.com/uploads/images/2020/1019/182017_536e61c4_2189748.jpeg "Snipaste_2020-10-19_18-19-35.jpg")
 
-
+![主界面](https://images.gitee.com/uploads/images/2020/1019/182239_4a87af30_2189748.jpeg "222.jpg")
 
 
 ### 演示
