@@ -38,7 +38,7 @@ Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-communit
 
 
 # 快速运行
-1、导入：docs/init_db.sql 到数据库
+1、导入：docs/init_db.sql 到数据库    
 2、下载快速运行jar包：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)    
 3、运行命令：java -jar exam-api.jar    
 4、本地访问：http://localhost:8101    
