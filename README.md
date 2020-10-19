@@ -35,9 +35,9 @@ SpringBoot / Redis / Shiro / Vue / MySQL
 
 
 ### 快速运行
-1、下载快速运行jar包：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)
-2、运行命令：java -jar exam-api.jar
-3、本地访问：http://localhost:8101
+1、下载快速运行jar包：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)    
+2、运行命令：java -jar exam-api.jar    
+3、本地访问：http://localhost:8101    
 
 
 
