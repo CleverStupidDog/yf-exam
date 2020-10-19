@@ -7,6 +7,12 @@
 ### 技术栈
 SpringBoot / Redis / Shiro / Vue / MySQL
 
+### 产品功能
+
+#### 定员考试：考试权限定义
+完全公开：任何人员都可以参与考试。
+指定部门：只有选中部门的人员才可以看到考试。
+
 
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1019/183158_72cefe61_2189748.jpeg "111.jpg")
