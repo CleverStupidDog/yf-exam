@@ -23,17 +23,18 @@ public interface QuMapper extends BaseMapper<Qu> {
 
 
 
-
     /**
      * 随机抽取题库的数据
      * @param repoId
      * @param quType
+     * @param level
      * @param excludes 要排除的ID列表
      * @param size
      * @return
      */
     List<Qu> listByRandom(@Param("repoId") String repoId,
                           @Param("quType") Integer quType,
+                          @Param("level") Integer level,
                           @Param("excludes") List<String> excludes,
                           @Param("size") Integer size);
 
@@ -51,5 +52,6 @@ public interface QuMapper extends BaseMapper<Qu> {
      * @return
      */
     IPage<QuDTO> paging(Page page, @Param("query") QuQueryReqDTO query);
+
 
 }

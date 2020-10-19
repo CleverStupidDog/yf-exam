@@ -60,6 +60,7 @@ export default {
   data() {
     return {
 
+      examId: '',
       quId: '',
       tags: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N'],
       analysisShow: false,
@@ -73,6 +74,8 @@ export default {
     }
   },
   created() {
+    this.examId = this.$route.params.examId
+
     this.fetchNextQu()
   },
   methods: {
@@ -110,7 +113,7 @@ export default {
 
     fetchNextQu() {
       // 查找下一个
-      nextQu(this.quId).then(response => {
+      nextQu(this.examId, this.quId).then(response => {
         this.fetchQuDetail(response.data.id)
       })
     },
@@ -126,7 +129,6 @@ export default {
       } else {
         // 直接判断正确性
         if (this.rightValues.join(',') === this.answerValues.join(',')) {
-
           this.$message({
             message: '回答正确，你好棒哦！',
             type: 'success'

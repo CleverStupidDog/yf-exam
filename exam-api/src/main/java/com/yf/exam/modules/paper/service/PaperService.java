@@ -3,13 +3,15 @@ package com.yf.exam.modules.paper.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yf.exam.core.api.dto.PagingReqDTO;
-import com.yf.exam.modules.paper.dto.PaperDTO;
 import com.yf.exam.modules.paper.dto.ext.PaperQuDetailDTO;
 import com.yf.exam.modules.paper.dto.request.PaperAnswerDTO;
+import com.yf.exam.modules.paper.dto.request.PaperListReqDTO;
 import com.yf.exam.modules.paper.dto.response.ExamDetailRespDTO;
 import com.yf.exam.modules.paper.dto.response.ExamResultRespDTO;
-import com.yf.exam.modules.paper.dto.response.PaperPagingRespDTO;
+import com.yf.exam.modules.paper.dto.response.PaperListRespDTO;
 import com.yf.exam.modules.paper.entity.Paper;
+
+import java.util.List;
 
 /**
 * <p>
@@ -66,9 +68,30 @@ public interface PaperService extends IService<Paper> {
     void handExam(String paperId);
 
     /**
-    * 分页查询数据
-    * @param reqDTO
-    * @return
-    */
-    IPage<PaperPagingRespDTO> paging(PagingReqDTO<PaperDTO> reqDTO);
+     * 阅卷完成
+     * @param reqDTO
+     */
+    void reviewPaper(ExamResultRespDTO reqDTO);
+
+
+    /**
+     * 试卷列表响应类
+     * @param reqDTO
+     * @return
+     */
+    IPage<PaperListRespDTO> paging(PagingReqDTO<PaperListReqDTO> reqDTO);
+
+    /**
+     * 查找到期未交卷的考试
+     * @return
+     */
+    List<Paper> findDeadPapers();
+
+    /**
+     * 取消考试
+     * @param paperId
+     */
+    void breakExam(String paperId);
+
+
 }

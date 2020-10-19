@@ -16,7 +16,7 @@ public class PaperCreateReqDTO extends BaseDTO {
     @JsonIgnore
     private String userId;
 
-    @ApiModelProperty(value = "课程ID", required=true)
+    @ApiModelProperty(value = "考试ID", required=true)
     private String examId;
 
 }

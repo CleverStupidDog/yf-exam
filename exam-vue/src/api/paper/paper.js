@@ -1,33 +1,9 @@
 import { post } from '@/utils/request'
 
 /**
- * 题库详情
+ * 试卷列表
  * @param data
  */
-export function fetchDetail(id) {
-  return post('/paper/rule/detail', { id: id })
-}
-
-/**
- * 保存题库
- * @param data
- */
-export function saveData(data) {
-  return post('/paper/rule/save', data)
-}
-
-/**
- * 保存题库
- * @param data
- */
-export function fetchList() {
-  return post('/paper/rule/list', {})
-}
-
-/**
- * 保存题库
- * @param data
- */
-export function reviewPaper(data) {
-  return post('/paper/paper/review-paper', data)
+export function listPaper(userId, examId) {
+  return post('/exam/api/paper/paper/paging', { current: 1, size: 5, params: { userId: userId, examId: examId }})
 }

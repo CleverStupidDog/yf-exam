@@ -22,22 +22,24 @@ import java.util.List;
 public interface QuService extends IService<Qu> {
 
     /**
-    * 分页查询数据
-    * @param reqDTO
-    * @return
-    */
+     * 分页查询数据
+     * @param reqDTO
+     * @return
+     */
     IPage<QuDTO> paging(PagingReqDTO<QuQueryReqDTO> reqDTO);
 
     /**
      * 随机抽取题库的数据
      * @param repoId
      * @param quType
+     * @param level  难度等级
      * @param excludes 要排除的ID列表
      * @param size
      * @return
      */
     List<Qu> listByRandom(String repoId,
                           Integer quType,
+                          Integer level,
                           List<String> excludes,
                           Integer size);
 
@@ -66,5 +68,5 @@ public interface QuService extends IService<Qu> {
      * @param dtoList
      * @return
      */
-    int importExcel(List<QuExportDTO> dtoList);
+    int importExcel(List<QuDetailDTO> dtoList);
 }

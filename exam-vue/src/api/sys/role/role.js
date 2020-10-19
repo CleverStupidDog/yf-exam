@@ -1,6 +1,6 @@
 import { post } from '@/utils/request'
 
 export function fetchList() {
-  return post('/sys/role/list', {})
+  return post('/exam/api/sys/role/list', {})
 }
 

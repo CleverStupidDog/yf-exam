@@ -2,18 +2,18 @@ package com.yf.exam.modules.sys.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.yf.exam.core.annon.LogInject;
+import com.yf.exam.core.api.ApiRest;
+import com.yf.exam.core.api.controller.BaseController;
+import com.yf.exam.core.api.dto.BaseIdsReqDTO;
+import com.yf.exam.core.api.dto.BaseStateReqDTO;
+import com.yf.exam.core.api.dto.PagingReqDTO;
 import com.yf.exam.modules.sys.user.dto.SysUserDTO;
 import com.yf.exam.modules.sys.user.dto.request.SysUserLoginReqDTO;
 import com.yf.exam.modules.sys.user.dto.request.SysUserSaveReqDTO;
 import com.yf.exam.modules.sys.user.dto.response.SysUserLoginDTO;
 import com.yf.exam.modules.sys.user.entity.SysUser;
 import com.yf.exam.modules.sys.user.service.SysUserService;
-import com.yf.exam.core.annon.AdminInject;
-import com.yf.exam.core.annon.LogInject;
-import com.yf.exam.core.api.ApiRest;
-import com.yf.exam.core.api.controller.BaseController;
-import com.yf.exam.core.api.dto.BaseStateReqDTO;
-import com.yf.exam.core.api.dto.PagingReqDTO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +73,6 @@ public class SysUserController extends BaseController {
      * 获取会话
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "获取会话")
     @RequestMapping(value = "/info", method = {RequestMethod.POST})
     public ApiRest info(@RequestParam("token") String token) {
@@ -85,7 +84,6 @@ public class SysUserController extends BaseController {
      * 修改用户资料
      * @return
      */
-    @AdminInject(ids = {"id"})
     @ApiOperation(value = "修改用户资料")
     @RequestMapping(value = "/update", method = {RequestMethod.POST})
     public ApiRest update(@RequestBody SysUserDTO reqDTO) {
@@ -98,7 +96,6 @@ public class SysUserController extends BaseController {
      * 保存或修改系统用户
      * @return
      */
-    @AdminInject(ids = {}, names = {})
     @ApiOperation(value = "保存或修改")
     @RequestMapping(value = "/save", method = {RequestMethod.POST})
     public ApiRest save(@RequestBody SysUserSaveReqDTO reqDTO) {
@@ -106,12 +103,25 @@ public class SysUserController extends BaseController {
         return success();
     }
 
+
+    /**
+     * 批量删除
+     * @param reqDTO
+     * @return
+     */
+    @ApiOperation(value = "批量删除")
+    @RequestMapping(value = "/delete", method = { RequestMethod.POST})
+    public ApiRest edit(@RequestBody BaseIdsReqDTO reqDTO) {
+        //根据ID删除
+        baseService.removeByIds(reqDTO.getIds());
+        return super.success();
+    }
+
     /**
      * 分页查找
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "分页查找")
     @RequestMapping(value = "/paging", method = { RequestMethod.POST})
     public ApiRest<IPage<SysUserDTO>> paging(@RequestBody PagingReqDTO<SysUserDTO> reqDTO) {
@@ -126,7 +136,6 @@ public class SysUserController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "修改状态")
     @RequestMapping(value = "/state", method = { RequestMethod.POST})
     public ApiRest state(@RequestBody BaseStateReqDTO reqDTO) {
@@ -154,6 +163,17 @@ public class SysUserController extends BaseController {
     @RequestMapping(value = "/reg", method = {RequestMethod.POST})
     public ApiRest<SysUserLoginDTO> reg(@RequestBody SysUserDTO reqDTO) {
         SysUserLoginDTO respDTO = baseService.reg(reqDTO);
+        return success(respDTO);
+    }
+
+    /**
+     * 快速注册，如果手机号存在则登录，不存在就注册
+     * @return
+     */
+    @ApiOperation(value = "快速注册")
+    @RequestMapping(value = "/quick-reg", method = {RequestMethod.POST})
+    public ApiRest<SysUserLoginDTO> quick(@RequestBody SysUserDTO reqDTO) {
+        SysUserLoginDTO respDTO = baseService.quickReg(reqDTO);
         return success(respDTO);
     }
 }

@@ -39,12 +39,16 @@
         align="center"
       />
 
+      <el-table-column
+        label="判断题数量"
+        prop="judgeCount"
+        align="center"
+      />
 
       <el-table-column
         label="创建时间"
         align="center"
         prop="createTime"
-        width="180px"
       />
 
     </template>
@@ -83,9 +87,9 @@ export default {
           }
         ],
         // 列表请求URL
-        listUrl: '/qu/repo/paging',
+        listUrl: '/exam/api/repo/paging',
         // 删除请求URL
-        deleteUrl: '/qu/repo/delete',
+        deleteUrl: '/exam/api/repo/delete',
         // 启用禁用
         stateUrl: '/qu/repo/state',
         // 添加数据路由

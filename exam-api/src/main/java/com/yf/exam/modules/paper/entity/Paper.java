@@ -26,7 +26,7 @@ public class Paper extends Model<Paper> {
     /**
      * 试卷ID
      */
-    @TableId(value = "id", type = IdType.ID_WORKER_STR)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
     /**
@@ -34,6 +34,12 @@ public class Paper extends Model<Paper> {
      */
     @TableField("user_id")
     private String userId;
+
+    /**
+     * 部门ID
+     */
+    @TableField("depart_id")
+    private String departId;
 
     /**
      * 规则ID
@@ -110,4 +116,10 @@ public class Paper extends Model<Paper> {
      */
     @TableField("update_time")
     private Date updateTime;
+
+    /**
+     * 截止时间
+     */
+    @TableField("limit_time")
+    private Date limitTime;
 }

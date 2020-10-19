@@ -26,7 +26,7 @@ public class SysUser extends Model<SysUser> {
     /**
      * ID
      */
-    @TableId(value = "id", type = IdType.ID_WORKER_STR)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
     /**
@@ -34,11 +34,6 @@ public class SysUser extends Model<SysUser> {
      */
     @TableField("user_name")
     private String userName;
-
-    /**
-     * 头像
-     */
-    private String avatar;
 
     /**
      * 真实姓名
@@ -61,6 +56,12 @@ public class SysUser extends Model<SysUser> {
      */
     @TableField("role_ids")
     private String roleIds;
+
+    /**
+     * 部门ID
+     */
+    @TableField("depart_id")
+    private String departId;
 
     /**
      * 创建时间

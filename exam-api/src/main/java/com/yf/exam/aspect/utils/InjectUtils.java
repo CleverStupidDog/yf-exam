@@ -79,14 +79,21 @@ public class InjectUtils {
      * @param response
      * @throws IOException
      */
-    public void restError(HttpServletResponse response) throws IOException {
+    public static void restError(HttpServletResponse response) {
 
-        //固定错误
-        ApiRest apiRest = new ApiRest(ApiError.ERROR_10010002);
-        response.setCharacterEncoding("UTF-8");
-        response.setContentType("application/json");
-        response.getWriter().write(JSON.toJSONString(apiRest));
-        response.getWriter().close();
+        try {
+
+            //固定错误
+            ApiRest apiRest = new ApiRest(ApiError.ERROR_10010002);
+            response.setCharacterEncoding("UTF-8");
+            response.setContentType("application/json");
+            response.getWriter().write(JSON.toJSONString(apiRest));
+            response.getWriter().close();
+
+        }catch (IOException e){
+
+        }
+
     }
 
 }

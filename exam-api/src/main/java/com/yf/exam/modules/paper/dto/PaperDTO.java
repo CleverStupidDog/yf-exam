@@ -1,5 +1,6 @@
 package com.yf.exam.modules.paper.dto;
 
+import com.yf.exam.core.annon.Dict;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -25,8 +26,13 @@ public class PaperDTO implements Serializable {
     @ApiModelProperty(value = "试卷ID", required=true)
     private String id;
 
+    @Dict(dictTable = "sys_user", dicText = "real_name", dicCode = "id")
     @ApiModelProperty(value = "用户ID", required=true)
     private String userId;
+
+    @Dict(dictTable = "sys_depart", dicText = "dept_name", dicCode = "id")
+    @ApiModelProperty(value = "部门ID", required=true)
+    private String departId;
 
     @ApiModelProperty(value = "规则ID", required=true)
     private String examId;
@@ -66,5 +72,8 @@ public class PaperDTO implements Serializable {
 
     @ApiModelProperty(value = "更新时间", required=true)
     private Date updateTime;
+
+    @ApiModelProperty(value = "截止时间")
+    private Date limitTime;
     
 }

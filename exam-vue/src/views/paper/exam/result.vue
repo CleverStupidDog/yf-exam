@@ -2,7 +2,7 @@
   <div class="app-container">
 
     <h2 class="text-center">开发人员入职培训考试</h2>
-    <p class="text-center" style="color: #666">{{paperData.createTime}}</p>
+    <p class="text-center" style="color: #666">{{ paperData.createTime }}</p>
 
     <el-row :gutter="24" style="margin-top: 50px">
 
@@ -11,11 +11,11 @@
       </el-col>
 
       <el-col :span="8" class="text-center">
-        考试用时：{{paperData.userTime}}分钟
+        考试用时：{{ paperData.userTime }}分钟
       </el-col>
 
       <el-col :span="8" class="text-center">
-        考试得分：{{paperData.userScore}}
+        考试得分：{{ paperData.userScore }}
       </el-col>
 
     </el-row>
@@ -24,52 +24,43 @@
 
       <div v-for="item in paperData.quList" class="qu-content">
 
-        <p>{{ item.sort + 1 }}.{{ item.content }}（得分：{{ item.actualScore}}）</p>
+        <p>{{ item.sort + 1 }}.{{ item.content }}（得分：{{ item.actualScore }}）</p>
         <div v-if="item.quType === 1 || item.quType===3">
           <el-radio-group v-model="radioValues[item.id]">
             <el-radio v-for="an in item.answerList" :label="an.id">{{ an.abc }}.{{ an.content }}</el-radio>
           </el-radio-group>
 
-
           <el-row :gutter="24">
 
             <el-col :span="12" style="color: #24da70">
-              正确答案：{{radioRights[item.id]}}
+              正确答案：{{ radioRights[item.id] }}
             </el-col>
 
-            <el-col  v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
+            <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：未答
             </el-col>
 
-
-            <el-col  v-if="item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
-              答题结果：{{myRadio[item.id]}}
+            <el-col v-if="item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
+              答题结果：{{ myRadio[item.id] }}
             </el-col>
 
-            <el-col  v-if="item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
-              答题结果：{{myRadio[item.id]}}
+            <el-col v-if="item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
+              答题结果：{{ myRadio[item.id] }}
             </el-col>
-
 
           </el-row>
 
         </div>
 
-
         <div v-if="item.quType === 4">
-
 
           <el-row :gutter="24">
 
             <el-col :span="12">
-              我的回答：{{item.answer}}
+              我的回答：{{ item.answer }}
             </el-col>
 
-
-
           </el-row>
-
-
 
         </div>
 
@@ -81,21 +72,20 @@
           <el-row :gutter="24">
 
             <el-col :span="12" style="color: #24da70">
-              正确答案：{{multiRights[item.id].join(',')}}
+              正确答案：{{ multiRights[item.id].join(',') }}
             </el-col>
 
-            <el-col  v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
+            <el-col v-if="!item.answered" :span="12" style="text-align: right; color: #ff0000;">
               答题结果：未答
             </el-col>
 
-            <el-col  v-if="item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
-              答题结果：{{myMulti[item.id].join(',')}}
+            <el-col v-if="item.answered && !item.isRight" :span="12" style="text-align: right; color: #ff0000;">
+              答题结果：{{ myMulti[item.id].join(',') }}
             </el-col>
 
-            <el-col  v-if="item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
-              答题结果：{{myMulti[item.id].join(',')}}
+            <el-col v-if="item.answered && item.isRight" :span="12" style="text-align: right; color: #24da70;">
+              答题结果：{{ myMulti[item.id].join(',') }}
             </el-col>
-
 
           </el-row>
         </div>
@@ -125,7 +115,7 @@ export default {
       radioRights: {},
       multiRights: {},
       myRadio: {},
-      myMulti: {},
+      myMulti: {}
     }
   },
   created() {
@@ -153,10 +143,9 @@ export default {
           const myMulti = []
 
           item.answerList.forEach((an) => {
-
             // 用户选定的
             if (an.checked) {
-              if (item.quType === 1 || item.quType===3) {
+              if (item.quType === 1 || item.quType === 3) {
                 radioValue = an.id
                 myRadio = an.abc
               } else {
@@ -165,10 +154,9 @@ export default {
               }
             }
 
-
             // 正确答案
             if (an.isRight) {
-              if (item.quType === 1 || item.quType===3) {
+              if (item.quType === 1 || item.quType === 3) {
                 radioRight = an.abc
               } else {
                 multiRight.push(an.abc)
@@ -182,10 +170,8 @@ export default {
           this.radioRights[item.id] = radioRight
           this.multiRights[item.id] = multiRight
 
-
           this.myRadio[item.id] = myRadio
           this.myMulti[item.id] = myMulti
-
         })
 
         console.log(this.multiValues)

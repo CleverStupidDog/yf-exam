@@ -4,7 +4,7 @@ import { post } from '@/utils/request'
  * 题库详情
  * @param data
  */
-export function nextQu(id) {
-  return post('/user/wrong-book/next',  { id: id })
+export function nextQu(examId, quId) {
+  return post('/exam/api/user/wrong-book/next', { examId: examId, quId: quId })
 }
 

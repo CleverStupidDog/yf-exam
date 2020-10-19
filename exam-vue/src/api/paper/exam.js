@@ -5,7 +5,7 @@ import { post } from '@/utils/request'
  * @param data
  */
 export function createPaper(data) {
-  return post('/paper/paper/create-paper', data)
+  return post('/exam/api/paper/paper/create-paper', data)
 }
 
 /**
@@ -13,7 +13,7 @@ export function createPaper(data) {
  * @param data
  */
 export function paperDetail(data) {
-  return post('/paper/paper/paper-detail', data)
+  return post('/exam/api/paper/paper/paper-detail', data)
 }
 
 /**
@@ -21,7 +21,7 @@ export function paperDetail(data) {
  * @param data
  */
 export function quDetail(data) {
-  return post('/paper/paper/qu-detail', data)
+  return post('/exam/api/paper/paper/qu-detail', data)
 }
 
 /**
@@ -29,7 +29,7 @@ export function quDetail(data) {
  * @param data
  */
 export function fillAnswer(data) {
-  return post('/paper/paper/fill-answer', data)
+  return post('/exam/api/paper/paper/fill-answer', data)
 }
 
 /**
@@ -37,7 +37,7 @@ export function fillAnswer(data) {
  * @param data
  */
 export function handExam(data) {
-  return post('/paper/paper/hand-exam', data)
+  return post('/exam/api/paper/paper/hand-exam', data)
 }
 
 /**
@@ -45,7 +45,7 @@ export function handExam(data) {
  * @param data
  */
 export function paperResult(data) {
-  return post('/paper/paper/paper-result', data)
+  return post('/exam/api/paper/paper/paper-result', data)
 }
 
 /**
@@ -53,5 +53,5 @@ export function paperResult(data) {
  * @param data
  */
 export function training(data) {
-  return post('/paper/paper/training', data)
+  return post('/exam/api/paper/paper/training', data)
 }

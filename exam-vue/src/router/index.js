@@ -124,20 +124,21 @@ export const asyncRoutes = [
   },
 
   {
-    path: '/online',
+    path: '/my',
     component: Layout,
-    redirect: '/online/exam',
+    redirect: '/my/exam',
     name: 'Online',
     meta: {
       title: '在线考试',
-      icon: 'list'
+      icon: 'list',
+      roles: ['student', 'sa']
     },
     children: [
 
       {
         path: 'exam',
         component: () => import('@/views/paper/exam/list'),
-        name: 'ListExam',
+        name: 'ExamOnline',
         meta: { title: '在线考试', noCache: true, icon: 'guide' }
       },
 
@@ -145,11 +146,9 @@ export const asyncRoutes = [
         path: 'exam/prepare/:examId',
         component: () => import('@/views/paper/exam/preview'),
         name: 'PreExam',
-        meta: { title: '准备考试', noCache: true, activeMenu: '/online/exam' },
+        meta: { title: '准备考试', noCache: true, activeMenu: '/my/exam' },
         hidden: true
       },
-
-
 
       {
         path: 'exam/result/:id',
@@ -160,33 +159,35 @@ export const asyncRoutes = [
       },
 
       {
-        path: 'tran',
-        component: () => import('@/views/user/book'),
-        name: 'ListTran',
-        meta: { title: '错题训练', noCache: true, icon: 'study' }
+        path: 'exam/records',
+        component: () => import('@/views/user/exam/my'),
+        name: 'ListMyExam',
+        meta: { title: '我的成绩', noCache: true, icon: 'results' }
       },
 
       {
-        path: 'tran/start',
-        component: () => import('@/views/user/book/train'),
-        name: 'StartTran',
-        meta: { title: '错题训练', noCache: true, activeMenu: '/online/tran' },
+        path: 'book/list/:examId',
+        component: () => import('@/views/user/book'),
+        name: 'BookList',
+        meta: { title: '考试错题', noCache: true, activeMenu: '/my/exam/records' },
         hidden: true
       },
 
       {
-        path: 'exam/records',
-        component: () => import('@/views/paper/paper'),
-        name: 'ListMyPaper',
-        meta: { title: '考试记录', noCache: true, icon: 'paper' }
+        path: 'book/training/:examId',
+        component: () => import('@/views/user/book/train'),
+        name: 'BookTraining',
+        meta: { title: '错题训练', noCache: true, activeMenu: '/my/exam/records' },
+        hidden: true
       }
 
     ]
   },
+
   {
-    path: '/manage',
+    path: '/exam',
     component: Layout,
-    redirect: '/manage/qu',
+    redirect: '/exam/repo',
     name: 'Manage',
     meta: {
       title: '考试管理',
@@ -206,7 +207,7 @@ export const asyncRoutes = [
         path: 'repo/add',
         component: () => import('@/views/qu/repo/form'),
         name: 'AddRepo',
-        meta: { title: '添加题库', noCache: true, activeMenu: '/manage/repo' },
+        meta: { title: '添加题库', noCache: true, activeMenu: '/exam/repo' },
         hidden: true
       },
 
@@ -214,7 +215,7 @@ export const asyncRoutes = [
         path: 'repo/update/:id',
         component: () => import('@/views/qu/repo/form'),
         name: 'UpdateRepo',
-        meta: { title: '题库详情', noCache: true, activeMenu: '/manage/repo' },
+        meta: { title: '题库详情', noCache: true, activeMenu: '/exam/repo' },
         hidden: true
       },
 
@@ -229,7 +230,7 @@ export const asyncRoutes = [
         path: 'qu/add',
         component: () => import('@/views/qu/qu/form'),
         name: 'AddQu',
-        meta: { title: '添加试题', noCache: true, activeMenu: '/manage/qu' },
+        meta: { title: '添加试题', noCache: true, activeMenu: '/exam/qu' },
         hidden: true
       },
 
@@ -237,30 +238,7 @@ export const asyncRoutes = [
         path: 'qu/update/:id',
         component: () => import('@/views/qu/qu/form'),
         name: 'UpdateQu',
-        meta: { title: '修改试题', noCache: true, activeMenu: '/manage/qu' },
-        hidden: true
-      },
-
-      {
-        path: 'rule',
-        component: () => import('@/views/paper/rule'),
-        name: 'ListRule',
-        meta: { title: '规则管理', noCache: true, icon: 'topic' }
-      },
-
-      {
-        path: 'rule/add',
-        component: () => import('@/views/paper/rule/form'),
-        name: 'AddRule',
-        meta: { title: '添加规则', noCache: true, activeMenu: '/manage/rule' },
-        hidden: true
-      },
-
-      {
-        path: 'rule/update/:id',
-        component: () => import('@/views/paper/rule/form'),
-        name: 'UpdateRule',
-        meta: { title: '修改规则', noCache: true, activeMenu: '/manage/rule' },
+        meta: { title: '修改试题', noCache: true, activeMenu: '/exam/qu' },
         hidden: true
       },
 
@@ -272,18 +250,10 @@ export const asyncRoutes = [
       },
 
       {
-        path: 'review-paper/:examId',
-        component: () => import('@/views/paper/paper/review'),
-        name: 'ReviewPaper',
-        meta: { title: '批阅试卷', noCache: true },
-        hidden: true
-      },
-
-      {
         path: 'exam/add',
         component: () => import('@/views/exam/exam/form'),
         name: 'AddExam',
-        meta: { title: '添加考试', noCache: true, activeMenu: '/manage/exam' },
+        meta: { title: '添加考试', noCache: true, activeMenu: '/exam/exam' },
         hidden: true
       },
 
@@ -291,7 +261,21 @@ export const asyncRoutes = [
         path: 'exam/update/:id',
         component: () => import('@/views/exam/exam/form'),
         name: 'UpdateExam',
-        meta: { title: '修改考试', noCache: true, activeMenu: '/manage/exam' },
+        meta: { title: '修改考试', noCache: true, activeMenu: '/exam/exam' },
+        hidden: true
+      },
+      {
+        path: 'exam/users/:examId',
+        component: () => import('@/views/user/exam'),
+        name: 'ListExamUser',
+        meta: { title: '考试人员', noCache: true, activeMenu: '/exam/exam' },
+        hidden: true
+      },
+      {
+        path: 'exam/paper/:examId',
+        component: () => import('@/views/paper/paper'),
+        name: 'ListPaper',
+        meta: { title: '考试记录', noCache: true, activeMenu: '/exam/exam' },
         hidden: true
       }
     ]
@@ -310,6 +294,13 @@ export const asyncRoutes = [
     children: [
 
       {
+        path: 'depart',
+        component: () => import('@/views/sys/depart'),
+        name: 'SysDepart',
+        meta: { title: '部门管理', icon: 'tree' }
+      },
+
+      {
         path: 'role',
         component: () => import('@/views/sys/role'),
         name: 'SysRole',
@@ -321,13 +312,6 @@ export const asyncRoutes = [
         component: () => import('@/views/sys/user'),
         name: 'SysUser',
         meta: { title: '用户管理', icon: 'admin' }
-      },
-
-      {
-        path: 'syslog',
-        component: () => import('@/views/sys/log'),
-        name: 'SysLog',
-        meta: { title: '系统日志', icon: 'log' }
       }
 
     ]
@@ -345,7 +329,6 @@ const createRouter = () => new Router({
 
 const router = createRouter()
 
-// Detail see: https://github.com/vuejs/vue-router/issues/1234#issuecomment-357941465
 export function resetRouter() {
   const newRouter = createRouter()
   router.matcher = newRouter.matcher // reset router

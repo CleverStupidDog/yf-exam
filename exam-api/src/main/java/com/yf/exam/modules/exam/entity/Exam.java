@@ -25,7 +25,7 @@ public class Exam extends Model<Exam> {
     /**
      * ID
      */
-    @TableId(value = "id", type = IdType.ID_WORKER_STR)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
     /**
@@ -39,9 +39,21 @@ public class Exam extends Model<Exam> {
     private String content;
 
     /**
-     * 是否公开
+     * 1公开2部门3定员
      */
-    private Boolean open;
+    @TableField("open_type")
+    private Integer openType;
+
+    /**
+     * 组题方式1题库,2指定
+     */
+    @TableField("join_type")
+    private Integer joinType;
+
+    /**
+     * 难度:0不限,1普通,2较难
+     */
+    private Integer level;
 
     /**
      * 口令密码
@@ -49,15 +61,9 @@ public class Exam extends Model<Exam> {
     private String password;
 
     /**
-     * 课程状态
+     * 考试状态
      */
     private Integer state;
-
-    /**
-     * 考试规则ID
-     */
-    @TableField("rule_id")
-    private String ruleId;
 
     /**
      * 是否限时
@@ -88,6 +94,12 @@ public class Exam extends Model<Exam> {
      */
     @TableField("update_time")
     private Date updateTime;
+
+    /**
+     * 是否包含简答题
+     */
+    @TableField("has_saq")
+    private Boolean hasSaq;
 
     /**
      * 主观题分数

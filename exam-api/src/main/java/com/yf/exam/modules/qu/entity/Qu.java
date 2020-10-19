@@ -26,7 +26,7 @@ public class Qu extends Model<Qu> {
     /**
      * 题目ID
      */
-    @TableId(value = "id", type = IdType.ID_WORKER_STR)
+    @TableId(value = "id", type = IdType.ASSIGN_ID)
     private String id;
 
     /**
@@ -36,19 +36,14 @@ public class Qu extends Model<Qu> {
     private Integer quType;
 
     /**
+     * 1普通,2较难
+     */
+    private Integer level;
+
+    /**
      * 题目内容
      */
     private String content;
-
-    /**
-     * 题目图片
-     */
-    private String image;
-
-    /**
-     * 题目视频
-     */
-    private String video;
 
     /**
      * 创建时间

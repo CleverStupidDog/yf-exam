@@ -28,9 +28,6 @@ public class SysUserDTO implements Serializable {
     @ApiModelProperty(value = "用户名", required=true)
     private String userName;
 
-    @ApiModelProperty(value = "头像", required=true)
-    private String avatar;
-
     @ApiModelProperty(value = "真实姓名", required=true)
     private String realName;
 
@@ -42,6 +39,9 @@ public class SysUserDTO implements Serializable {
 
     @ApiModelProperty(value = "角色列表", required=true)
     private String roleIds;
+
+    @ApiModelProperty(value = "部门ID", required=true)
+    private String departId;
 
     @ApiModelProperty(value = "创建时间", required=true)
     private Date createTime;

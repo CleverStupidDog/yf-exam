@@ -7,9 +7,22 @@
 
         <el-form-item label="题目类型 " prop="quType">
 
-          <el-select v-model="postForm.quType" :disabled="quTypeDisabled" class="filter-item">
+          <el-select v-model="postForm.quType" :disabled="quTypeDisabled" class="filter-item" @change="handleTypeChange">
             <el-option
               v-for="item in quTypes"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
+
+        </el-form-item>
+
+        <el-form-item label="难度等级 " prop="level">
+
+          <el-select v-model="postForm.level" class="filter-item">
+            <el-option
+              v-for="item in levels"
               :key="item.value"
               :label="item.label"
               :value="item.value"
@@ -28,14 +41,13 @@
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
 
-
         <el-form-item label="整题解析" prop="oriPrice">
           <el-input v-model="postForm.analysis" type="textarea" :precision="1" :max="999999" />
         </el-form-item>
 
       </el-card>
 
-      <div v-if="!subjective" class="filter-container" style="margin-top: 25px">
+      <div v-if="postForm.quType!==4" class="filter-container" style="margin-top: 25px">
 
         <el-button class="filter-item" type="primary" icon="el-icon-plus" size="small" plain @click="handleAdd">
           添加
@@ -109,8 +121,12 @@ export default {
   data() {
     return {
 
-      subjective: false,
       quTypeDisabled: false,
+
+      levels: [
+        { value: 1, label: '普通' },
+        { value: 2, label: '较难' }
+      ],
 
       quTypes: [{
         value: 1,
@@ -118,8 +134,11 @@ export default {
       }, {
         value: 2,
         label: '多选题'
+      },
+      {
+        value: 3,
+        label: '判断题'
       }
-
       ],
 
       postForm: {
@@ -134,6 +153,10 @@ export default {
 
         quType: [
           { required: true, message: '题目类型不能为空！' }
+        ],
+
+        level: [
+          { required: true, message: '必须选择难度等级！' }
         ],
 
         repoIds: [
@@ -151,6 +174,13 @@ export default {
   },
   methods: {
 
+    handleTypeChange(v) {
+      this.postForm.answerList = []
+      if (v === 3) {
+        this.postForm.answerList.push({ isRight: true, content: '对', analysis: '' })
+        this.postForm.answerList.push({ isRight: false, content: '错', analysis: '' })
+      }
+    },
 
     // 添加子项
     handleAdd() {

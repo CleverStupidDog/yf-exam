@@ -34,6 +34,9 @@ public class SysUserSaveReqDTO implements Serializable {
     @ApiModelProperty(value = "密码", required=true)
     private String password;
 
+    @ApiModelProperty(value = "部门", required=true)
+    private String departId;
+
     @ApiModelProperty(value = "角色列表", required=true)
     private List<String> roles;
     

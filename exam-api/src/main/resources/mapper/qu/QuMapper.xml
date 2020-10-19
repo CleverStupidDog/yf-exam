@@ -6,9 +6,8 @@
     <resultMap id="BaseResultMap" type="com.yf.exam.modules.qu.entity.Qu">
         <id column="id" property="id" />
         <result column="qu_type" property="quType" />
+        <result column="level" property="level" />
         <result column="content" property="content" />
-        <result column="image" property="image" />
-        <result column="video" property="video" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
         <result column="remark" property="remark" />
@@ -17,7 +16,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        `id`,`qu_type`,`content`,`image`,`video`,`create_time`,`update_time`,`remark`,`analysis`
+        `id`,`qu_type`,`level`,`content`,`create_time`,`update_time`,`remark`,`analysis`
     </sql>
 
 
@@ -25,11 +24,14 @@
     <select id="listByRandom" resultMap="BaseResultMap">
         SELECT a.*
         FROM el_qu a
-        LEFT JOIN el_qu_repo_ref b ON a.id=b.qu_id
+        LEFT JOIN el_qu_repo b ON a.id=b.qu_id
         WHERE b.repo_id=#{repoId} AND a.qu_type=#{quType}
         <if test="excludes!=null">
             AND a.id NOT IN
             <foreach item="item" collection="excludes" separator="," open="(" close=")" index="">'${item}'</foreach>
+        </if>
+        <if test="level!=null and level>0">
+            AND a.`level`=#{level}
         </if>
         ORDER BY RAND()
         LIMIT ${size}
@@ -41,8 +43,6 @@
         <result column="qu_type" property="quType"  />
         <result column="q_content" property="qContent"  />
         <result column="q_analysis" property="qAnalysis"  />
-        <result column="q_image" property="qImage"  />
-        <result column="q_video" property="qVideo"  />
         <result column="a_is_right" property="aIsRight"  />
         <result column="a_content" property="aContent"  />
         <result column="a_image" property="aImage"  />
@@ -51,7 +51,7 @@
     </resultMap>
 
     <select id="selectRepos" resultType="String">
-		SELECT repo_id FROM el_qu_repo_ref po WHERE po.qu_id=#{qId}
+		SELECT repo_id FROM el_qu_repo po WHERE po.qu_id=#{qId}
 	</select>
 
 
@@ -69,6 +69,13 @@
                 <if test="query.content!=null and query.content!=''">
                     AND q.content LIKE '%${query.content}%'
                 </if>
+
+                <if test="query.excludes!=null and query.excludes.size()>0">
+                    AND q.id NOT IN
+                    <foreach collection="query.excludes" open="(" close=")" separator="," item="quId">
+                    #{quId}
+                    </foreach>
+                </if>
             </if>
         </where>
     </sql>
@@ -76,7 +83,7 @@
     <select id="paging" resultMap="BaseResultMap">
         SELECT q.*
         FROM el_qu q
-        LEFT JOIN el_qu_repo_ref po ON q.id=po.qu_id
+        LEFT JOIN el_qu_repo po ON q.id=po.qu_id
         <include refid="query" />
         GROUP BY q.id ORDER BY q.update_time DESC
     </select>
@@ -88,15 +95,13 @@
         q.qu_type,
         q.content AS q_content,
         q.analysis as q_analysis,
-        q.image as q_image,
-        q.video as q_video,
         a.content as a_content,
         a.image as a_image,
         a.is_right as a_is_right,
         a.analysis as a_analysis
         FROM el_qu q
         LEFT JOIN el_qu_answer a ON q.id=a.qu_id
-        LEFT JOIN el_qu_repo_ref po ON q.id=po.qu_id
+        LEFT JOIN el_qu_repo po ON q.id=po.qu_id
         <include refid="query" />
         GROUP BY a.id ORDER BY q.id
         LIMIT 10000

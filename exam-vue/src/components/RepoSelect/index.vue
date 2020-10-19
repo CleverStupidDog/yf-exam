@@ -14,7 +14,7 @@
     @change="handlerChange"
   >
     <el-option
-      v-for="item in catalogs"
+      v-for="item in dataList"
       :key="item.id"
       :label="item.title"
       :value="item.id"
@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       // 下拉选项值
-      catalogs: [],
+      dataList: [],
       currentValue: []
     }
   },
@@ -58,7 +58,7 @@ export default {
 
     fetchData() {
       fetchList({}).then(response => {
-        this.catalogs = response.data
+        this.dataList = response.data
       })
     },
     handlerChange(e) {

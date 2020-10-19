@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yf.exam.modules.repo.mapper.RepoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.yf.exam.modules.repo.entity.Repo">
+        <id column="id" property="id" />
+        <result column="code" property="code" />
+        <result column="title" property="title" />
+        <result column="radio_count" property="radioCount" />
+        <result column="multi_count" property="multiCount" />
+        <result column="judge_count" property="judgeCount" />
+        <result column="saq_count" property="saqCount" />
+        <result column="remark" property="remark" />
+        <result column="create_time" property="createTime" />
+        <result column="update_time" property="updateTime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        `id`,`code`,`title`,`radio_count`,`multi_count`,`judge_count`,`saq_count`,`remark`,`create_time`,`update_time`
+    </sql>
+
+
+    <resultMap id="ListResultMap"
+               type="com.yf.exam.modules.repo.dto.response.RepoRespDTO"
+               extends="BaseResultMap">
+    </resultMap>
+
+    <select id="paging" resultMap="ListResultMap">
+        SELECT * FROM el_repo repo
+        <where>
+            <if test="query!=null">
+                <if test="query.title!=null and query.title!=''">
+                    AND title LIKE '%${query.title}%'
+                </if>
+            </if>
+        </where>
+    </select>
+
+
+</mapper>

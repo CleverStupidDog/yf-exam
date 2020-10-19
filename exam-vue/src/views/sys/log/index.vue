@@ -8,7 +8,6 @@
       :list-query="listQuery"
     >
 
-
       <template slot="filter-content">
         <el-select v-model="listQuery.params.title" clearable class="filter-item">
           <el-option
@@ -20,7 +19,6 @@
         </el-select>
         <el-input v-model="listQuery.params.userName" clearable placeholder="操作人" style="width: 200px;" class="filter-item" />
       </template>
-
 
       <template slot="data-columns">
 
@@ -80,7 +78,7 @@ export default {
 
       options: {
         // 列表请求URL
-        listUrl: '/sys/log/paging'
+        listUrl: '/exam/api/sys/log/paging'
       },
 
       types: [

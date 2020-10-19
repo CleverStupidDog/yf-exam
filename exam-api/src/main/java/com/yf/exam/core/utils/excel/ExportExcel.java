@@ -384,8 +384,9 @@ public class ExportExcel {
 	 */
 	public ExportExcel write(HttpServletResponse response, String fileName) throws IOException{
 		response.reset();
+		response.setHeader("Access-Control-Allow-Origin", "*");
         response.setContentType("application/octet-stream; charset=utf-8");
-        response.setHeader("Content-Disposition", "attachment; filename="+ URLEncoder.encode(fileName, "utf-8"));
+        response.addHeader("Content-Disposition", "attachment; filename="+ URLEncoder.encode(fileName, "utf-8"));
 		write(response.getOutputStream());
 		return this;
 	}

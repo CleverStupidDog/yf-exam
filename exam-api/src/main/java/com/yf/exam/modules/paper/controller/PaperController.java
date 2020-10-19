@@ -1,7 +1,6 @@
 package com.yf.exam.modules.paper.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yf.exam.core.annon.AdminInject;
 import com.yf.exam.core.api.ApiRest;
 import com.yf.exam.core.api.controller.BaseController;
 import com.yf.exam.core.api.dto.BaseIdReqDTO;
@@ -13,12 +12,14 @@ import com.yf.exam.modules.paper.dto.PaperDTO;
 import com.yf.exam.modules.paper.dto.ext.PaperQuDetailDTO;
 import com.yf.exam.modules.paper.dto.request.PaperAnswerDTO;
 import com.yf.exam.modules.paper.dto.request.PaperCreateReqDTO;
+import com.yf.exam.modules.paper.dto.request.PaperListReqDTO;
 import com.yf.exam.modules.paper.dto.request.PaperQuQueryDTO;
 import com.yf.exam.modules.paper.dto.response.ExamDetailRespDTO;
 import com.yf.exam.modules.paper.dto.response.ExamResultRespDTO;
-import com.yf.exam.modules.paper.dto.response.PaperPagingRespDTO;
+import com.yf.exam.modules.paper.dto.response.PaperListRespDTO;
 import com.yf.exam.modules.paper.entity.Paper;
 import com.yf.exam.modules.paper.service.PaperService;
+import com.yf.exam.modules.user.UserUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -49,7 +50,6 @@ public class PaperController extends BaseController {
     * @param reqDTO
     * @return
     */
-    @AdminInject
     @ApiOperation(value = "添加或修改")
     @RequestMapping(value = "/save", method = { RequestMethod.POST})
     public ApiRest<BaseIdRespDTO> save(@RequestBody PaperDTO reqDTO) {
@@ -65,7 +65,6 @@ public class PaperController extends BaseController {
     * @param reqDTO
     * @return
     */
-    @AdminInject
     @ApiOperation(value = "批量删除")
     @RequestMapping(value = "/delete", method = { RequestMethod.POST})
     public ApiRest edit(@RequestBody BaseIdsReqDTO reqDTO) {
@@ -79,7 +78,6 @@ public class PaperController extends BaseController {
     * @param reqDTO
     * @return
     */
-    @AdminInject
     @ApiOperation(value = "查找详情")
     @RequestMapping(value = "/detail", method = { RequestMethod.POST})
     public ApiRest<PaperDTO> find(@RequestBody BaseIdReqDTO reqDTO) {
@@ -89,18 +87,19 @@ public class PaperController extends BaseController {
         return super.success(dto);
     }
 
+
+
     /**
-    * 分页查找
-    * @param reqDTO
-    * @return
-    */
-    @AdminInject
+     * 分页查找
+     * @param reqDTO
+     * @return
+     */
     @ApiOperation(value = "分页查找")
     @RequestMapping(value = "/paging", method = { RequestMethod.POST})
-    public ApiRest<IPage<PaperPagingRespDTO>> myPaging(@RequestBody PagingReqDTO<PaperDTO> reqDTO) {
+    public ApiRest<IPage<PaperListRespDTO>> paging(@RequestBody PagingReqDTO<PaperListReqDTO> reqDTO) {
 
         //分页查询并转换
-        IPage<PaperPagingRespDTO> page = baseService.paging(reqDTO);
+        IPage<PaperListRespDTO> page = baseService.paging(reqDTO);
 
         return super.success(page);
     }
@@ -112,12 +111,11 @@ public class PaperController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "创建试卷")
     @RequestMapping(value = "/create-paper", method = { RequestMethod.POST})
     public ApiRest<BaseIdRespDTO> save(@RequestBody PaperCreateReqDTO reqDTO) {
         //复制参数
-        String paperId = baseService.createPaper(reqDTO.getUserId(), reqDTO.getExamId());
+        String paperId = baseService.createPaper(UserUtils.getUserId(), reqDTO.getExamId());
         return super.success(new BaseIdRespDTO(paperId));
     }
 
@@ -126,7 +124,6 @@ public class PaperController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "试卷详情")
     @RequestMapping(value = "/paper-detail", method = { RequestMethod.POST})
     public ApiRest<ExamDetailRespDTO> paperDetail(@RequestBody BaseIdReqDTO reqDTO) {
@@ -140,7 +137,6 @@ public class PaperController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "试题详情")
     @RequestMapping(value = "/qu-detail", method = { RequestMethod.POST})
     public ApiRest<PaperQuDetailDTO> quDetail(@RequestBody PaperQuQueryDTO reqDTO) {
@@ -154,7 +150,6 @@ public class PaperController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "填充答案")
     @RequestMapping(value = "/fill-answer", method = { RequestMethod.POST})
     public ApiRest<PaperQuDetailDTO> fillAnswer(@RequestBody PaperAnswerDTO reqDTO) {
@@ -169,7 +164,6 @@ public class PaperController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "交卷操作")
     @RequestMapping(value = "/hand-exam", method = { RequestMethod.POST})
     public ApiRest<PaperQuDetailDTO> handleExam(@RequestBody BaseIdReqDTO reqDTO) {
@@ -184,7 +178,6 @@ public class PaperController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "试卷详情")
     @RequestMapping(value = "/paper-result", method = { RequestMethod.POST})
     public ApiRest<ExamResultRespDTO> paperResult(@RequestBody BaseIdReqDTO reqDTO) {
@@ -193,4 +186,17 @@ public class PaperController extends BaseController {
         return super.success(respDTO);
     }
 
+
+    /**
+     * 提交阅卷
+     * @param reqDTO
+     * @return
+     */
+    @ApiOperation(value = "提交阅卷")
+    @RequestMapping(value = "/review-paper", method = { RequestMethod.POST})
+    public ApiRest<PaperQuDetailDTO> reviewPaper(@RequestBody ExamResultRespDTO reqDTO) {
+        //根据ID删除
+        baseService.reviewPaper(reqDTO);
+        return super.success();
+    }
 }

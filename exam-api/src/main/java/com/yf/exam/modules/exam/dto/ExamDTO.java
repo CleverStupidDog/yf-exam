@@ -1,11 +1,14 @@
 package com.yf.exam.modules.exam.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.yf.exam.modules.paper.enums.ExamState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import java.util.Date;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
 * <p>
@@ -19,6 +22,7 @@ import java.io.Serializable;
 @ApiModel(value="考试", description="考试")
 public class ExamDTO implements Serializable {
 
+
     private static final long serialVersionUID = 1L;
 
 
@@ -31,24 +35,31 @@ public class ExamDTO implements Serializable {
     @ApiModelProperty(value = "考试描述", required=true)
     private String content;
 
-    @ApiModelProperty(value = "是否公开", required=true)
-    private Boolean open;
+    @ApiModelProperty(value = "1公开2部门3定员", required=true)
+    private Integer openType;
+
+    @ApiModelProperty(value = "组题方式1题库,2指定", required=true)
+    private Integer joinType;
+
+    @ApiModelProperty(value = "难度:0不限,1普通,2较难", required=true)
+    private Integer level;
 
     @ApiModelProperty(value = "口令密码", required=true)
     private String password;
 
-    @ApiModelProperty(value = "课程状态", required=true)
+    @ApiModelProperty(value = "考试状态", required=true)
     private Integer state;
-
-    @ApiModelProperty(value = "考试规则ID", required=true)
-    private String ruleId;
 
     @ApiModelProperty(value = "是否限时", required=true)
     private Boolean timeLimit;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "开始时间", required=true)
     private Date startTime;
 
+    @JsonFormat(timezone = "GMT+8", pattern = "yyyy-MM-dd")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @ApiModelProperty(value = "结束时间", required=true)
     private Date endTime;
 
@@ -57,6 +68,9 @@ public class ExamDTO implements Serializable {
 
     @ApiModelProperty(value = "更新时间", required=true)
     private Date updateTime;
+
+    @ApiModelProperty(value = "是否包含简答题", required=true)
+    private Boolean hasSaq;
 
     @ApiModelProperty(value = "主观题分数", required=true)
     private Integer subjScore;
@@ -74,4 +88,32 @@ public class ExamDTO implements Serializable {
     private Integer qualifyScore;
 
 
+
+
+    /**
+     * 是否结束
+     * @return
+     */
+    public Integer getState(){
+
+        if(this.timeLimit!=null && this.timeLimit){
+
+            if(System.currentTimeMillis() < startTime.getTime() ){
+                return ExamState.READY_START;
+            }
+
+            if(System.currentTimeMillis() > endTime.getTime()){
+                return ExamState.OVERDUE;
+            }
+
+            if(System.currentTimeMillis() > startTime.getTime()
+                    && System.currentTimeMillis() < endTime.getTime()
+                    && !ExamState.DISABLED.equals(this.state)){
+                return ExamState.ENABLE;
+            }
+
+        }
+
+        return this.state;
+    }
 }

@@ -5,15 +5,20 @@
 
       <el-col :span="24" style="margin-bottom: 20px">
 
+        <el-alert
+          title="点击`开始考试`后将自动进入考试，请诚信考试！"
+          type="error"
+          style="margin-bottom: 10px"
+        />
+
         <el-card class="pre-exam">
 
-          <div><strong>考试名称：</strong>{{ postForm.title }}</div>
-          <div><strong>考试时长：</strong>{{ postForm.totalTime }}分钟</div>
-          <div v-if="postForm.subjScore > 0"><strong>客观分数：</strong>{{ postForm.objScore }}分</div>
-          <div v-if="postForm.subjScore > 0"><strong>主观总分：</strong>{{ postForm.subjScore }}分</div>
-          <div><strong>试卷总分：</strong>{{ postForm.totalScore }}分</div>
-          <div><strong>及格分数：</strong>{{ postForm.qualifyScore }}分</div>
-          <div><strong>考试描述：</strong>{{ postForm.content }}</div>
+          <div><strong>考试名称：</strong>{{ detailData.title }}</div>
+          <div><strong>考试时长：</strong>{{ detailData.totalTime }}分钟</div>
+          <div><strong>试卷总分：</strong>{{ detailData.totalScore }}分</div>
+          <div><strong>及格分数：</strong>{{ detailData.qualifyScore }}分</div>
+          <div><strong>考试描述：</strong>{{ detailData.content }}</div>
+          <div><strong>开放类型：</strong> {{ detailData.openType | examOpenType }}</div>
 
         </el-card>
 
@@ -21,8 +26,8 @@
 
       <el-col :span="24">
 
-        <el-button type="primary" icon="el-icon-caret-right" :loading="loading" @click="handleCreate">
-          {{ loadingText }}
+        <el-button type="primary" icon="el-icon-caret-right" @click="handleCreate">
+          开始考试
         </el-button>
 
         <el-button @click="handleBack">
@@ -32,11 +37,11 @@
       </el-col>
 
     </el-row>
-
   </div>
 </template>
 
 <script>
+import { Loading } from 'element-ui'
 import { fetchDetail } from '@/api/exam/exam'
 import { createPaper } from '@/api/paper/exam'
 
@@ -44,58 +49,58 @@ export default {
   name: 'PreExam',
   data() {
     return {
-      examId: '',
-      loading: false,
-      loadingText: '开始考试',
-      postForm: {}
+      detailData: {},
+      postForm: {
+        examId: '',
+        password: ''
+      },
+      rules: {
+        password: [
+          { required: true, message: '考试密码不能为空！' }
+        ]
+      }
     }
   },
 
   created() {
-    this.examId = this.$route.params.examId
-    this.fetchData(this.examId)
+    this.postForm.examId = this.$route.params.examId
+    this.fetchData()
   },
 
   methods: {
 
-    showLoading() {
-      this.loading = true
-      this.loadingText = '创建试卷中'
-    },
-
-    closeLoading() {
-      this.loading = false
-      this.loadingText = '开始考试'
-    },
-
-    fetchData(id) {
-      fetchDetail(id).then(response => {
-        this.postForm = response.data
+    fetchData() {
+      fetchDetail(this.postForm.examId).then(response => {
+        this.detailData = response.data
       })
     },
 
     handleCreate() {
-      const params = { examId: this.examId }
-      const ctx = this
+      const that = this
 
-      this.showLoading()
+      // 打开
+      const loading = Loading.service({
+        text: '正在努力创建试卷...',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
 
-      createPaper(params).then(response => {
+      createPaper(this.postForm).then(response => {
         console.log(response)
 
         if (response.code === 0) {
-          ctx.$message({
+          this.$message({
             message: '试卷创建成功，即将进入考试！',
             type: 'success'
           })
 
           setTimeout(function() {
-            ctx.$router.push({ name: 'StartExam', params: { id: response.data.id }})
-          }, 2000)
-        } else {
-          ctx.$message.error(response.data.msg)
-          this.closeLoading()
+            loading.close()
+            that.dialogVisible = false
+            that.$router.push({ name: 'StartExam', params: { id: response.data.id }})
+          }, 1000)
         }
+      }).catch(() => {
+        loading.close()
       })
     },
 

@@ -28,14 +28,11 @@ public class QuDTO implements Serializable {
     @ApiModelProperty(value = "题目类型", required=true)
     private Integer quType;
 
+    @ApiModelProperty(value = "1普通,2较难", required=true)
+    private Integer level;
+
     @ApiModelProperty(value = "题目内容", required=true)
     private String content;
-
-    @ApiModelProperty(value = "题目图片", required=true)
-    private String image;
-
-    @ApiModelProperty(value = "题目视频", required=true)
-    private String video;
 
     @ApiModelProperty(value = "创建时间", required=true)
     private Date createTime;

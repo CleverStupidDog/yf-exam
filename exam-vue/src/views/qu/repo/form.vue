@@ -80,15 +80,13 @@ export default {
             duration: 2000
           })
 
-
-          this.$router.push({ name: 'ListRepo'})
-
+          this.$router.push({ name: 'ListRepo' })
         })
       })
     },
 
     onCancel() {
-      this.$router.push({ name: 'ListRepo'})
+      this.$router.push({ name: 'ListRepo' })
     }
 
   }

@@ -67,7 +67,7 @@ export default {
           // 批量操作
           multiActions: [],
           // 列表请求URL
-          listUrl: '',
+          listUrl: '/exam/api',
           // 删除请求URL
           deleteUrl: '',
           // 启用禁用

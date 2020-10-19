@@ -1,11 +1,11 @@
-import { post, get, postForm, download } from '@/utils/request'
+import { post, upload, download } from '@/utils/request'
 
 /**
  * 题库详情
  * @param data
  */
 export function fetchDetail(id) {
-  return post('/qu/qu/detail', { id: id })
+  return post('/exam/api/qu/qu/detail', { id: id })
 }
 
 /**
@@ -13,7 +13,7 @@ export function fetchDetail(id) {
  * @param data
  */
 export function saveData(data) {
-  return post('/qu/qu/save', data)
+  return post('/exam/api/qu/qu/save', data)
 }
 
 /**
@@ -21,7 +21,7 @@ export function saveData(data) {
  * @param data
  */
 export function exportExcel(data) {
-  return download('/qu/qu/export', data)
+  return download('/exam/api/qu/qu/export', data)
 }
 
 /**
@@ -29,14 +29,14 @@ export function exportExcel(data) {
  * @param data
  */
 export function importTemplate() {
-  return download('/qu/qu/import/template')
+  return download('/exam/api/qu/qu/import/template')
 }
 
 /**
  * 导出
  * @param data
  */
-export function importExcel(data) {
-  return postForm('/qu/qu/import', data)
+export function importExcel(file) {
+  return upload('/exam/api/qu/qu/import', file)
 }
 

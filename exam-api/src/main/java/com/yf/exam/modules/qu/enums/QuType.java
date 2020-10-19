@@ -17,5 +17,10 @@ public interface QuType {
      * 多选题
      */
     Integer MULTI = 2;
+
+    /**
+     * 判断题
+     */
+    Integer JUDGE = 3;
     
 }

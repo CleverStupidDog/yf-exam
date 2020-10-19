@@ -24,5 +24,10 @@ public interface PaperState {
      */
     Integer FINISHED = 2;
 
+    /**
+     * 弃考
+     */
+    Integer BREAK = 3;
+
     
 }

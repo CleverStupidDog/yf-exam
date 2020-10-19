@@ -63,4 +63,10 @@ public interface SysUserService extends IService<SysUser> {
      * @param reqDTO
      */
     SysUserLoginDTO reg(SysUserDTO reqDTO);
+
+    /**
+     * 快速注册
+     * @param reqDTO
+     */
+    SysUserLoginDTO quickReg(SysUserDTO reqDTO);
 }

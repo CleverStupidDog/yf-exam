@@ -5,7 +5,7 @@ import { post } from '@/utils/request'
  * @param data
  */
 export function fetchDetail(data) {
-  return post('/qu/repo/detail', data)
+  return post('/exam/api/repo/detail', data)
 }
 
 /**
@@ -13,7 +13,7 @@ export function fetchDetail(data) {
  * @param data
  */
 export function saveData(data) {
-  return post('/qu/repo/save', data)
+  return post('/exam/api/repo/save', data)
 }
 
 /**
@@ -21,7 +21,7 @@ export function saveData(data) {
  * @param data
  */
 export function fetchList(data) {
-  return post('/qu/repo/list', data)
+  return post('/exam/api/repo/list', data)
 }
 
 /**
@@ -29,5 +29,5 @@ export function fetchList(data) {
  * @param data
  */
 export function batchAction(data) {
-  return post('/qu/repo/batch-action', data)
+  return post('/exam/api/repo/batch-action', data)
 }

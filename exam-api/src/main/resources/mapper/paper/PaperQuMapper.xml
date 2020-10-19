@@ -41,15 +41,13 @@
     <resultMap id="ListResultMap" extends="BaseResultMap" type="com.yf.exam.modules.paper.dto.ext.PaperQuDetailDTO">
 
         <result column="content" property="content" />
-        <result column="image" property="image" />
-        <result column="video" property="video" />
         <collection property="answerList" column="{paperId=paper_id,quId=qu_id}"
                     select="com.yf.exam.modules.paper.mapper.PaperQuAnswerMapper.list"></collection>
 
     </resultMap>
 
     <select id="listByPaper" resultMap="ListResultMap">
-        SELECT pq.*,eq.content,eq.image,eq.video
+        SELECT pq.*,eq.content
         FROM el_paper_qu pq
         LEFT JOIN el_qu eq ON pq.qu_id = eq.id
         WHERE pq.paper_id=#{paperId}

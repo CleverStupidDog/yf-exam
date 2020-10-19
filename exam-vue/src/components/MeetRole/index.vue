@@ -1,8 +1,8 @@
 <template>
 
   <el-select
-    style="width: 100%"
     v-model="values"
+    style="width: 100%"
     multiple
     filterable
     remote

@@ -1,112 +1,113 @@
 <template>
 
-  <div class="login-container">
+  <el-container class="login-container">
 
-    <div class="nav-line">
-      <el-link type="primary" icon="el-icon-headset" href="https://face-files.oss-cn-shenzhen.aliyuncs.com/guide.pdf" target="_blank">在线文档</el-link>
-    </div>
+    <el-main>
+      <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
 
+        <div class="login-main">
+          <div class="title-container">
+            <h3 class="title">云帆培训考试系统 <span style="font-size: 6px; vertical-align: top">开源版</span></h3>
+          </div>
 
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on" label-position="left">
+          <el-form-item prop="username">
+            <span class="svg-container">
+              <svg-icon icon-class="user" />
+            </span>
+            <el-input
+              ref="username"
+              v-model="loginForm.username"
+              placeholder="用户名"
+              name="username"
+              type="text"
+              tabindex="1"
+              autocomplete="on"
+            />
+          </el-form-item>
 
-      <div class="title-container">
-        <h3 class="title">云帆考试系统</h3>
-      </div>
+          <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
+            <el-form-item prop="password">
+              <span class="svg-container">
+                <svg-icon icon-class="password" />
+              </span>
+              <el-input
+                :key="passwordType"
+                ref="password"
+                v-model="loginForm.password"
+                :type="passwordType"
+                placeholder="密码"
+                name="password"
+                tabindex="2"
+                autocomplete="on"
+                @keyup.native="checkCapslock"
+                @blur="capsTooltip = false"
+                @keyup.enter.native="handleLogin"
+              />
+              <span class="show-pwd" @click="showPwd">
+                <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+              </span>
+            </el-form-item>
+          </el-tooltip>
 
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user" />
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="用户名"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
+          <div style="position:relative;">
 
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password" />
-          </span>
-          <el-input
-            :key="passwordType"
-            ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="密码"
-            name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
-            @keyup.enter.native="handleLogin"
-          />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-          </span>
-        </el-form-item>
-      </el-tooltip>
+            <el-row :gutter="10">
 
+              <el-col :span="12">
+                <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
+              </el-col>
 
+              <el-col :span="12">
+                <el-button type="warning" style="width:100%;margin-bottom:30px;" @click.native.prevent="studentRegister">学员注册</el-button>
+              </el-col>
 
+            </el-row>
 
-      <div style="position:relative;">
+          </div>
 
-        <el-row :gutter="10">
+          <div style="position:relative;">
 
+            <el-row :gutter="10" style="padding-top: 5px">
 
-          <el-col :span="16">
-            <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-          </el-col>
+              <div style="border-bottom: #ccc 1px solid" />
 
+              <el-col :span="24">
+                <p style="color: #001528;font-size: 12px;line-height: 30px">演示账号，点击以下按钮直接登录系统</p>
+              </el-col>
 
-          <el-col :span="8">
-            <el-button type="warning" style="width:100%;margin-bottom:30px;"  @click.native.prevent="studentRegister">学员注册</el-button>
-          </el-col>
+              <el-col :span="12" :xs="24">
+                <el-button style="width:100%;margin-bottom:10px;" size="mini" icon="el-icon-s-promotion" @click.native.prevent="studentLogin">学员登录</el-button>
+              </el-col>
 
+              <el-col :span="12" :xs="24">
+                <el-button icon="el-icon-s-tools" style="width:100%;margin-bottom:10px;" size="mini" @click.native.prevent="adminLogin">超管登录</el-button>
+              </el-col>
 
-        </el-row>
+            </el-row>
 
-      </div>
+          </div>
 
+        </div>
 
-      <div style="position:relative;">
+      </el-form>
 
-        <el-row :gutter="10" style="padding-top: 20px">
+    </el-main>
 
-          <div style="border-bottom: #394352 1px solid"></div>
+    <el-footer style="background: #ffffff; text-align: center; line-height: 50px;font-size: 14px" height="50px">
 
-          <el-col :span="24">
-            <p style="color: #eee;font-size: 12px;line-height: 30px">演示账号，点击以下按钮直接登录系统</p>
-          </el-col>
+      ©云帆互联
+      <a href="https://lp.yfhl.net" target="_blank" style="margin-left: 10px">企业官网</a> / <a href="https://cdn.yfhl.net/docs/exam-guide.pdf" target="_blank">产品文档</a> /
+      <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=dfXIc5z0O7DMxdrF-N8DV9HbUKnKJFW0&jump_from=webapi">Q群:865330294</a>
 
-          <el-col :span="12">
-            <el-button style="width:100%;margin-bottom:30px;" icon="el-icon-s-promotion" @click.native.prevent="studentLogin">学员登录</el-button>
-          </el-col>
+    </el-footer>
 
-          <el-col :span="12">
-            <el-button icon="el-icon-s-tools" style="width:100%;margin-bottom:30px;" @click.native.prevent="adminLogin">超管登录</el-button>
-          </el-col>
-
-
-        </el-row>
-
-      </div>
-
-
-    </el-form>
-
-  </div>
+  </el-container>
 
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
+import 'element-ui/lib/theme-chalk/display.css'
 
 export default {
   name: 'Login',
@@ -180,17 +181,13 @@ export default {
 
     adminLogin() {
       this.loginForm.username = 'admin'
-      this.loginForm.password = '123456'
+      this.loginForm.password = 'admin'
       this.handleLogin()
     },
     teacherLogin() {
       this.loginForm.username = 'teacher'
       this.loginForm.password = '123456'
       this.handleLogin()
-    },
-
-    onlineGuide(){
-      this.$router.push('https://face-files.oss-cn-shenzhen.aliyuncs.com/guide.pdf')
     },
 
     checkCapslock({ shiftKey, key } = {}) {
@@ -247,132 +244,150 @@ export default {
 
 <style lang="scss">
 
-$bg:#283443;
-$light_gray:#fff;
-$cursor: #fff;
+  $bg:#2d3a4b;
+  $color:#001528;
 
-@supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
-  .login-container .el-input input {
-    color: $cursor;
-  }
-}
-
-/* reset element-ui css */
-.login-container {
-  .el-input {
-    display: inline-block;
-    height: 47px;
-    width: 85%;
-
-    input {
-      background: transparent;
-      border: 0px;
-      -webkit-appearance: none;
-      border-radius: 0px;
-      padding: 12px 5px 12px 15px;
-      color: $light_gray;
-      height: 47px;
-      caret-color: $cursor;
-
-      &:-webkit-autofill {
-        box-shadow: 0 0 0px 1000px $bg inset !important;
-        -webkit-text-fill-color: $cursor !important;
-      }
+  @supports (-webkit-mask: none) and (not (cater-color: $color)) {
+    .login-container .el-input input {
+      color: $color;
     }
   }
 
-  .el-form-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 5px;
-    color: #454545;
+  /* reset element-ui css */
+  .login-container {
+    .el-input {
+      display: inline-block;
+      height: 47px;
+      width: 85%;
+
+      input {
+        background: transparent;
+        border: 0px;
+        -webkit-appearance: none;
+        border-radius: 0px;
+        padding: 12px 5px 12px 15px;
+        color: $color;
+        height: 47px;
+        caret-color: $color;
+
+        &:-webkit-autofill {
+          box-shadow: 0 0 0px 1000px #ffffff inset !important;
+          -webkit-text-fill-color: $color !important;
+        }
+      }
+    }
+
+    .el-form-item {
+      border: $bg 1px solid;
+      border-radius: 5px;
+      color: $color;
+      background: #ffffff;
+    }
   }
-}
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+  $bg:#2d3a4b;
+  $dark_gray:#889aa4;
+  $light_gray:#eee;
 
+  .login-main{
+    padding: 25px 15px 15px 15px;
+    background-color: rgba(255,255,255,0.8);
+    border-radius: 5px;
+  }
 
+  @media \0screen\,screen\9 {
+    .login-main{
+      padding: 15px;
+      border-radius: 5px;
+      background-color: rgba(0,0,0,0.5);
+      filter:Alpha(opacity=50);
+      *zoom:1;
+    }
+  }
 
-.login-container {
-  min-height: 100%;
-  width: 100%;
-  background-color: $bg;
-  overflow: hidden;
-
-  .nav-line{
-
-    position: absolute;
+  .login-container {
+    min-height: 100%;
     width: 100%;
-    background: #fefefe;
-    text-align: right;
-    padding: 10px;
-  }
-
-  .login-form {
-    position: relative;
-    width: 520px;
-    max-width: 100%;
-    padding: 160px 35px 0;
-    margin: 0 auto;
+    background: url('../../assets/bg2.jpg') center center;
     overflow: hidden;
-  }
 
-  .tips {
-    font-size: 14px;
-    color: #fff;
-    margin-bottom: 10px;
+    .nav-line{
+      position: absolute;
+      width: 100%;
+      background: #fefefe;
+      text-align: right;
+      padding: 10px;
+    }
 
-    span {
-      &:first-of-type {
-        margin-right: 16px;
+    .login-form {
+      position: relative;
+      width: 450px;
+      max-width: 100%;
+      padding: 120px 0 0;
+      margin: 0 auto;
+      overflow: hidden;
+    }
+
+    .tips {
+      font-size: 14px;
+      color: #fff;
+      margin-bottom: 10px;
+
+      span {
+        &:first-of-type {
+          margin-right: 16px;
+        }
       }
     }
-  }
 
-  .svg-container {
-    padding: 6px 5px 6px 15px;
-    color: $dark_gray;
-    vertical-align: middle;
-    width: 30px;
-    display: inline-block;
-  }
-
-  .title-container {
-    position: relative;
-
-    .title {
-      font-size: 26px;
-      color: $light_gray;
-      margin: 0px auto 40px auto;
-      text-align: center;
-      font-weight: bold;
+    .svg-container {
+      padding: 6px 5px 6px 15px;
+      color: $bg;
+      vertical-align: middle;
+      width: 30px;
+      display: inline-block;
     }
-  }
 
-  .show-pwd {
-    position: absolute;
-    right: 10px;
-    top: 7px;
-    font-size: 16px;
-    color: $dark_gray;
-    cursor: pointer;
-    user-select: none;
-  }
+    .title-container {
+      position: relative;
 
-  .thirdparty-button {
-    position: absolute;
-    right: 0;
-    bottom: 6px;
-  }
+      .title {
+        font-size: 26px;
+        color: $bg;
+        margin: 0px auto 40px auto;
+        text-align: center;
+        font-weight: bold;
+      }
+    }
 
-  @media only screen and (max-width: 470px) {
+    .show-pwd {
+      position: absolute;
+      right: 10px;
+      top: 7px;
+      font-size: 16px;
+      color: $bg;
+      cursor: pointer;
+      user-select: none;
+    }
+
     .thirdparty-button {
-      display: none;
+      position: absolute;
+      right: 0;
+      bottom: 6px;
     }
   }
-}
+
+  .code-container{
+    position: fixed; bottom: 50px; right: 10px; width: 200px; height: 260px
+  }
+
+  .code-container .title{
+    width: 100%;text-align: center;line-height: 50px; color: #fff; font-weight: bold
+  }
+
+  .code-container .code{
+    width: 200px; height: 200px
+  }
 </style>

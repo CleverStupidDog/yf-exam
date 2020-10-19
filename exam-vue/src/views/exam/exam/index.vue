@@ -7,6 +7,31 @@
   >
     <template slot="filter-content">
 
+      <el-select v-model="listQuery.params.openType" class="filter-item" placeholder="开放类型" clearable>
+        <el-option
+          v-for="item in openTypes"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
+
+      <el-date-picker
+        v-model="listQuery.params.startTime"
+        class="filter-item"
+        value-format="yyyy-MM-dd"
+        type="date"
+        placeholder="考试开始时间"
+      />
+
+      <el-date-picker
+        v-model="listQuery.params.endTime"
+        class="filter-item"
+        value-format="yyyy-MM-dd"
+        type="date"
+        placeholder="考试结束时间"
+      />
+
       <el-input v-model="listQuery.params.title" placeholder="搜索考试名称" style="width: 200px;" class="filter-item" />
 
     </template>
@@ -24,39 +49,63 @@
 
       </el-table-column>
 
-
       <el-table-column
         label="考试类型"
         align="center"
       >
         <template slot-scope="scope">
-          <span v-if="scope.row.open">公开考试</span>
-          <span v-else>内部考试</span>
+          {{ scope.row.openType | examOpenType }}
         </template>
 
       </el-table-column>
 
-
       <el-table-column
-        label="考试人数"
+        label="考试时间"
+        width="220px"
         align="center"
       >
 
         <template slot-scope="scope">
-
-          <router-link :to="{name: 'ReviewPaper', params:{examId: scope.row.id}}">
-            {{scope.row.examUser}}
-          </router-link>
-
+          <span v-if="scope.row.timeLimit">
+            {{ scope.row.startTime }} ~ {{ scope.row.endTime }}
+          </span>
+          <span v-else>不限时</span>
         </template>
 
       </el-table-column>
 
       <el-table-column
-        label="创建时间"
-        prop="createTime"
+        label="考试总分"
+        prop="totalScore"
         align="center"
       />
+
+      <el-table-column
+        label="及格线"
+        prop="qualifyScore"
+        align="center"
+      />
+
+      <el-table-column
+        label="状态"
+        align="center"
+      >
+
+        <template slot-scope="scope">
+          {{ scope.row.state | examStateFilter }}
+        </template>
+
+      </el-table-column>
+
+      <el-table-column
+        label="操作"
+        align="center"
+        width="220px"
+      >
+        <template slot-scope="scope">
+          <el-button type="primary" size="mini" icon="el-icon-user" @click="handlerExamDetail(scope.row.id)">考试详情</el-button>
+        </template>
+      </el-table-column>
 
     </template>
 
@@ -73,11 +122,22 @@ export default {
   data() {
     return {
 
+      openTypes: [
+        {
+          value: 1,
+          label: '完全开放'
+        },
+        {
+          value: 2,
+          label: '指定部门'
+        }
+      ],
+
       listQuery: {
         current: 1,
         size: 10,
         params: {
-          name: ''
+          title: ''
         }
       },
 
@@ -99,18 +159,19 @@ export default {
           }
         ],
         // 列表请求URL
-        listUrl: '/exam/exam/paging',
+        listUrl: '/exam/api/exam/exam/paging',
         // 删除请求URL
-        deleteUrl: '/exam/exam/delete',
+        deleteUrl: '/exam/api/exam/exam/delete',
+        // 删除请求URL
+        stateUrl: '/exam/exam/state',
         addRoute: 'AddExam'
       }
     }
   },
   methods: {
 
-    // 开始考试
-    handlePre(examId) {
-      this.$router.push({ name: 'PreExam', params: { examId: examId }})
+    handlerExamDetail(examId) {
+      this.$router.push({ name: 'ListExamUser', params: { examId: examId }})
     }
   }
 }

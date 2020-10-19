@@ -3,14 +3,14 @@ server:
 
 spring:
   application:
-    name: yf-exam
+    name: yf_exam_lite
+
   # 数据库配置
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/bool-exam?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/yf_exam_lite?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
-
   # Redis配置
   redis:
     database: 0
@@ -19,7 +19,3 @@ spring:
     password:
     timeout: 5000
 
-# 日志级别
-logging:
-  level:
-    root: debug

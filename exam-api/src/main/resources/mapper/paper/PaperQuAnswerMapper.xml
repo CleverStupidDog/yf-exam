@@ -23,12 +23,11 @@
                type="com.yf.exam.modules.paper.dto.ext.PaperQuAnswerExtDTO"
                extends="BaseResultMap">
         <result column="content" property="content" />
-        <result column="image" property="image" />
     </resultMap>
 
 
     <select id="list" resultMap="ListResultMap">
-        SELECT pa.*,qa.content,qa.image
+        SELECT pa.*,qa.content
         FROM el_paper_qu_answer pa
         LEFT JOIN el_qu_answer qa ON pa.answer_id=qa.id
         WHERE pa.paper_id=#{paperId} AND pa.qu_id=#{quId}

@@ -7,7 +7,6 @@
   >
     <template slot="filter-content">
 
-
       <el-input v-model="listQuery.params.title" placeholder="搜索题目内容" style="width: 200px;" class="filter-item" />
 
       <el-button class="filter-item" style="float: right" type="primary" icon="el-icon-magic-stick" @click="startTrain">
@@ -62,10 +61,10 @@ export default {
         current: 1,
         size: 10,
         params: {
-          title: ''
+          title: '',
+          examId: ''
         }
       },
-
 
       options: {
 
@@ -80,16 +79,23 @@ export default {
           }
         ],
         // 列表请求URL
-        listUrl: '/user/wrong-book/paging',
+        listUrl: '/exam/api/user/wrong-book/paging',
         // 删除请求URL
-        deleteUrl: '/user/wrong-book/delete'
+        deleteUrl: '/exam/api/user/wrong-book/delete'
       }
+    }
+  },
+  created() {
+    const id = this.$route.params.examId
+    if (typeof id !== 'undefined') {
+      this.listQuery.params.examId = id
+      this.fetchData(id)
     }
   },
   methods: {
 
     startTrain() {
-      this.$router.push({ name: 'StartTran' })
+      this.$router.push({ name: 'BookTraining', params: { examId: this.listQuery.params.examId }})
     }
 
   }

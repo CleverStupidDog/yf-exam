@@ -1,13 +1,13 @@
 import { post } from '@/utils/request'
 
 export function updateData(data) {
-  return post('/sys/user/update', data)
+  return post('/exam/api/sys/user/update', data)
 }
 
 export function saveData(data) {
-  return post('/sys/user/save', data)
+  return post('/exam/api/sys/user/save', data)
 }
 
 export function userReg(data) {
-  return post('/sys/user/reg', data)
+  return post('/exam/api/sys/user/reg', data)
 }

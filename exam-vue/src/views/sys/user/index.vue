@@ -11,6 +11,9 @@
 
       <template slot="filter-content">
 
+        <el-input v-model="listQuery.params.userName" style="width: 200px" placeholder="搜索登录名" class="filter-item" />
+        <el-input v-model="listQuery.params.realName" style="width: 200px" placeholder="搜索姓名" class="filter-item" />
+
         <el-button class="filter-item" type="primary" icon="el-icon-plus" @click="handleAdd">
           添加
         </el-button>
@@ -27,8 +30,12 @@
         <el-table-column
           align="center"
           label="用户名"
-          prop="userName"
-        />
+        >
+          <template slot-scope="scope">
+            <a @click="handleUpdate(scope.row)">{{ scope.row.userName }}</a>
+          </template>
+
+        </el-table-column>
 
         <el-table-column
           align="center"
@@ -58,16 +65,6 @@
           </template>
         </el-table-column>
 
-        <el-table-column
-          align="center"
-          label="操作"
-        >
-
-          <template slot-scope="scope">
-            <el-button size="small" icon="el-icon-edit" @click="handleUpdate(scope.row)">修改</el-button>
-          </template>
-        </el-table-column>
-
       </template>
     </data-table>
 
@@ -87,21 +84,20 @@
           <el-input v-model="formData.password" placeholder="不修改请留空" type="password" />
         </el-form-item>
 
+        <el-form-item label="部门">
+          <depart-tree-select v-model="formData.departId" :options="treeData" :props="defaultProps" />
+        </el-form-item>
+
         <el-form-item label="角色">
           <meet-role v-model="formData.roles" />
         </el-form-item>
 
-        <el-form-item label="头像" prop="avatar">
-          <el-upload
-            class="avatar-uploader"
-            :show-file-list="false"
-            action="/api/v1/common/oss/upload"
-            :on-success="handleUploadSuccess"
-          >
-            <img v-if="formData.avatar" :src="formData.avatar" class="avatar">
-            <i v-else class="el-icon-plus avatar-uploader-icon" />
-          </el-upload>
-        </el-form-item>
+        <!--        <el-form-item label="头像" prop="avatar">-->
+
+        <!--          <single-upload-->
+        <!--            v-model="formData.avatar"-->
+        <!--          />-->
+        <!--        </el-form-item>-->
 
       </el-form>
 
@@ -120,10 +116,12 @@
 import DataTable from '@/components/DataTable'
 import MeetRole from '@/components/MeetRole'
 import { saveData } from '@/api/sys/user/user'
+import DepartTreeSelect from '@/components/DepartTreeSelect'
+import { fetchTree } from '@/api/sys/depart/depart'
 
 export default {
   name: 'SysUserList',
-  components: { DataTable, MeetRole },
+  components: { DepartTreeSelect, DataTable, MeetRole },
   filters: {
 
     // 订单状态
@@ -138,7 +136,12 @@ export default {
   data() {
     return {
 
-
+      treeData: [],
+      defaultProps: {
+        value: 'id',
+        label: 'deptName',
+        children: 'children'
+      },
       dialogVisible: false,
 
       listQuery: {
@@ -154,10 +157,10 @@ export default {
 
       options: {
         // 列表请求URL
-        listUrl: '/sys/user/paging',
+        listUrl: '/exam/api/sys/user/paging',
         // 启用禁用
         stateUrl: '/sys/user/state',
-
+        deleteUrl: '/exam/api/sys/user/delete',
         // 批量操作列表
         multiActions: [
           {
@@ -166,10 +169,20 @@ export default {
           }, {
             value: 'disable',
             label: '禁用'
+          },
+          {
+            value: 'delete',
+            label: '删除'
           }
         ]
       }
     }
+  },
+
+  created() {
+    fetchTree({}).then(response => {
+      this.treeData = response.data
+    })
   },
 
   methods: {
@@ -179,9 +192,8 @@ export default {
       this.formData.avatar = response.data.url
     },
 
-
     handleAdd() {
-      this.formData = {};
+      this.formData = {}
       this.dialogVisible = true
     },
 
@@ -194,6 +206,9 @@ export default {
       console.log(JSON.stringify(this.formData))
     },
 
+    departSelected(data) {
+      this.formData.departId = data.id
+    },
     handleSave() {
       saveData(this.formData).then(() => {
         this.$message({

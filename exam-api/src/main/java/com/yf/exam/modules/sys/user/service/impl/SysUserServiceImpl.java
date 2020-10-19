@@ -16,7 +16,9 @@ import com.yf.exam.core.utils.BeanMapper;
 import com.yf.exam.core.utils.StringUtils;
 import com.yf.exam.core.utils.passwd.PassHandler;
 import com.yf.exam.core.utils.passwd.PassInfo;
+import com.yf.exam.modules.Constant;
 import com.yf.exam.modules.common.redis.service.RedisService;
+import com.yf.exam.modules.shiro.jwt.JwtUtils;
 import com.yf.exam.modules.sys.user.dto.SysUserDTO;
 import com.yf.exam.modules.sys.user.dto.request.SysUserSaveReqDTO;
 import com.yf.exam.modules.sys.user.dto.response.SysUserLoginDTO;
@@ -24,7 +26,7 @@ import com.yf.exam.modules.sys.user.entity.SysUser;
 import com.yf.exam.modules.sys.user.mapper.SysUserMapper;
 import com.yf.exam.modules.sys.user.service.SysUserRoleService;
 import com.yf.exam.modules.sys.user.service.SysUserService;
-import org.apache.commons.lang3.RandomStringUtils;
+import com.yf.exam.modules.user.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -50,16 +52,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     private RedisService redisService;
 
-    /**
-     * 管理员会话前缀
-     */
-    private static final String ADMIN_SESSION_KEY = "admin:session:";
-
-    /**
-     * 管理员账号
-     */
-    private static final String ADMIN_ACCOUNT = "admin";
-    private static final String STUDENT_ACCOUNT = "student";
 
     @Override
     public IPage<SysUserDTO> paging(PagingReqDTO<SysUserDTO> reqDTO) {
@@ -69,6 +61,18 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         //查询条件
         QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+
+        SysUserDTO params = reqDTO.getParams();
+
+        if(params!=null){
+            if(!StringUtils.isBlank(params.getUserName())){
+                wrapper.lambda().like(SysUser::getUserName, params.getUserName());
+            }
+
+            if(!StringUtils.isBlank(params.getRealName())){
+                wrapper.lambda().like(SysUser::getRealName, params.getRealName());
+            }
+        }
 
         //获得数据
         IPage<SysUser> page = this.page(query, wrapper);
@@ -98,34 +102,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             throw new ServiceException(ApiError.ERROR_90010002);
         }
 
-        SysUserLoginDTO respDTO = new SysUserLoginDTO();
-        BeanMapper.copy(user, respDTO);
-        respDTO.setToken(RandomStringUtils.randomAlphanumeric(32));
-
-        //查找用户角色
-        respDTO.setRoles(sysUserRoleService.listRoles(user.getId()));
-
-
-        // 设置缓存
-        redisService.set(processKey(respDTO.getToken()), JSON.toJSONString(respDTO));
-
-        return respDTO;
+        return this.setToken(user);
     }
 
     @Override
     public SysUserLoginDTO token(String token) {
 
-        JSONObject json = redisService.getJson(processKey(token));
+        // 获得会话
+        String username = JwtUtils.getUsername(token);
+
+        JSONObject json = redisService.getJson(Constant.USER_NAME_KEY+username);
         if(json == null){
             throw new ServiceException(ApiError.ERROR_10010002);
         }
+
         return json.toJavaObject(SysUserLoginDTO.class);
     }
 
     @Override
     public void logout(String token) {
 
-        String [] keys = new String[]{processKey(token)};
+        String username = JwtUtils.getUsername(token);
+
+        String [] keys = new String[]{Constant.USER_SESSION_KEY+token, Constant.USER_NAME_KEY+username};
         redisService.del(keys);
     }
 
@@ -136,12 +135,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
        String pass = reqDTO.getPassword();
        if(!StringUtils.isBlank(pass)){
            PassInfo passInfo = PassHandler.buildPassword(pass);
-           SysUser user = this.getById(reqDTO.getId());
-
-           if(user.getUserName().equals(ADMIN_ACCOUNT) || user.getUserName().equals(STUDENT_ACCOUNT)){
-               throw new ServiceException(ApiError.ERROR_90010004);
-           }
-
+           SysUser user = this.getById(UserUtils.getUserId());
            user.setPassword(passInfo.getPassword());
            user.setSalt(passInfo.getSalt());
            this.updateById(user);
@@ -161,11 +155,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 保存基本信息
         SysUser user = new SysUser();
         BeanMapper.copy(reqDTO, user);
-
-        if(user.getUserName().equals(ADMIN_ACCOUNT) || user.getUserName().equals(STUDENT_ACCOUNT)){
-            throw new ServiceException(ApiError.ERROR_90010004);
-        }
-
 
         // 添加模式
         if(StringUtils.isBlank(user.getId())){
@@ -201,7 +190,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         // 保存用户
         SysUser user = new SysUser();
-        user.setAvatar("https://face-files.oss-cn-shenzhen.aliyuncs.com/logo.png");
         user.setId(IdWorker.getIdStr());
         user.setUserName(reqDTO.getUserName());
         user.setRealName(reqDTO.getRealName());
@@ -216,23 +204,48 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         user.setRoleIds(roleIds);
         this.save(user);
 
-        SysUserLoginDTO respDTO = new SysUserLoginDTO();
-        BeanMapper.copy(user, respDTO);
-        respDTO.setToken(RandomStringUtils.randomAlphanumeric(32));
-        respDTO.setRoles(roles);
-
-        // 设置缓存
-        redisService.set(processKey(respDTO.getToken()), JSON.toJSONString(respDTO));
-
-        return respDTO;
+        return this.setToken(user);
     }
 
+    @Override
+    public SysUserLoginDTO quickReg(SysUserDTO reqDTO) {
+
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(SysUser::getUserName, reqDTO.getUserName());
+        wrapper.last(" LIMIT 1 ");
+        SysUser user = this.getOne(wrapper);
+        if(user!=null){
+            return this.setToken(user);
+        }
+
+        return this.reg(reqDTO);
+    }
+
+
     /**
-     * 拼接缓存Key
-     * @param token
+     * 保存会话信息
+     * @param user
      * @return
      */
-    private String processKey(String token){
-        return ADMIN_SESSION_KEY+token;
+    private SysUserLoginDTO setToken(SysUser user){
+
+        SysUserLoginDTO respDTO = new SysUserLoginDTO();
+        BeanMapper.copy(user, respDTO);
+
+        // 根据用户生成Token
+        String token = JwtUtils.sign(user.getUserName());
+        respDTO.setToken(token);
+
+
+        // 角色是要
+        List<String> roles = sysUserRoleService.listRoles(user.getId());
+        respDTO.setRoles(roles);
+
+        // 保存如Redis
+        redisService.set(Constant.USER_SESSION_KEY+token, token);
+        redisService.set(Constant.USER_NAME_KEY+user.getUserName(), JSON.toJSONString(respDTO));
+
+        return respDTO;
+
     }
 }

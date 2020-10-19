@@ -6,6 +6,7 @@
     <resultMap id="BaseResultMap" type="com.yf.exam.modules.paper.entity.Paper">
         <id column="id" property="id" />
         <result column="user_id" property="userId" />
+        <result column="depart_id" property="departId" />
         <result column="exam_id" property="examId" />
         <result column="title" property="title" />
         <result column="total_time" property="totalTime" />
@@ -19,21 +20,23 @@
         <result column="state" property="state" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
+        <result column="limit_time" property="limitTime" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        `id`,`user_id`,`exam_id`,`title`,`total_time`,`user_time`,`total_score`,`qualify_score`,`obj_score`,`subj_score`,`user_score`,`has_saq`,`state`,`create_time`,`update_time`
+        `id`,`user_id`,`depart_id`,`exam_id`,`title`,`total_time`,`user_time`,`total_score`,`qualify_score`,`obj_score`,`subj_score`,`user_score`,`has_saq`,`state`,`create_time`,`update_time`,`limit_time`
     </sql>
+
 
     <resultMap id="ListResultMap"
                extends="BaseResultMap"
-               type="com.yf.exam.modules.paper.dto.response.PaperPagingRespDTO">
+               type="com.yf.exam.modules.paper.dto.response.PaperListRespDTO">
         <result column="real_name" property="realName" />
     </resultMap>
 
     <select id="paging" resultMap="ListResultMap">
-        SELECT pp.*,uc.real_name  FROM el_paper pp
+        SELECT pp.*,uc.real_name FROM el_paper pp
         LEFT JOIN sys_user uc ON pp.user_id=uc.id
         <where>
             <if test="query!=null">
@@ -44,10 +47,21 @@
                 <if test="query.userId!=null and query.userId!=''">
                     AND pp.user_id=#{query.userId}
                 </if>
+
+                <if test="query.departId!=null and query.departId!=''">
+                    AND pp.depart_id=#{query.departId}
+                </if>
+
+                <if test="query.state!=null">
+                    AND pp.state=#{query.state}
+                </if>
+                <if test="query.realName!=null and query.realName!=''">
+                    AND uc.real_name  LIKE '%${query.realName}%'
+                </if>
             </if>
         </where>
 
-        ORDER BY pp.create_time DESC
+        ORDER BY create_time DESC
     </select>
 
 </mapper>

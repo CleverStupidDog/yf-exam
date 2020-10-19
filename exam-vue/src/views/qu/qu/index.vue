@@ -10,9 +10,6 @@
     >
       <template slot="filter-content">
 
-
-
-
         <el-row>
           <el-col :span="24">
 
@@ -152,10 +149,6 @@ export default {
         {
           value: 3,
           label: '判断题'
-        },
-        {
-          value: 4,
-          label: '简答题'
         }
       ],
 
@@ -187,11 +180,11 @@ export default {
           }
         ],
         // 列表请求URL
-        listUrl: '/qu/qu/paging',
+        listUrl: '/exam/api/qu/qu/paging',
         // 删除请求URL
-        deleteUrl: '/qu/qu/delete',
+        deleteUrl: '/exam/api/qu/qu/delete',
         // 启用禁用
-        stateUrl: '/qu/qu//state',
+        stateUrl: '/exam/api/qu/qu//state',
         // 添加数据路由
         addRoute: 'AddQu'
       }
@@ -235,8 +228,8 @@ export default {
       exportExcel(this.listQuery.params)
     },
 
-    downloadTemplate(){
-      importTemplate();
+    downloadTemplate() {
+      importTemplate()
     },
 
     showImport() {
@@ -250,9 +243,7 @@ export default {
 
     doImport(e) {
       const file = e.target.files[0]
-      const param = new FormData()
-      param.append('file', file)
-      importExcel(param).then(res => {
+      importExcel(file).then(res => {
         if (res.data.code !== 0) {
           this.$alert(res.data.msg, '导入信息', {
             dangerouslyUseHTMLString: true

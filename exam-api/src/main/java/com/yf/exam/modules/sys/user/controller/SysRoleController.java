@@ -2,14 +2,13 @@ package com.yf.exam.modules.sys.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yf.exam.modules.sys.user.dto.SysRoleDTO;
-import com.yf.exam.modules.sys.user.entity.SysRole;
-import com.yf.exam.modules.sys.user.service.SysRoleService;
-import com.yf.exam.core.annon.AdminInject;
 import com.yf.exam.core.api.ApiRest;
 import com.yf.exam.core.api.controller.BaseController;
 import com.yf.exam.core.api.dto.PagingReqDTO;
 import com.yf.exam.core.utils.BeanMapper;
+import com.yf.exam.modules.sys.user.dto.SysRoleDTO;
+import com.yf.exam.modules.sys.user.entity.SysRole;
+import com.yf.exam.modules.sys.user.service.SysRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,6 @@ public class SysRoleController extends BaseController {
      * @param reqDTO
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "分页查找")
     @RequestMapping(value = "/paging", method = { RequestMethod.POST})
     public ApiRest<IPage<SysRoleDTO>> paging(@RequestBody PagingReqDTO<SysRoleDTO> reqDTO) {
@@ -58,7 +56,6 @@ public class SysRoleController extends BaseController {
      * 查找列表，每次最多返回200条数据
      * @return
      */
-    @AdminInject
     @ApiOperation(value = "查找列表")
     @RequestMapping(value = "/list", method = { RequestMethod.POST})
     public ApiRest<List<SysRoleDTO>> list() {

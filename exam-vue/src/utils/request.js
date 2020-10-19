@@ -2,24 +2,11 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-import querystring from 'querystring'
 
 // 请求实例
 const instance = axios.create({
   baseURL: process.env.VUE_APP_BASE_API,
   timeout: 60000
-})
-
-/**
- * 封装post请求 FormData方式
- * @param url
- * @param data
- * @returns {Promise}
- */
-const formInstance = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API,
-  headers: { 'content-type': 'multipart/form-data' },
-  timeout: 120000
 })
 
 // 请求前置过滤器
@@ -40,6 +27,11 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     const res = response.data
+
+    // 下载文件直接返回
+    if (res.type === 'application/octet-stream') {
+      return res
+    }
 
     // 0为正确响应码
     if (res.code !== 0) {
@@ -78,6 +70,29 @@ instance.interceptors.response.use(
   }
 )
 
+/**
+ * 上传
+ * @param url
+ * @param data
+ */
+export function upload(url, file) {
+  const formData = new FormData()
+  formData.append('file', file)
+
+  return new Promise((resolve, reject) => {
+    instance.request({
+      url: url,
+      method: 'post',
+      data: formData,
+      timeout: 120000
+    }).then(response => {
+      console.log(response)
+      resolve(response.data)
+    }).catch(err => {
+      reject(err)
+    })
+  })
+}
 
 /**
  * 下载
@@ -85,30 +100,30 @@ instance.interceptors.response.use(
  * @param data
  */
 export function download(url, data) {
-  // 构造完整地址
-  const fullUrl = process.env.VUE_APP_BASE_API + url + '?' + querystring.stringify(data)
-  // 创建链接并模拟点击
-  const a = document.createElement('a')
-  a.href = fullUrl
-  a.click()
-}
-
-/**
- * 封装get方法
- * @param url
- * @param data
- * @returns {Promise}
- */
-export function get(url, params = {}) {
   return new Promise((resolve, reject) => {
-    instance.get(url, {
-      params: params
-    }).then(response => {
-      resolve(response)
-    })
-      .catch(err => {
-        reject(err)
+    instance.request({
+      url: url,
+      method: 'get',
+      data: data,
+      timeout: 120000,
+      responseType: 'blob'
+    }).then(res => {
+      // 文件下载
+      const blob = new Blob([res], {
+        type: 'application/vnd.ms-excel'
       })
+
+      // 获得文件名称
+      const fileName = '导出的数据.xlsx'
+      let link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.setAttribute('download', fileName)
+      link.click()
+      link = null
+      Message.success('导出成功!')
+    }).catch(err => {
+      reject(err)
+    })
   })
 }
 
@@ -121,23 +136,6 @@ export function get(url, params = {}) {
 export function post(url, data = {}) {
   return new Promise((resolve, reject) => {
     instance.post(url, data)
-      .then(response => {
-        resolve(response)
-      }, err => {
-        reject(err)
-      })
-  })
-}
-
-/**
- * 使用表单的方式POST数据
- * @param url
- * @param data
- * @returns {Promise<any>}
- */
-export function postForm(url, data = {}) {
-  return new Promise((resolve, reject) => {
-    formInstance.post(url, data)
       .then(response => {
         resolve(response)
       }, err => {

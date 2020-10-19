@@ -14,6 +14,9 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * 反射工具类.
@@ -29,6 +32,26 @@ public class Reflections {
 	private static final String GETTER_PREFIX = "get";
 
 	private static final String CGLIB_CLASS_SEPARATOR = "$$";
+
+
+	/**
+	 * 获取类的所有属性，包括父类
+	 *
+	 * @param object
+	 * @return
+	 */
+	public static Field[] getAllFields(Object object) {
+		Class<?> clazz = object.getClass();
+		List<Field> fieldList = new ArrayList<>();
+		while (clazz != null) {
+			fieldList.addAll(new ArrayList<>(Arrays.asList(clazz.getDeclaredFields())));
+			clazz = clazz.getSuperclass();
+		}
+		Field[] fields = new Field[fieldList.size()];
+		fieldList.toArray(fields);
+		return fields;
+	}
+
 
 	/**
 	 * 调用Getter方法.

@@ -23,9 +23,6 @@ public class ExamDetailRespDTO extends PaperDTO {
     @ApiModelProperty(value = "判断题", required=true)
     private List<PaperQuDTO> judgeList;
 
-    @ApiModelProperty(value = "简答题数量", required=true)
-    private List<PaperQuDTO> saqList;
-
 
     @ApiModelProperty(value = "剩余结束秒数", required=true)
     public Long getLeftSeconds(){

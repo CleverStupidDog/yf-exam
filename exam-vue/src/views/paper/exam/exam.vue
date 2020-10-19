@@ -1,6 +1,6 @@
 <template>
 
-  <div class="app-container">
+  <div v-visibility-change="visibleChange" class="app-container">
 
     <el-row :gutter="24">
 
@@ -46,13 +46,6 @@
             </el-row>
           </div>
 
-          <div v-if="paperData.saqList!==undefined && paperData.saqList.length > 0">
-            <p class="card-title">简答题</p>
-            <el-row :gutter="24" class="card-line">
-              <el-tag v-for="item in paperData.saqList" :type="cardItemClass(item.answered, item.quId)" @click="handSave(item)">{{ item.sort+1 }}</el-tag>
-            </el-row>
-          </div>
-
         </el-card>
 
       </el-col>
@@ -61,23 +54,18 @@
 
         <el-card class="qu-content">
           <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
-          <p v-if="quData.image"><img :src="quData.image"></p>
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both"><img :src="item.image"></div></el-radio>
+              <el-radio v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both" /></el-radio>
             </el-radio-group>
           </div>
 
           <div v-if="quData.quType === 2">
 
             <el-checkbox-group v-model="multiValue">
-              <el-checkbox v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both"><img :src="item.image"></div></el-checkbox>
+              <el-checkbox v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both" /></el-checkbox>
             </el-checkbox-group>
 
-          </div>
-
-          <div v-if="quData.quType === 4">
-            <el-input v-model="saqValue" type="textarea" :rows="10" />
           </div>
 
         </el-card>
@@ -96,7 +84,6 @@
       </el-col>
 
     </el-row>
-
   </div>
 
 </template>
@@ -112,7 +99,6 @@ export default {
     return {
       // 全屏/不全屏
       isFullscreen: false,
-      camVisible: true,
       showPrevious: false,
       showNext: true,
       loading: false,
@@ -132,13 +118,10 @@ export default {
         leftSeconds: 99999,
         radioList: [],
         multiList: [],
-        judgeList: [],
-        saqList: []
+        judgeList: []
       },
       // 单选选定值
       radioValue: '',
-      // 简答题值
-      saqValue: '',
       // 多选选定值
       multiValue: [],
       // 已答ID
@@ -215,12 +198,6 @@ export default {
       })
 
       this.paperData.judgeList.forEach(function(item) {
-        if (!item.answered) {
-          notAnswered += 1
-        }
-      })
-
-      this.paperData.saqList.forEach(function(item) {
         if (!item.answered) {
           notAnswered += 1
         }
@@ -311,7 +288,7 @@ export default {
         answers.push(this.radioValue)
       }
 
-      const params = { paperId: this.paperId, quId: this.cardItem.quId, answers: answers, answer: this.saqValue }
+      const params = { paperId: this.paperId, quId: this.cardItem.quId, answers: answers, answer: '' }
       fillAnswer(params).then(() => {
         // 必须选择一个值
         if (answers.length > 0) {
@@ -359,9 +336,6 @@ export default {
           }
         })
 
-        // 填充主观答案
-        this.saqValue = this.quData.answer
-
         // 关闭详情
         loading.close()
       })
@@ -381,8 +355,6 @@ export default {
           this.cardItem = this.paperData.multiList[0]
         } else if (this.paperData.judgeList) {
           this.cardItem = this.paperData.judgeList[0]
-        } else {
-          this.cardItem = this.paperData.saqList[0]
         }
 
         const that = this
@@ -399,10 +371,6 @@ export default {
           that.allItem.push(item)
         })
 
-        this.paperData.saqList.forEach(function(item) {
-          that.allItem.push(item)
-        })
-
         // 当前选定
         this.fetchQuData(this.cardItem)
 
@@ -416,16 +384,6 @@ export default {
 </script>
 
 <style scoped>
-
-  .web-cam{
-    position: absolute;
-    right: 5px;
-    bottom: 10px;
-  }
-
-  .qu-content{
-
-  }
 
   .qu-content div{
     line-height: 30px;
