@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yf.exam.core.api.dto.PagingReqDTO;
+import com.yf.exam.core.exception.ServiceException;
 import com.yf.exam.core.utils.BeanMapper;
 import com.yf.exam.core.utils.StringUtils;
 import com.yf.exam.modules.enums.JoinType;
@@ -20,6 +21,7 @@ import com.yf.exam.modules.exam.service.ExamDepartService;
 import com.yf.exam.modules.exam.service.ExamRepoService;
 import com.yf.exam.modules.exam.service.ExamService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,7 +68,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
         // 题库组卷
         if(JoinType.REPO_JOIN.equals(reqDTO.getJoinType())){
-            examRepoService.saveAll(id, reqDTO.getRepoList());
+            try {
+                examRepoService.saveAll(id, reqDTO.getRepoList());
+            }catch (DuplicateKeyException e){
+                throw new ServiceException(1, "不能选择重复的题库！");
+            }
         }
 
         // 开放的部门
@@ -148,7 +154,6 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
     private void calcScore(ExamSaveReqDTO reqDTO){
 
         // 主观题分数
-        int subjScore = 0;
         int objScore = 0;
 
         // 题库组卷
@@ -174,19 +179,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
                         && item.getJudgeScore()>0){
                     objScore+=item.getJudgeCount()*item.getJudgeScore();
                 }
-                if(item.getSaqCount()!=null
-                        && item.getSaqCount()>0
-                        && item.getSaqScore()!=null
-                        && item.getSaqScore()>0){
-                    subjScore+=item.getSaqCount()*item.getSaqScore();
-                }
             }
         }
 
-        reqDTO.setObjScore(objScore);
-        reqDTO.setSubjScore(subjScore);
-        reqDTO.setTotalScore(subjScore+objScore);
-        reqDTO.setHasSaq(subjScore>0);
+
+        reqDTO.setTotalScore(objScore);
     }
 
 }

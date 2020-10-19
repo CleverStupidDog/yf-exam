@@ -31,6 +31,12 @@ public interface RepoService extends IService<Repo> {
      */
     void save(RepoDTO reqDTO);
 
+    /**
+     * 更新统计数量
+     * @param repoId
+     */
+    void refreshStat(String repoId);
+
 
     /**
      * 根据名称查找题库

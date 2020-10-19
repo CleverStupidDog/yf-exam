@@ -75,16 +75,4 @@ public class ExamRepo extends Model<ExamRepo> {
     @TableField("judge_score")
     private Integer judgeScore;
     
-    /**
-    * 简答题数量
-    */
-    @TableField("saq_count")
-    private Integer saqCount;
-    
-    /**
-    * 简答题分数
-    */
-    @TableField("saq_score")
-    private Integer saqScore;
-    
 }

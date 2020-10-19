@@ -317,23 +317,6 @@ export default {
         this.postForm.endTime = this.dateValues[1]
       }
     },
-    // 检测查询变化
-    quList: {
-      handler() {
-        const that = this
-
-        that.postForm.totalScore = 0
-        that.postForm.quList = []
-
-        this.quList.forEach(function(item) {
-          item.forEach(function(qu) {
-            that.postForm.totalScore += parseInt(qu.score)
-            that.postForm.quList.push(qu)
-          })
-        })
-      },
-      deep: true
-    },
 
     // 题库变换
     repoList: {
@@ -346,7 +329,6 @@ export default {
           that.postForm.totalScore += item.radioCount * item.radioScore
           that.postForm.totalScore += item.multiCount * item.multiScore
           that.postForm.totalScore += item.judgeCount * item.judgeScore
-          that.postForm.totalScore += item.saqCount * item.saqScore
         })
 
         // 赋值
@@ -368,26 +350,6 @@ export default {
   },
   methods: {
 
-    quEnableChange(type, value) {
-      const index = type - 1
-
-      const that = this
-
-      if (!value && this.quList[index].length > 0) {
-        this.$confirm('该大题已经做了详细配置，是否仍要移除？', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          that.quList[index] = []
-        }).catch(() => {
-          // 重新赋值
-          const arr = that.quEnable
-          arr[index] = true
-          that.quEnable = [arr[0], arr[1], arr[2], arr[3]]
-        })
-      }
-    },
 
     nextStep() {
       if (this.step < 3) {

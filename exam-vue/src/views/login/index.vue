@@ -174,19 +174,14 @@ export default {
     },
 
     studentLogin() {
-      this.loginForm.username = 'student'
-      this.loginForm.password = '123456'
+      this.loginForm.username = 'person'
+      this.loginForm.password = 'person'
       this.handleLogin()
     },
 
     adminLogin() {
       this.loginForm.username = 'admin'
       this.loginForm.password = 'admin'
-      this.handleLogin()
-    },
-    teacherLogin() {
-      this.loginForm.username = 'teacher'
-      this.loginForm.password = '123456'
       this.handleLogin()
     },
 

@@ -19,10 +19,6 @@ public class RepoRespDTO extends RepoDTO {
 
     private static final long serialVersionUID = 1L;
 
-
-    @ApiModelProperty(value = "简答题数量", required=true)
-    private Integer saqCount;
-
     @ApiModelProperty(value = "多选题数量", required=true)
     private Integer multiCount;
 

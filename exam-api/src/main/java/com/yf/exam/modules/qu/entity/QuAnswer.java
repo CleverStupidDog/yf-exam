@@ -24,7 +24,7 @@ public class QuAnswer extends Model<QuAnswer> {
     /**
      * 答案ID
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
     /**
@@ -44,10 +44,6 @@ public class QuAnswer extends Model<QuAnswer> {
      */
     private String content;
 
-    /**
-     * 图片地址
-     */
-    private String image;
 
     /**
      * 答案分析

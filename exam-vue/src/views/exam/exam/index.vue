@@ -40,14 +40,8 @@
 
       <el-table-column
         label="考试名称"
-      >
-        <template slot-scope="scope">
-          <router-link :to="{name: 'UpdateExam', params: {id: scope.row.id}}">
-            {{ scope.row.title }}
-          </router-link>
-        </template>
-
-      </el-table-column>
+        prop="title"
+      />
 
       <el-table-column
         label="考试类型"
@@ -103,7 +97,8 @@
         width="220px"
       >
         <template slot-scope="scope">
-          <el-button type="primary" size="mini" icon="el-icon-user" @click="handlerExamDetail(scope.row.id)">考试详情</el-button>
+          <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdateExam(scope.row.id)">修改</el-button>
+          <el-button type="warning" size="mini" icon="el-icon-user" @click="handleExamDetail(scope.row.id)">考试详情</el-button>
         </template>
       </el-table-column>
 
@@ -170,8 +165,12 @@ export default {
   },
   methods: {
 
-    handlerExamDetail(examId) {
+    handleExamDetail(examId) {
       this.$router.push({ name: 'ListExamUser', params: { examId: examId }})
+    },
+
+    handleUpdateExam(examId) {
+      this.$router.push({ name: 'UpdateExam', params: { id: examId }})
     }
   }
 }

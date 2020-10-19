@@ -3,7 +3,6 @@ package com.yf.exam.modules.exam.dto;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
-import java.util.Date;
 
 import java.io.Serializable;
 
@@ -48,11 +47,5 @@ public class ExamRepoDTO implements Serializable {
     
     @ApiModelProperty(value = "判断题分数", required=true)
     private Integer judgeScore;
-    
-    @ApiModelProperty(value = "简答题数量", required=true)
-    private Integer saqCount;
-    
-    @ApiModelProperty(value = "简答题分数", required=true)
-    private Integer saqScore;
     
 }

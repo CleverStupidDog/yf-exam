@@ -10,7 +10,6 @@
         <result column="radio_count" property="radioCount" />
         <result column="multi_count" property="multiCount" />
         <result column="judge_count" property="judgeCount" />
-        <result column="saq_count" property="saqCount" />
         <result column="remark" property="remark" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
@@ -18,7 +17,7 @@
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        `id`,`code`,`title`,`radio_count`,`multi_count`,`judge_count`,`saq_count`,`remark`,`create_time`,`update_time`
+        `id`,`code`,`title`,`radio_count`,`multi_count`,`judge_count`,`remark`,`create_time`,`update_time`
     </sql>
 
 
@@ -37,6 +36,16 @@
             </if>
         </where>
     </select>
+
+
+    <update id="refreshStat">
+         UPDATE el_repo a
+         SET
+         radio_count=(SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=a.id AND qu_type=1),
+         multi_count=(SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=a.id AND qu_type=2),
+         judge_count=(SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=a.id AND qu_type=3)
+         WHERE a.id=#{repoId}
+    </update>
 
 
 </mapper>

@@ -325,7 +325,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
         paper.setUpdateTime(new Date());
         paper.setQualifyScore(exam.getQualifyScore());
         paper.setState(PaperState.ING);
-        paper.setHasSaq(exam.getHasSaq());
+        paper.setHasSaq(false);
 
         // 截止时间
         Calendar cl = Calendar.getInstance();

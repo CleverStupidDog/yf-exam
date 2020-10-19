@@ -68,5 +68,5 @@ public interface QuService extends IService<Qu> {
      * @param dtoList
      * @return
      */
-    int importExcel(List<QuDetailDTO> dtoList);
+    int importExcel(List<QuExportDTO> dtoList);
 }

@@ -40,8 +40,6 @@ public class RepoDTO implements Serializable {
     @ApiModelProperty(value = "判断数量", required=true)
     private Integer judgeCount;
 
-    @ApiModelProperty(value = "简单数量", required=true)
-    private Integer saqCount;
 
     @ApiModelProperty(value = "题库备注", required=true)
     private String remark;

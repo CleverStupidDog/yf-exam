@@ -26,7 +26,7 @@ public class Qu extends Model<Qu> {
     /**
      * 题目ID
      */
-    @TableId(value = "id", type = IdType.ASSIGN_ID)
+    @TableId(value = "id", type = IdType.ID_WORKER_STR)
     private String id;
 
     /**

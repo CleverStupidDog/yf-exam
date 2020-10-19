@@ -49,7 +49,7 @@ public class QuAnswerServiceImpl extends ServiceImpl<QuAnswerMapper, QuAnswer> i
     public List<QuAnswer> listAnswerByRandom(String quId) {
         QueryWrapper<QuAnswer> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(QuAnswer::getQuId, quId);
-        wrapper.last(" ORDER BY id ASC ");
+        wrapper.last(" ORDER BY RAND() ");
 
         return this.list(wrapper);
     }

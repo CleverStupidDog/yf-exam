@@ -18,7 +18,7 @@
         </el-col>
 
         <el-col :span="12">
-          是否合格：是
+          是否合格：{{item.userScore > item.qualifyScore ?'是':'否'}}
         </el-col>
 
         <el-col :span="12">

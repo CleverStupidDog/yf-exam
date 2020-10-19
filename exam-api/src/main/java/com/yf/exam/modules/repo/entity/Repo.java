@@ -57,11 +57,6 @@ public class Repo extends Model<Repo> {
     @TableField("judge_count")
     private Integer judgeCount;
 
-    /**
-     * 简单数量
-     */
-    @TableField("saq_count")
-    private Integer saqCount;
 
     /**
      * 题库备注

@@ -8,13 +8,12 @@
         <result column="qu_id" property="quId" />
         <result column="is_right" property="isRight" />
         <result column="content" property="content" />
-        <result column="image" property="image" />
         <result column="analysis" property="analysis" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        `id`,`qu_id`,`is_right`,`content`,`image`,`analysis`
+        `id`,`qu_id`,`is_right`,`content`,`analysis`
     </sql>
 
 </mapper>

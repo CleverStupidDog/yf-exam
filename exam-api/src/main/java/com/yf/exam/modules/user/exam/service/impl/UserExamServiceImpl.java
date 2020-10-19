@@ -73,6 +73,7 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
         }
 
         if(record.getMaxScore() < score){
+            record.setTryCount(record.getTryCount()+1);
             record.setMaxScore(score);
             record.setPassed(passed);
             record.setUpdateTime(new Date());

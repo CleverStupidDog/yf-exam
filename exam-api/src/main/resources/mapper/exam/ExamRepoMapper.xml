@@ -13,13 +13,11 @@
         <result column="multi_score" property="multiScore" />
         <result column="judge_count" property="judgeCount" />
         <result column="judge_score" property="judgeScore" />
-        <result column="saq_count" property="saqCount" />
-        <result column="saq_score" property="saqScore" />
     </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
-        `id`,`exam_id`,`repo_id`,`radio_count`,`radio_score`,`multi_count`,`multi_score`,`judge_count`,`judge_score`,`saq_count`,`saq_score`
+        `id`,`exam_id`,`repo_id`,`radio_count`,`radio_score`,`multi_count`,`multi_score`,`judge_count`,`judge_score`
     </sql>
 
 </mapper>

@@ -42,6 +42,11 @@ public class RepoServiceImpl extends ServiceImpl<RepoMapper, Repo> implements Re
         this.saveOrUpdate(entity);
     }
 
+    @Override
+    public void refreshStat(String repoId) {
+        baseMapper.refreshStat(repoId);
+    }
+
 
     @Override
     public String findByName(String name) {

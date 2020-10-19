@@ -44,8 +44,6 @@ public class ExamDTO implements Serializable {
     @ApiModelProperty(value = "难度:0不限,1普通,2较难", required=true)
     private Integer level;
 
-    @ApiModelProperty(value = "口令密码", required=true)
-    private String password;
 
     @ApiModelProperty(value = "考试状态", required=true)
     private Integer state;
@@ -68,15 +66,6 @@ public class ExamDTO implements Serializable {
 
     @ApiModelProperty(value = "更新时间", required=true)
     private Date updateTime;
-
-    @ApiModelProperty(value = "是否包含简答题", required=true)
-    private Boolean hasSaq;
-
-    @ApiModelProperty(value = "主观题分数", required=true)
-    private Integer subjScore;
-
-    @ApiModelProperty(value = "客观题分数", required=true)
-    private Integer objScore;
 
     @ApiModelProperty(value = "总分数", required=true)
     private Integer totalScore;

@@ -26,4 +26,10 @@ public interface RepoMapper extends BaseMapper<Repo> {
      */
     IPage<RepoRespDTO> paging(Page page, @Param("query") RepoDTO query);
 
+    /**
+     * 更新统计数量
+     * @param repoId
+     */
+    void refreshStat(@Param("repoId") String repoId);
+
 }

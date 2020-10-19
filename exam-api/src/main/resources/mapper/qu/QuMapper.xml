@@ -45,7 +45,6 @@
         <result column="q_analysis" property="qAnalysis"  />
         <result column="a_is_right" property="aIsRight"  />
         <result column="a_content" property="aContent"  />
-        <result column="a_image" property="aImage"  />
         <result column="a_analysis" property="aAnalysis"  />
         <collection property="repoList" column="q_id" select="selectRepos"/>
     </resultMap>
@@ -96,7 +95,6 @@
         q.content AS q_content,
         q.analysis as q_analysis,
         a.content as a_content,
-        a.image as a_image,
         a.is_right as a_is_right,
         a.analysis as a_analysis
         FROM el_qu q

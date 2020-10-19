@@ -56,11 +56,6 @@ public class Exam extends Model<Exam> {
     private Integer level;
 
     /**
-     * 口令密码
-     */
-    private String password;
-
-    /**
      * 考试状态
      */
     private Integer state;
@@ -94,24 +89,6 @@ public class Exam extends Model<Exam> {
      */
     @TableField("update_time")
     private Date updateTime;
-
-    /**
-     * 是否包含简答题
-     */
-    @TableField("has_saq")
-    private Boolean hasSaq;
-
-    /**
-     * 主观题分数
-     */
-    @TableField("subj_score")
-    private Integer subjScore;
-
-    /**
-     * 客观题分数
-     */
-    @TableField("obj_score")
-    private Integer objScore;
 
     /**
      * 总分数
