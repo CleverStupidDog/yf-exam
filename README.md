@@ -29,6 +29,14 @@ SpringBoot / Redis / Shiro / Vue / MySQL
 题库组卷：指定题库、分数、数量；题目、选项随机排序、杜绝作弊    
 
 
+## 环境要求
+JDK 1.8+  [Windows下载](https://cdn.yfhl.net/java-win/jdk-8u181-windows-x64.exe)
+Redis 3.0+ [Windows下载](https://cdn.yfhl.net/java-win/Redis-x64-3.2.100.msi)
+Mysql5.7+  [Windows下载](https://cdn.yfhl.net/java-win/mysql-installer-community-5.7.31.0.msi)
+
+
+
+
 ## 快速运行
 1、下载快速运行jar包：[下载地址](https://cdn.yfhl.net/yf_exam_lite/exam-api.jar)    
 2、运行命令：java -jar exam-api.jar    
