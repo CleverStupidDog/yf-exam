@@ -1,5 +1,9 @@
 # 云帆培训考试系统 开源版
 
+# 项目演示
+开源版本：https://lite.yfhl.net  
+商业版本：https://exam.yfhl.net  
+
 # 介绍
 一款多角色在线培训考试系统，系统集成了用户管理、角色管理、部门管理、题库管理、试题管理、试题导入导出、考试管理、在线考试、错题训练等功能，考试流程完善。
 
@@ -45,10 +49,11 @@ Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-communit
 
 
 # 其它支持
-开源版本：https://lite.yfhl.net  
-商业版本：https://exam.yfhl.net    
 QQ交流群：865330294      
-邮箱：18365918@qq.com   
+邮箱：626264481@qq.com   
+手机：18710213152
+网站：https://lp.yfhl.net/
+
 
 
 
