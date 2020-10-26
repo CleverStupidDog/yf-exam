@@ -94,7 +94,7 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper> implements
     private UserExamService userExamService;
 
     /**
-     * 展示的选项，ABCD这样
+     * 展示的选项，ABC这样
      */
     private static List<String> ABC = Arrays.asList(new String[]{
             "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K","L","M","N","O","P","Q","R","S","T","U","V","W","X"

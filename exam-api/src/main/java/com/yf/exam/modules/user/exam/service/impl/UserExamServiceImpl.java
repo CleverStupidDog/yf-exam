@@ -72,14 +72,16 @@ public class UserExamServiceImpl extends ServiceImpl<UserExamMapper, UserExam> i
             return;
         }
 
+        // 修复低分数不加入统计问题
+        record.setTryCount(record.getTryCount()+1);
+        record.setUpdateTime(new Date());
+
         if(record.getMaxScore() < score){
-            record.setTryCount(record.getTryCount()+1);
             record.setMaxScore(score);
             record.setPassed(passed);
-            record.setUpdateTime(new Date());
-            this.updateById(record);
         }
 
+        this.updateById(record);
 
 
     }

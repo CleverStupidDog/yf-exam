@@ -27,7 +27,7 @@
 
 
     <select id="list" resultMap="ListResultMap">
-        SELECT pa.*,qa.content
+        SELECT pa.`id`,pa.`paper_id`,pa.`answer_id`,pa.`qu_id`,pa.`checked`,pa.`sort`,pa.`abc`,qa.content
         FROM el_paper_qu_answer pa
         LEFT JOIN el_qu_answer qa ON pa.answer_id=qa.id
         WHERE pa.paper_id=#{paperId} AND pa.qu_id=#{quId}
