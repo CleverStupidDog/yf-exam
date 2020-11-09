@@ -105,7 +105,7 @@ export default {
     },
 
     handleBack() {
-      window.location.href = document.referrer
+      this.$router.push({ name: 'ExamOnline' })
     }
 
   }

@@ -177,8 +177,15 @@ export default {
     handleTypeChange(v) {
       this.postForm.answerList = []
       if (v === 3) {
-        this.postForm.answerList.push({ isRight: true, content: '对', analysis: '' })
-        this.postForm.answerList.push({ isRight: false, content: '错', analysis: '' })
+        this.postForm.answerList.push({ isRight: true, content: '正确', analysis: '' })
+        this.postForm.answerList.push({ isRight: false, content: '错误', analysis: '' })
+      }
+
+      if (v === 1 || v === 2) {
+        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
+        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
+        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
+        this.postForm.answerList.push({ isRight: false, content: '', analysis: '' })
       }
     },
 

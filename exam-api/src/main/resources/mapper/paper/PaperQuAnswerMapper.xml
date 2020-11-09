@@ -34,4 +34,12 @@
         ORDER BY pa.sort ASC
     </select>
 
+    <select id="listForShow" resultMap="ListResultMap">
+        SELECT pa.`id`,pa.`paper_id`,pa.`answer_id`,pa.`qu_id`,pa.`checked`,pa.`sort`,pa.`abc`,qa.content,qa.is_right
+        FROM el_paper_qu_answer pa
+        LEFT JOIN el_qu_answer qa ON pa.answer_id=qa.id
+        WHERE pa.paper_id=#{paperId} AND pa.qu_id=#{quId}
+        ORDER BY pa.sort ASC
+    </select>
+
 </mapper>
