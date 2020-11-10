@@ -64,7 +64,12 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         // 复制基本数据
         BeanMapper.copy(reqDTO, entity);
         entity.setId(id);
-        entity.setState(reqDTO.getState());
+
+        if (!reqDTO.getTimeLimit() && reqDTO.getState() == 2) { //不限时 且 状态还是未开始的 把状态改为 进行中
+            entity.setState(0);
+        } else {
+            entity.setState(reqDTO.getState());
+        }
 
         // 题库组卷
         if(JoinType.REPO_JOIN.equals(reqDTO.getJoinType())){
