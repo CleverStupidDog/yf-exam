@@ -42,8 +42,8 @@ Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-communit
 
 # 快速运行
 1、导入：/exam-api/docs/install/init_db.sql 到您安装好的MySQL    
-2、修改：/exam-api/docs/run/application.properties  修改为您自己的配置数据
-3、进入：/exam-api/docs/run/ 运行启动命令，Windows运行：start.bat, Linux运行：start.sh
+2、修改：/exam-api/docs/run/application.properties  修改为您自己的配置数据    
+3、进入：/exam-api/docs/run/ 运行启动命令，Windows运行：start.bat, Linux运行：start.sh    
 4、本地访问：http://localhost:8101    
 
 
