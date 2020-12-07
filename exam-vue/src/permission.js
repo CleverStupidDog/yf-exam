@@ -14,8 +14,14 @@ router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()
 
-  // set page title
-  document.title = getPageTitle(to.meta.title)
+  // 获取网站基本信息
+  let siteData = store.getters.siteData
+  if (!siteData.siteName) {
+    siteData = await store.dispatch('settings/getSite')
+  }
+
+  // 页面标题
+  document.title = getPageTitle(siteData.siteName, to.meta.title)
 
   // determine whether the user has logged in
   const hasToken = getToken()

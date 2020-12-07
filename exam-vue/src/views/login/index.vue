@@ -7,7 +7,7 @@
 
         <div class="login-main">
           <div class="title-container">
-            <h3 class="title">云帆培训考试系统 <span style="font-size: 6px; vertical-align: top">开源版</span></h3>
+            <h3 class="title">{{siteData.siteName}}</h3>
           </div>
 
           <el-form-item prop="username">
@@ -65,28 +65,6 @@
 
           </div>
 
-          <div style="position:relative;">
-
-            <el-row :gutter="10" style="padding-top: 5px">
-
-              <div style="border-bottom: #ccc 1px solid" />
-
-              <el-col :span="24">
-                <p style="color: #001528;font-size: 12px;line-height: 30px">演示账号，点击以下按钮直接登录系统</p>
-              </el-col>
-
-              <el-col :span="12" :xs="24">
-                <el-button style="width:100%;margin-bottom:10px;" size="mini" icon="el-icon-s-promotion" @click.native.prevent="studentLogin">学员登录</el-button>
-              </el-col>
-
-              <el-col :span="12" :xs="24">
-                <el-button icon="el-icon-s-tools" style="width:100%;margin-bottom:10px;" size="mini" @click.native.prevent="adminLogin">超管登录</el-button>
-              </el-col>
-
-            </el-row>
-
-          </div>
-
         </div>
 
       </el-form>
@@ -94,11 +72,7 @@
     </el-main>
 
     <el-footer style="background: #ffffff; text-align: center; line-height: 50px;font-size: 14px" height="50px">
-
-      ©云帆互联
-      <a href="https://lp.yfhl.net" target="_blank" style="margin-left: 10px">企业官网</a> / <a href="https://cdn.yfhl.net/docs/exam-guide.pdf" target="_blank">产品文档</a> /
-      <a target="_blank" href="https://qm.qq.com/cgi-bin/qm/qr?k=dfXIc5z0O7DMxdrF-N8DV9HbUKnKJFW0&jump_from=webapi">Q群:865330294</a>
-
+      <a href="https://lp.yfhl.net" target="_blank" style="margin-left: 10px">©2020 云帆互联</a>
     </el-footer>
 
   </el-container>
@@ -106,11 +80,17 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
 import { validUsername } from '@/utils/validate'
 import 'element-ui/lib/theme-chalk/display.css'
 
 export default {
   name: 'Login',
+  computed: {
+    ...mapGetters([
+      'siteData'
+    ])
+  },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {

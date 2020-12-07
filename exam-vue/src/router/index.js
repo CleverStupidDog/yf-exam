@@ -292,6 +292,12 @@ export const asyncRoutes = [
       roles: ['sa']
     },
     children: [
+      {
+        path: 'config',
+        component: () => import('@/views/sys/config'),
+        name: 'SysConfig',
+        meta: { title: '系统配置', icon: 'theme' }
+      },
 
       {
         path: 'depart',

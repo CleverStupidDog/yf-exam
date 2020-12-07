@@ -1,40 +1,23 @@
 <template>
   <div class="app-container">
 
-    <el-form ref="postForm" :model="postForm" :rules="rules" label-position="top">
+    <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="100px">
 
       <el-card>
 
-        <el-form-item label="预热时长/分钟" prop="prepare">
-          <el-input-number v-model="postForm.prepare" :min="0" :max="999999" placeholder="预热时长/分钟" />
+        <el-form-item label="系统名称">
+          <el-input v-model="postForm.siteName" placeholder="系统显示名称" />
         </el-form-item>
 
-        <el-form-item label="休市开始时间" prop="restStart">
-          <el-time-select
-            v-model="postForm.restStart"
-            :picker-options="{
-              start: '00:00',
-              step: '00:30',
-              end: '23:59'
-            }"
-            placeholder="休市开始时间"
-          />
+        <!-- 有需求可自行重构、接口有前后端LOGO -->
 
-        </el-form-item>
+<!--        <el-form-item label="后台LOGO">-->
+<!--          <single-upload v-model="postForm.backLogo" />-->
+<!--        </el-form-item>-->
 
-        <el-form-item label="休市结束时间" prop="restEnd">
-
-          <el-time-select
-            v-model="postForm.restEnd"
-            :picker-options="{
-              start: '00:00',
-              step: '00:30',
-              end: '23:59'
-            }"
-            placeholder="休市结束时间"
-          />
-
-        </el-form-item>
+<!--        <el-form-item label="前端LOGO">-->
+<!--          <single-upload v-model="postForm.frontLogo" />-->
+<!--        </el-form-item>-->
 
         <el-row>
           <el-button type="primary" @click="submitForm">保存</el-button>
@@ -55,19 +38,10 @@ export default {
   data() {
     return {
       postForm: {
-        id: '0'
+        id: '1'
       },
       loading: false,
       rules: {
-        prepare: [
-          { required: true, message: '预热时长不能为空！' }
-        ],
-        restStart: [
-          { required: true, message: '预热时长不能为空！' }
-        ],
-        restEnd: [
-          { required: true, message: '预热时长不能为空！' }
-        ]
       }
     }
   },
@@ -90,7 +64,7 @@ export default {
         }
 
         this.loading = true
-        this.postForm.id = '0'
+        this.postForm.id = '1'
 
         saveData(this.postForm).then(() => {
           this.$notify({

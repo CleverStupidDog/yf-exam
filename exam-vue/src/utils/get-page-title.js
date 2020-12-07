@@ -1,8 +1,4 @@
-import defaultSettings from '@/settings'
-
-const title = defaultSettings.title || '云帆考试系统'
-
-export default function getPageTitle(pageTitle) {
+export default function getPageTitle(title, pageTitle) {
   if (pageTitle) {
     return `${pageTitle} - ${title}`
   }

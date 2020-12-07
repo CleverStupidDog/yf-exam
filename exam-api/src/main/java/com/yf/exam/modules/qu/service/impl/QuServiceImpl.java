@@ -255,6 +255,5 @@ public class QuServiceImpl extends ServiceImpl<QuMapper, Qu> implements QuServic
                 throw new ServiceException(1, no + "单选题不能包含多个正确项！");
             }
 
-
     }
 }

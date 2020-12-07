@@ -62,6 +62,9 @@ public class ShiroConfig {
 		map.put("/exam/api/sys/user/reg", "anon");
 		map.put("/exam/api/sys/user/quick-reg", "anon");
 
+		// 获取网站基本信息
+		map.put("/exam/api/sys/config/detail", "anon");
+
 		map.put("/", "anon");
 		map.put("/v2/**", "anon");
 		map.put("/doc.html", "anon");
