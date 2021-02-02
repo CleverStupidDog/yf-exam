@@ -41,10 +41,13 @@ Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-communit
 
 
 # 快速运行
-1、导入：/exam-api/docs/install/init_db.sql 到您安装好的MySQL    
-2、修改：/exam-api/docs/run/application.properties  修改为您自己的配置数据    
-3、进入：/exam-api/docs/run/ 运行启动命令，Windows运行：start.bat, Linux运行：start.sh    
-4、本地访问：http://localhost:8101    
+1、自行安装MySQL数据库（版本最好大于5.7），将`安装资源中`的`数据库初始化.sql`导入到安装好的数据库
+2、安装Java环境，要求JDK版本大于1.7
+3、请修改外置配置文件：application.properties 改成您自己的MySQL配置
+4、Windows通过start.bat运行，Linux运行start.sh运行
+5、如果无意外，可通过：http://localhost:8101 访问到项目了
+6、管理员账号密码：admin/admin 学员账号：person/person
+
 
 
 # 其它支持
@@ -52,11 +55,6 @@ QQ交流群：865330294
 邮箱：626264481@qq.com   
 手机：18710213152    
 网站：https://lp.yfhl.net/    
-
-
-# 默认账号    
-学员：person / person    
-管理员： admin / admin    
 
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1207/173238_e6c22c67_2189748.jpeg "17-32-10.jpg")
