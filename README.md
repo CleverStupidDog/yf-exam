@@ -34,8 +34,7 @@ SpringBoot / Redis / Shiro / Vue / MySQL
 
 
 # 环境要求
-JDK 1.8+  [点此下载](https://cdn.yfhl.net/java-win/jdk-8u181-windows-x64.exe)    
-Redis 3.0+ [点此下载](https://cdn.yfhl.net/java-win/Redis-x64-3.2.100.msi)    
+JDK 1.8+  [点此下载](https://cdn.yfhl.net/java-win/jdk-8u181-windows-x64.exe)        
 Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-community-5.7.31.0.msi)    
 
 
@@ -53,7 +52,7 @@ Mysql5.7+  [点此下载](https://cdn.yfhl.net/java-win/mysql-installer-communit
 QQ交流群：865330294      
 邮箱：626264481@qq.com   
 手机：18710213152    
-网站：https://lp.yfhl.net/    
+网站：https://lp-exam.yfhl.net  
 
 
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1207/173238_e6c22c67_2189748.jpeg "17-32-10.jpg")
