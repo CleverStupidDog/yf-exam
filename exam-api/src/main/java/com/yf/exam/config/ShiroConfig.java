@@ -3,7 +3,6 @@ package com.yf.exam.config;
 import com.yf.exam.modules.shiro.ShiroRealm;
 import com.yf.exam.modules.shiro.aop.JwtFilter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
@@ -11,10 +10,7 @@ import org.apache.shiro.spring.LifecycleBeanPostProcessor;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
 import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
-import org.crazycake.shiro.RedisCacheManager;
-import org.crazycake.shiro.RedisManager;
 import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -32,15 +28,6 @@ import java.util.Map;
 @Slf4j
 @Configuration
 public class ShiroConfig {
-
-    @Value("${spring.redis.port}")
-    private String redisPort;
-
-    @Value("${spring.redis.host}")
-    private String redisHost;
-
-    @Value("${spring.redis.password}")
-    private String redisPass;
 
 	/**
 	 * Filter Chain定义说明
@@ -105,8 +92,6 @@ public class ShiroConfig {
 		defaultSessionStorageEvaluator.setSessionStorageEnabled(false);
 		subjectDAO.setSessionStorageEvaluator(defaultSessionStorageEvaluator);
 		securityManager.setSubjectDAO(subjectDAO);
-        //自定义缓存实现,使用redis
-        securityManager.setCacheManager(redisCacheManager());
 		return securityManager;
 	}
 
@@ -135,41 +120,5 @@ public class ShiroConfig {
 		advisor.setSecurityManager(securityManager);
 		return advisor;
 	}
-
-    /**
-     * cacheManager 缓存 redis实现
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    public RedisCacheManager redisCacheManager() {
-        log.info("===============(1)创建缓存管理器RedisCacheManager");
-        RedisCacheManager redisCacheManager = new RedisCacheManager();
-        redisCacheManager.setRedisManager(redisManager());
-        //redis中针对不同用户缓存(此处的id需要对应user实体中的id字段,用于唯一标识)
-        redisCacheManager.setPrincipalIdFieldName("id");
-        //用户权限信息缓存时间
-        redisCacheManager.setExpire(200000);
-        return redisCacheManager;
-    }
-
-    /**
-     * 配置shiro redisManager
-     * 使用的是shiro-redis开源插件
-     *
-     * @return
-     */
-    @Bean
-    public RedisManager redisManager() {
-        log.info("===============(2)创建RedisManager,连接Redis..URL= " + redisHost + ":" + redisPort);
-        RedisManager redisManager = new RedisManager();
-		redisManager.setHost(redisHost);
-		redisManager.setPort(Integer.parseInt(redisPort));
-		redisManager.setTimeout(0);
-        if (!StringUtils.isEmpty(redisPass)) {
-            redisManager.setPassword(redisPass);
-        }
-        return redisManager;
-    }
 
 }

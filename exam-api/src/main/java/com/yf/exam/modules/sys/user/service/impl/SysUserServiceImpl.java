@@ -1,7 +1,6 @@
 package com.yf.exam.modules.sys.user.service.impl;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -16,8 +15,6 @@ import com.yf.exam.core.utils.BeanMapper;
 import com.yf.exam.core.utils.StringUtils;
 import com.yf.exam.core.utils.passwd.PassHandler;
 import com.yf.exam.core.utils.passwd.PassInfo;
-import com.yf.exam.modules.Constant;
-import com.yf.exam.modules.common.redis.service.RedisService;
 import com.yf.exam.modules.shiro.jwt.JwtUtils;
 import com.yf.exam.modules.sys.user.dto.SysUserDTO;
 import com.yf.exam.modules.sys.user.dto.request.SysUserSaveReqDTO;
@@ -27,6 +24,7 @@ import com.yf.exam.modules.sys.user.mapper.SysUserMapper;
 import com.yf.exam.modules.sys.user.service.SysUserRoleService;
 import com.yf.exam.modules.sys.user.service.SysUserService;
 import com.yf.exam.modules.user.UserUtils;
+import org.apache.shiro.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,9 +46,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
     @Autowired
     private SysUserRoleService sysUserRoleService;
-
-    @Autowired
-    private RedisService redisService;
 
 
     @Override
@@ -111,21 +106,35 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 获得会话
         String username = JwtUtils.getUsername(token);
 
-        JSONObject json = redisService.getJson(Constant.USER_NAME_KEY+username);
-        if(json == null){
+        // 校验结果
+        boolean check = JwtUtils.verify(token, username);
+
+
+        if(!check){
+            throw new ServiceException(ApiError.ERROR_90010001);
+        }
+
+        QueryWrapper<SysUser> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(SysUser::getUserName, username);
+
+        SysUser user = this.getOne(wrapper, false);
+        if(user == null){
             throw new ServiceException(ApiError.ERROR_10010002);
         }
 
-        return json.toJavaObject(SysUserLoginDTO.class);
+        // 被禁用
+        if(user.getState().equals(CommonState.ABNORMAL)){
+            throw new ServiceException(ApiError.ERROR_90010005);
+        }
+
+        return this.setToken(user);
     }
 
     @Override
     public void logout(String token) {
 
-        String username = JwtUtils.getUsername(token);
-
-        String [] keys = new String[]{Constant.USER_SESSION_KEY+token, Constant.USER_NAME_KEY+username};
-        redisService.del(keys);
+        // 仅退出当前会话
+        SecurityUtils.getSubject().logout();
     }
 
     @Override
@@ -232,20 +241,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUserLoginDTO respDTO = new SysUserLoginDTO();
         BeanMapper.copy(user, respDTO);
 
-        // 根据用户生成Token
+        // 生成Token
         String token = JwtUtils.sign(user.getUserName());
         respDTO.setToken(token);
 
-
-        // 角色是要
+        // 填充角色
         List<String> roles = sysUserRoleService.listRoles(user.getId());
         respDTO.setRoles(roles);
 
-        // 保存如Redis
-        redisService.set(Constant.USER_SESSION_KEY+token, token);
-        redisService.set(Constant.USER_NAME_KEY+user.getUserName(), JSON.toJSONString(respDTO));
-
         return respDTO;
-
     }
 }

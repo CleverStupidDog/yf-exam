@@ -1,15 +1,12 @@
 package com.yf.exam.modules.shiro;
 
 
-import com.yf.exam.modules.Constant;
-import com.yf.exam.modules.common.redis.service.RedisService;
 import com.yf.exam.modules.shiro.jwt.JwtToken;
 import com.yf.exam.modules.shiro.jwt.JwtUtils;
 import com.yf.exam.modules.sys.user.dto.response.SysUserLoginDTO;
 import com.yf.exam.modules.sys.user.service.SysUserRoleService;
 import com.yf.exam.modules.sys.user.service.SysUserService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -41,10 +38,6 @@ public class ShiroRealm extends AuthorizingRealm {
 	@Lazy
 	private SysUserRoleService sysUserRoleService;
 
-	@Autowired
-	@Lazy
-	private RedisService redisService;
-
 
 	@Override
 	public boolean supports(AuthenticationToken token) {
@@ -59,7 +52,6 @@ public class ShiroRealm extends AuthorizingRealm {
 	 */
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-		log.info("++++++++++开始校验详细权限");
 
 		String userId = null;
 		if (principals != null) {
@@ -118,8 +110,8 @@ public class ShiroRealm extends AuthorizingRealm {
 		// 查找登录用户对象
 		SysUserLoginDTO user = sysUserService.token(token);
 
-		// 校验token是否超时失效 & 或者账号密码是否错误
-		if (!checkAndRefresh(token, username)) {
+		// 校验token是否失效
+		if (!JwtUtils.verify(token, username)) {
 			throw new AuthenticationException("登陆失效，请重试登陆!");
 		}
 
@@ -127,29 +119,6 @@ public class ShiroRealm extends AuthorizingRealm {
 	}
 
 
-	/**
-	 * 刷新token内容和到期时间，使其有访问时自动续期
-	 * @param token
-	 * @param userName
-	 * @return
-	 */
-	public boolean checkAndRefresh(String token, String userName) {
-
-		String key = Constant.USER_SESSION_KEY + token;
-
-		String cacheToken = redisService.getString(key);
-		if (StringUtils.isNotEmpty(cacheToken)) {
-			// 校验token有效性
-			if (!JwtUtils.verify(cacheToken, userName)) {
-				String newToken = JwtUtils.sign(userName);
-				// 更新token
-				redisService.set(key, newToken, 1000L);
-                log.info("++++++++++会话活跃：{}",token);
-			}
-			return true;
-		}
-		return false;
-	}
 
 	/**
 	 * 清除当前用户的权限认证缓存

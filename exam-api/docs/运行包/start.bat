@@ -1,0 +1,1 @@
+java -jar exam-api.jar -Dspring.config.location=application.properties

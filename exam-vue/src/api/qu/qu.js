@@ -21,7 +21,7 @@ export function saveData(data) {
  * @param data
  */
 export function exportExcel(data) {
-  return download('/exam/api/qu/qu/export', data)
+  return download('/exam/api/qu/qu/export', data, '导出的数据.xlsx')
 }
 
 /**
@@ -29,7 +29,7 @@ export function exportExcel(data) {
  * @param data
  */
 export function importTemplate() {
-  return download('/exam/api/qu/qu/import/template')
+  return download('/exam/api/qu/qu/import/template', {}, 'qu-import-template.xlsx')
 }
 
 /**

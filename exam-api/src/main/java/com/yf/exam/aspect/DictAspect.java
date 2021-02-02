@@ -109,7 +109,7 @@ public class DictAspect {
             ((ApiRest) result).setData(item);
 
         }catch (Exception e){
-            e.printStackTrace();
+
         }
     }
 

@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row style="line-height: 30px">
       <el-row :span="24">欢迎使用 {{siteData.siteName}}</el-row>
-      <el-row :span="24" style="font-size: 14px; color: #666">系统版本：1.1.0</el-row>
+      <el-row :span="24" style="font-size: 14px; color: #666">系统版本：1.2.0</el-row>
     </el-row>
   </div>
 </template>

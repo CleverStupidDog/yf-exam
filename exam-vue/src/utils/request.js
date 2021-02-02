@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
+import { Loading } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
 
@@ -30,7 +31,11 @@ instance.interceptors.response.use(
 
     // 下载文件直接返回
     if (res.type === 'application/octet-stream') {
-      return res
+      return response
+    }
+
+    if (res.type === 'application/vnd.ms-excel') {
+      return response
     }
 
     // 0为正确响应码
@@ -75,20 +80,35 @@ instance.interceptors.response.use(
  * @param url
  * @param data
  */
-export function upload(url, file) {
+export function upload(url, file, data) {
   const formData = new FormData()
   formData.append('file', file)
 
+  // 附加数据
+  if (data) {
+    Object.keys(data).forEach((key) => {
+      formData.append(key, data[key])
+    })
+  }
+
   return new Promise((resolve, reject) => {
+    // 打开
+    const loading = Loading.service({
+      text: '正在上传数据...',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+
     instance.request({
       url: url,
       method: 'post',
       data: formData,
-      timeout: 120000
+      timeout: 1200000
     }).then(response => {
       console.log(response)
-      resolve(response.data)
+      loading.close()
+      resolve(response)
     }).catch(err => {
+      loading.close()
       reject(err)
     })
   })
@@ -99,22 +119,29 @@ export function upload(url, file) {
  * @param url
  * @param data
  */
-export function download(url, data) {
+export function download(url, data, fileName) {
   return new Promise((resolve, reject) => {
+    // 打开
+    const loading = Loading.service({
+      text: '正在下载数据...',
+      background: 'rgba(0, 0, 0, 0.7)'
+    })
+
     instance.request({
       url: url,
-      method: 'get',
+      method: 'post',
       data: data,
-      timeout: 120000,
+      timeout: 1200000,
       responseType: 'blob'
     }).then(res => {
+      loading.close()
+
       // 文件下载
-      const blob = new Blob([res], {
+      const blob = new Blob([res.data], {
         type: 'application/vnd.ms-excel'
       })
 
       // 获得文件名称
-      const fileName = '导出的数据.xlsx'
       let link = document.createElement('a')
       link.href = URL.createObjectURL(blob)
       link.setAttribute('download', fileName)
@@ -122,6 +149,7 @@ export function download(url, data) {
       link = null
       Message.success('导出成功!')
     }).catch(err => {
+      loading.close()
       reject(err)
     })
   })

@@ -1,19 +1,8 @@
 <template>
   <div class="app-container">
 
-    <el-steps :active="step" simple>
-
-      <el-step title="组卷配置" icon="el-icon-set-up" />
-      <el-step title="考试权限" icon="el-icon-unlock" />
-      <el-step title="补充配置" icon="el-icon-s-tools" />
-    </el-steps>
-
-    <div style="margin-top: 20px;width:100%; height: 40px;">
-      <el-button v-if="step > 1" @click="prevStep">上一步</el-button>
-      <el-button type="primary" style="float:right;" @click="nextStep">{{ step===3?'提交保存':'下一步' }}</el-button>
-    </div>
-
-    <el-card v-if="step === 1" style="margin-top: 20px">
+    <h3>组卷信息</h3>
+    <el-card style="margin-top: 20px">
 
       <div style="float: right; font-weight: bold; color: #ff0000">试卷总分：{{ postForm.totalScore }}分</div>
 
@@ -126,45 +115,8 @@
 
     </el-card>
 
-    <el-card v-if="step === 2" style="margin-top: 20px;">
-
-      <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
-        <el-radio :label="1" border>完全公开</el-radio>
-        <el-radio :label="2" border>部门开放</el-radio>
-      </el-radio-group>
-
-      <el-alert
-        v-if="postForm.openType===1"
-        title="开放的，任何人都可以进行考试！"
-        type="warning"
-      />
-
-      <div v-if="postForm.openType===2">
-        <el-input
-          v-model="filterText"
-          placeholder="输入关键字进行过滤"
-        />
-
-        <el-tree
-
-          ref="tree"
-          v-loading="treeLoading"
-          empty-text=" "
-          :data="treeData"
-          default-expand-all
-          show-checkbox
-          node-key="id"
-          :default-checked-keys="postForm.departIds"
-          :props="defaultProps"
-          :filter-node-method="filterNode"
-          @check-change="handleCheckChange"
-        />
-
-      </div>
-
-    </el-card>
-
-    <el-card v-if="step === 3" style="margin-top: 20px">
+    <h3>考试配置</h3>
+    <el-card style="margin-top: 20px">
 
       <el-form ref="postForm" :model="postForm" :rules="rules" label-position="left" label-width="120px">
 
@@ -209,6 +161,51 @@
       </el-form>
 
     </el-card>
+
+    <h3>权限配置</h3>
+    <el-card style="margin-top: 20px;">
+
+      <el-radio-group v-model="postForm.openType" style="margin-bottom: 20px">
+        <el-radio :label="1" border>完全公开</el-radio>
+        <el-radio :label="2" border>部门开放</el-radio>
+      </el-radio-group>
+
+      <el-alert
+        v-if="postForm.openType===1"
+        title="开放的，任何人都可以进行考试！"
+        type="warning"
+      />
+
+      <div v-if="postForm.openType===2">
+        <el-input
+          v-model="filterText"
+          placeholder="输入关键字进行过滤"
+        />
+
+        <el-tree
+
+          ref="tree"
+          v-loading="treeLoading"
+          empty-text=" "
+          :data="treeData"
+          default-expand-all
+          show-checkbox
+          node-key="id"
+          :default-checked-keys="postForm.departIds"
+          :props="defaultProps"
+          :filter-node-method="filterNode"
+          @check-change="handleCheckChange"
+        />
+
+      </div>
+
+    </el-card>
+
+    <div style="margin-top: 20px">
+      <el-button type="primary" @click="handleSave">保存</el-button>
+    </div>
+
+
 
   </div>
 </template>
@@ -291,9 +288,6 @@ export default {
           { required: true, message: '考试时间不能为空！' }
         ],
 
-        content: [
-          { required: true, message: '课程描述不能为空' }
-        ],
         ruleId: [
           { required: true, message: '考试规则不能为空' }
         ],
@@ -350,89 +344,80 @@ export default {
   },
   methods: {
 
+    handleSave() {
+      this.$refs.postForm.validate((valid) => {
+        if (!valid) {
+          return
+        }
 
-    nextStep() {
-      if (this.step < 3) {
-        this.step += 1
-      } else {
-        this.$refs.postForm.validate((valid) => {
-          if (!valid) {
-            return
-          }
+        if (this.postForm.totalScore === 0) {
+          this.$notify({
+            title: '提示信息',
+            message: '考试规则设置不正确，请确认！',
+            type: 'warning',
+            duration: 2000
+          })
 
-          if (this.postForm.totalScore === 0) {
-            this.$notify({
-              title: '提示信息',
-              message: '考试规则设置不正确，请确认！',
-              type: 'warning',
-              duration: 2000
-            })
+          return
+        }
 
-            return
-          }
+        if (this.postForm.joinType === 1) {
+          for (let i = 0; i < this.postForm.repoList.length; i++) {
+            const repo = this.postForm.repoList[i]
 
-          if (this.postForm.joinType === 1) {
-            for (let i = 0; i < this.postForm.repoList.length; i++) {
-              const repo = this.postForm.repoList[i]
+            if (!repo.repoId) {
+              this.$notify({
+                title: '提示信息',
+                message: '考试题库选择不正确！',
+                type: 'warning',
+                duration: 2000
+              })
 
-              if (!repo.repoId) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '考试题库选择不正确！',
-                  type: 'warning',
-                  duration: 2000
-                })
+              return
+            }
 
-                return
-              }
+            if ((repo.radioCount > 0 && repo.radioScore === 0) || (repo.radioCount === 0 && repo.radioScore > 0)) {
+              this.$notify({
+                title: '提示信息',
+                message: '题库第：[' + (i + 1) + ']项存在无效的单选题配置！',
+                type: 'warning',
+                duration: 2000
+              })
 
-              if ((repo.radioCount > 0 && repo.radioScore === 0) || (repo.radioCount === 0 && repo.radioScore > 0)) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '题库第：[' + (i + 1) + ']项存在无效的单选题配置！',
-                  type: 'warning',
-                  duration: 2000
-                })
+              return
+            }
 
-                return
-              }
+            if ((repo.multiCount > 0 && repo.multiScore === 0) || (repo.multiCount === 0 && repo.multiScore > 0)) {
+              this.$notify({
+                title: '提示信息',
+                message: '题库第：[' + (i + 1) + ']项存在无效的多选题配置！',
+                type: 'warning',
+                duration: 2000
+              })
 
-              if ((repo.multiCount > 0 && repo.multiScore === 0) || (repo.multiCount === 0 && repo.multiScore > 0)) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '题库第：[' + (i + 1) + ']项存在无效的多选题配置！',
-                  type: 'warning',
-                  duration: 2000
-                })
+              return
+            }
 
-                return
-              }
-
-              if ((repo.judgeCount > 0 && repo.judgeScore === 0) || (repo.judgeCount === 0 && repo.judgeScore > 0)) {
-                this.$notify({
-                  title: '提示信息',
-                  message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
-                  type: 'warning',
-                  duration: 2000
-                })
-                return
-              }
+            if ((repo.judgeCount > 0 && repo.judgeScore === 0) || (repo.judgeCount === 0 && repo.judgeScore > 0)) {
+              this.$notify({
+                title: '提示信息',
+                message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
+                type: 'warning',
+                duration: 2000
+              })
+              return
             }
           }
+        }
 
-          this.$confirm('确实要提交保存吗？', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            this.submitForm()
-          })
+        this.$confirm('确实要提交保存吗？', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.submitForm()
         })
-      }
-    },
-
-    prevStep() {
-      this.step -= 1
+      })
     },
 
     handleCheckChange() {
@@ -460,8 +445,11 @@ export default {
 
       fetchDetail(id).then(response => {
         this.postForm = response.data
-        this.dateValues[0] = this.postForm.startTime
-        this.dateValues[1] = this.postForm.endTime
+
+        if (this.postForm.startTime && this.postForm.endTime) {
+          this.dateValues[0] = this.postForm.startTime
+          this.dateValues[1] = this.postForm.endTime
+        }
 
         // 按分组填充题目
         if (this.postForm.joinType === 2) {

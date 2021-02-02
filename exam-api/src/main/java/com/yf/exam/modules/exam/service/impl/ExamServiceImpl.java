@@ -65,7 +65,11 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         BeanMapper.copy(reqDTO, entity);
         entity.setId(id);
 
-        if (!reqDTO.getTimeLimit() && reqDTO.getState() == 2) { //不限时 且 状态还是未开始的 把状态改为 进行中
+        // 修复状态
+        if (reqDTO.getTimeLimit()!=null
+                && !reqDTO.getTimeLimit()
+                && reqDTO.getState()!=null
+                && reqDTO.getState() == 2) {
             entity.setState(0);
         } else {
             entity.setState(reqDTO.getState());
