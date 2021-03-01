@@ -2,7 +2,7 @@
 
 # 项目演示
 开源版本：https://lite.yfhl.net  
-管理账号：admin/admin 学员账号：person/person   
+管理账号：admin/admin 学员账号：student/student   
 
 商业版本：https://lp-exam.yfhl.net
 
