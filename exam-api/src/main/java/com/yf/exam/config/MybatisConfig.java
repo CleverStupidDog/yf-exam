@@ -20,7 +20,9 @@ public class MybatisConfig {
      */
     @Bean
     public QueryInterceptor queryInterceptor() {
-        return new QueryInterceptor();
+        QueryInterceptor query =  new QueryInterceptor();
+        query.setLimit(-1L);
+        return query;
     }
 
     /**

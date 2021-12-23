@@ -81,7 +81,6 @@ public class ShiroRealm extends AuthorizingRealm {
 			throw new AuthenticationException("token为空!");
 		}
 
-		log.error("++++++++++校验用户："+token);
 		// 校验token有效性
 		SysUserLoginDTO user = this.checkToken(token);
 		return new SimpleAuthenticationInfo(user, token, getName());

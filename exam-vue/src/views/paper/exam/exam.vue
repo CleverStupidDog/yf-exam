@@ -1,13 +1,15 @@
 <template>
 
-  <div v-visibility-change="visibleChange" class="app-container">
+  <div class="app-container">
 
     <el-row :gutter="24">
 
       <el-col :span="24">
         <el-card style="margin-bottom: 10px">
 
-          距离考试结束还有：<span style="color: #ff0000;">{{ min }}分钟{{ sec }}秒</span>
+          距离考试结束还有：
+          <exam-timer v-model="paperData.leftSeconds" @timeout="doHandler()" />
+
           <el-button style="float: right; margin-top: -10px" type="primary" icon="el-icon-plus" :loading="loading" @click="handHandExam()">
             {{ handleText }}
           </el-button>
@@ -54,16 +56,27 @@
 
         <el-card class="qu-content">
           <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
+          <p v-if="quData.image!=null && quData.image!=''">
+            <el-image :src="quData.image" style="max-width:100%;" />
+          </p>
           <div v-if="quData.quType === 1 || quData.quType===3">
             <el-radio-group v-model="radioValue">
-              <el-radio v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both" /></el-radio>
+              <el-radio v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }}
+                <div v-if="item.image!=null && item.image!=''" style="clear: both">
+                  <el-image :src="item.image" style="max-width:100%;" />
+                </div>
+              </el-radio>
             </el-radio-group>
           </div>
 
           <div v-if="quData.quType === 2">
 
             <el-checkbox-group v-model="multiValue">
-              <el-checkbox v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }} <div v-if="item.image" style="clear: both" /></el-checkbox>
+              <el-checkbox v-for="item in quData.answerList" :label="item.id">{{ item.abc }}.{{ item.content }}
+                <div v-if="item.image!=null && item.image!=''" style="clear: both">
+                  <el-image :src="item.image" style="max-width:100%;" />
+                </div>
+              </el-checkbox>
             </el-checkbox-group>
 
           </div>
@@ -91,10 +104,11 @@
 <script>
 import { paperDetail, quDetail, handExam, fillAnswer } from '@/api/paper/exam'
 import { Loading } from 'element-ui'
+import ExamTimer from '@/views/paper/exam/components/ExamTimer'
 
 export default {
   name: 'ExamProcess',
-
+  components: { ExamTimer },
   data() {
     return {
       // 全屏/不全屏
@@ -125,9 +139,7 @@ export default {
       // 多选选定值
       multiValue: [],
       // 已答ID
-      answeredIds: [],
-      min: '00',
-      sec: '00'
+      answeredIds: []
     }
   },
   created() {
@@ -139,29 +151,6 @@ export default {
   },
 
   methods: {
-
-    // 倒计时
-    countdown() {
-      const leftSeconds = this.paperData.leftSeconds
-
-      // 强制交卷
-      if (leftSeconds < 0) {
-        this.doHandler()
-        return
-      }
-
-      // 时
-      const min = parseInt(leftSeconds / 60 % 60)
-      const sec = parseInt(leftSeconds % 60)
-
-      this.min = min > 9 ? min : '0' + min
-      this.sec = sec > 9 ? sec : '0' + sec
-      const that = this
-      this.paperData.leftSeconds -= 1
-      setTimeout(function() {
-        that.countdown()
-      }, 1000)
-    },
 
     // 答题卡样式
     cardItemClass(answered, quId) {
@@ -373,9 +362,6 @@ export default {
 
         // 当前选定
         this.fetchQuData(this.cardItem)
-
-        // 倒计时
-        this.countdown()
       })
     }
 

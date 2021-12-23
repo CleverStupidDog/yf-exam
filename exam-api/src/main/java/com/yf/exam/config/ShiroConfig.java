@@ -36,7 +36,7 @@ public class ShiroConfig {
 	 * 2、当设置多个过滤器时，全部验证通过，才视为通过
 	 * 3、部分过滤器可指定参数，如perms，roles
 	 */
-	@Bean("shiroFilter")
+	@Bean("shiroFilterFactoryBean")
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
 		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
@@ -51,6 +51,9 @@ public class ShiroConfig {
 
 		// 获取网站基本信息
 		map.put("/exam/api/sys/config/detail", "anon");
+
+		// 文件读取
+		map.put("/upload/file/**", "anon");
 
 		map.put("/", "anon");
 		map.put("/v2/**", "anon");

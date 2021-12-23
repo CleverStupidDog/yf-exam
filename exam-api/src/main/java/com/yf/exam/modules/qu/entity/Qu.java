@@ -41,6 +41,11 @@ public class Qu extends Model<Qu> {
     private Integer level;
 
     /**
+     * 题目图片
+     */
+    private String image;
+
+    /**
      * 题目内容
      */
     private String content;

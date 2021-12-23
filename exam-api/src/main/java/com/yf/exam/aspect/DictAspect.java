@@ -1,28 +1,24 @@
 package com.yf.exam.aspect;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yf.exam.core.annon.Dict;
 import com.yf.exam.core.api.ApiRest;
-import com.yf.exam.core.utils.BeanMapper;
 import com.yf.exam.core.utils.Reflections;
 import com.yf.exam.modules.sys.system.service.SysDictService;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,6 +26,7 @@ import java.util.List;
 
 /**
  * 数据字典AOP类，处理数据字典值
+ *
  * @author bool
  */
 @Aspect
@@ -41,62 +38,76 @@ public class DictAspect {
     private SysDictService sysDictService;
 
     /**
-     * 切入Controller
+     * 切入Controller执行
+     * @param pjp
+     * @return
+     * @throws Throwable
      */
-    @Pointcut("execution(public *  com.yf.exam.modules..*.*Controller.*(..))")
-    public void execService() {
+    @Around("execution(public *  com.yf.exam..*.*Controller.*(..))")
+    public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
+        return this.translate(pjp);
     }
 
-    @Around("execService()")
-    public Object doAround(ProceedingJoinPoint pjp) throws Throwable {
-        long time1 = System.currentTimeMillis();
-        Object result = pjp.proceed();
-        long time2 = System.currentTimeMillis();
-        log.error("获取JSON数据 耗时：" + (time2 - time1) + "ms");
-        long start = System.currentTimeMillis();
-        this.parseAllDictText(result);
-        long end = System.currentTimeMillis();
-        log.error("解析注入JSON数据  耗时" + (end - start) + "ms");
-        return result;
+    /**
+     * 进行翻译并返回，调用前必须实现：BaseDictService
+     *
+     * @param pjp
+     * @return
+     * @throws Throwable
+     */
+    public Object translate(ProceedingJoinPoint pjp) throws Throwable {
+        // 处理字典
+        return this.parseAllDictText(pjp.proceed());
     }
 
     /**
      * 转换全部数据字典
+     *
      * @param result
      */
-    private void parseAllDictText(Object result) {
+    private Object parseAllDictText(Object result) {
 
         // 非ApiRest类型不处理
         if (result instanceof ApiRest) {
             parseFullDictText(result);
         }
+
+        return result;
     }
 
 
     /**
      * 转换所有类型的数据字典、包含子列表
+     *
      * @param result
      */
     private void parseFullDictText(Object result) {
 
         try {
 
+            Object rest = ((ApiRest) result).getData();
+
+            // 不处理普通数据类型
+            if (rest == null || this.isBaseType(rest.getClass())) {
+                return;
+            }
+
             // 分页的
-            if (((ApiRest) result).getData() instanceof IPage) {
-                List<JSONObject> items = new ArrayList<>(16);
-                for (Object record : ((IPage) ((ApiRest) result).getData()).getRecords()) {
-                    JSONObject item = this.parseObject(record);
+            if (rest instanceof IPage) {
+                List<Object> items = new ArrayList<>(16);
+                for (Object record : ((IPage) rest).getRecords()) {
+                    Object item = this.parseObject(record);
                     items.add(item);
                 }
-                ((IPage) ((ApiRest) result).getData()).setRecords(items);
+                ((IPage) rest).setRecords(items);
                 return;
             }
 
             // 数据列表的
-            if (((ApiRest) result).getData() instanceof List) {
-                List<JSONObject> items = new ArrayList<>();
-                for (Object record : ((List) ((ApiRest) result).getData())) {
-                    JSONObject item = this.parseObject(record);
+            if (rest instanceof List) {
+                List<Object> items = new ArrayList<>();
+                for (Object record : ((List) rest)) {
+                    Object item = this.parseObject(record);
                     items.add(item);
                 }
                 // 重新回写值
@@ -105,46 +116,47 @@ public class DictAspect {
             }
 
             // 处理单对象
-            JSONObject item = this.parseObject(((ApiRest) result).getData());
+            Object item = this.parseObject(((ApiRest) result).getData());
             ((ApiRest) result).setData(item);
 
-        }catch (Exception e){
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * 处理数据字典值
+     *
      * @param record
      * @return
      */
-    public JSONObject parseObject(Object record) {
+    public Object parseObject(Object record) {
 
-        if(record == null){
+        if (record == null) {
             return null;
         }
 
-        log.info("++++++++++翻译字典："+ JSON.toJSONString(record));
-
-        ObjectMapper mapper = new ObjectMapper();
-        String json = "{}";
-        try {
-            //解决@JsonFormat注解解析不了的问题详见SysAnnouncement类的@JsonFormat
-            json = mapper.writeValueAsString(record);
-        } catch (JsonProcessingException e) {
-            log.error("json解析失败" + e.getMessage(), e);
+        // 不处理普通数据类型
+        if (this.isBaseType(record.getClass())) {
+            return record;
         }
+
+        // 转换JSON字符
+        String json = JSON.toJSONString(record);
         JSONObject item = JSONObject.parseObject(json);
+
         for (Field field : Reflections.getAllFields(record)) {
+
             // 如果是List类型
-            if(List.class.isAssignableFrom(field.getType())){
+            if (List.class.isAssignableFrom(field.getType())) {
                 try {
-                    List<JSONObject> list = this.processList(field, item.getJSONArray(field.getName()));
+                    List list = this.processList(field, item.getObject(field.getName(), List.class));
                     item.put(field.getName(), list);
                     continue;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                continue;
             }
 
             // 处理普通字段
@@ -156,18 +168,31 @@ public class DictAspect {
 
                 //翻译字典值对应的txt
                 String textValue = this.translateDictValue(code, text, table, key);
-                if(StringUtils.isEmpty(textValue)){
+                if (StringUtils.isEmpty(textValue)) {
                     textValue = "";
                 }
                 item.put(field.getName() + "_dictText", textValue);
+                continue;
             }
 
             //日期格式转换
-            if (field.getType().getName().equals("java.util.Date")
-                    && field.getAnnotation(JsonFormat.class) == null
-                    && item.get(field.getName()) != null) {
-                SimpleDateFormat aDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                item.put(field.getName(), aDate.format(new Date((Long) item.get(field.getName()))));
+            if (field.getType().getName().equals("java.util.Date") && item.get(field.getName()) != null) {
+
+                // 获取注解
+                JsonFormat ann = field.getAnnotation(JsonFormat.class);
+                // 格式化方式
+                SimpleDateFormat fmt;
+
+                // 使用注解指定的
+                if (ann != null && !StringUtils.isEmpty(ann.pattern())) {
+                    fmt = new SimpleDateFormat(ann.pattern());
+                } else {
+                    // 默认时间样式
+                    fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                }
+                item.put(field.getName(), fmt.format(new Date((Long) item.get(field.getName()))));
+                continue;
+
             }
         }
 
@@ -176,35 +201,57 @@ public class DictAspect {
 
     /**
      * 获得类型为List的值
+     *
      * @param field
      * @return
      */
-    private List<JSONObject> processList(Field field, JSONArray array) throws IllegalAccessException, InstantiationException {
+    private List<Object> processList(Field field, List list) {
 
         // 空判断
-        if(array == null || array.size()==0){
+        if (list == null || list.size() == 0) {
             return new ArrayList<>();
         }
 
         // 获得List属性的真实类
-        ParameterizedType pt = (ParameterizedType) field.getGenericType();
-        Class clazz = (Class) pt.getActualTypeArguments()[0];
+        Type genericType = field.getGenericType();
+        Class<?> actualType = null;
+        if (genericType instanceof ParameterizedType) {
+            // 尝试获取数据类型
+            ParameterizedType pt = (ParameterizedType) genericType;
+            try {
+                actualType = (Class) pt.getActualTypeArguments()[0];
+            }catch (Exception e){
+                return list;
+            }
+        }
+
+        // 常规列表无需处理
+        if (isBaseType(actualType)) {
+            return list;
+        }
 
         // 返回列表
-        List<JSONObject> list = new ArrayList<>(16);
+        List<Object> result = new ArrayList<>(16);
 
-        for(int i=0; i<array.size(); i++){
+        for (int i = 0; i < list.size(); i++) {
             // 创建实例-->赋值-->字典处理
-            Object data = clazz.newInstance();
-            BeanMapper.copy(array.get(i), data);
-            JSONObject obj = this.parseObject(data);
-            list.add(obj);
+            Object data = list.get(i);
+            try {
+                data = JSON.parseObject(JSON.toJSONString(data), actualType);
+            }catch (Exception e){
+                // 转换出错不处理
+            }
+
+            // 处理后的数据
+            Object pds = this.parseObject(data);
+            result.add(pds);
         }
-        return list;
+
+        return result;
     }
 
     /**
-     * 翻译字典文本
+     * 翻译实现
      *
      * @param code
      * @param text
@@ -216,36 +263,55 @@ public class DictAspect {
         if (StringUtils.isEmpty(key)) {
             return null;
         }
-
         try {
-            StringBuffer textValue = new StringBuffer();
-            String[] keys = key.split(",");
-            for (String k : keys) {
-                String tmpValue = null;
-                log.debug(" 字典 key : " + k);
-                if (k.trim().length() == 0) {
-                    continue; //跳过循环
-                }
-
-                if (!StringUtils.isEmpty(table)) {
-                    log.debug("--DictAspect------dicTable=" + table + " ,dicText= " + text + " ,dicCode=" + code);
-                    tmpValue = sysDictService.findDict(table, text, code, k.trim());
-                }
-
-                if (tmpValue != null) {
-                    if (!"".equals(textValue.toString())) {
-                        textValue.append(",");
-                    }
-                    textValue.append(tmpValue);
-                }
-
+            // 翻译值
+            String dictText = null;
+            if (!StringUtils.isEmpty(table)) {
+                dictText  = sysDictService.findDict(table, text, code, key.trim());
             }
-            return textValue.toString();
-        }catch (Exception e){
+
+            if (!StringUtils.isEmpty(dictText)) {
+                return dictText;
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
-
         return "";
     }
+
+    /**
+     * 判断是否基本类型
+     *
+     * @param clazz
+     * @return
+     */
+    private boolean isBaseType(Class clazz) {
+
+
+        // 基础数据类型
+        if (clazz.equals(java.lang.Integer.class) ||
+                clazz.equals(java.lang.Byte.class) ||
+                clazz.equals(java.lang.Long.class) ||
+                clazz.equals(java.lang.Double.class) ||
+                clazz.equals(java.lang.Float.class) ||
+                clazz.equals(java.lang.Character.class) ||
+                clazz.equals(java.lang.Short.class) ||
+                clazz.equals(java.lang.Boolean.class)) {
+            return true;
+        }
+
+        // String类型
+        if (clazz.equals(java.lang.String.class)) {
+            return true;
+        }
+
+        // 数字
+        if (clazz.equals(java.lang.Number.class)) {
+            return true;
+        }
+
+        return false;
+    }
+
 
 }

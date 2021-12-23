@@ -12,6 +12,7 @@ import com.yf.exam.modules.enums.JoinType;
 import com.yf.exam.modules.enums.OpenType;
 import com.yf.exam.modules.exam.dto.ExamDTO;
 import com.yf.exam.modules.exam.dto.ExamRepoDTO;
+import com.yf.exam.modules.exam.dto.ext.ExamRepoExtDTO;
 import com.yf.exam.modules.exam.dto.request.ExamSaveReqDTO;
 import com.yf.exam.modules.exam.dto.response.ExamOnlineRespDTO;
 import com.yf.exam.modules.exam.dto.response.ExamReviewRespDTO;
@@ -106,7 +107,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
         respDTO.setDepartIds(departIds);
 
         // 题库
-        List<ExamRepoDTO> repos = examRepoService.listByExam(id);
+        List<ExamRepoExtDTO> repos = examRepoService.listByExam(id);
         respDTO.setRepoList(repos);
 
         return respDTO;
@@ -167,7 +168,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamMapper, Exam> implements Ex
 
         // 题库组卷
         if(JoinType.REPO_JOIN.equals(reqDTO.getJoinType())){
-            List<ExamRepoDTO> repoList = reqDTO.getRepoList();
+            List<ExamRepoExtDTO> repoList = reqDTO.getRepoList();
 
             for(ExamRepoDTO item: repoList){
                 if(item.getRadioCount()!=null

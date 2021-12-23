@@ -41,6 +41,10 @@
           <el-input v-model="postForm.content" type="textarea" />
         </el-form-item>
 
+        <el-form-item label="试题图片">
+          <file-upload v-model="postForm.image" />
+        </el-form-item>
+
         <el-form-item label="整题解析" prop="oriPrice">
           <el-input v-model="postForm.analysis" type="textarea" :precision="1" :max="999999" />
         </el-form-item>
@@ -69,6 +73,21 @@
 
             </template>
 
+          </el-table-column>
+
+          <el-table-column
+            v-if="itemImage"
+            label="选项图片"
+            width="120px"
+            align="center"
+          >
+            <template slot-scope="scope">
+
+              <file-upload
+                v-model="scope.row.image"
+              />
+
+            </template>
           </el-table-column>
 
           <el-table-column
@@ -114,14 +133,16 @@
 <script>
 import { fetchDetail, saveData } from '@/api/qu/qu'
 import RepoSelect from '@/components/RepoSelect'
+import FileUpload from '@/components/FileUpload'
 
 export default {
   name: 'QuDetail',
-  components: { RepoSelect },
+  components: { FileUpload, RepoSelect },
   data() {
     return {
 
       quTypeDisabled: false,
+      itemImage: true,
 
       levels: [
         { value: 1, label: '普通' },

@@ -109,7 +109,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         // 校验结果
         boolean check = JwtUtils.verify(token, username);
 
-
         if(!check){
             throw new ServiceException(ApiError.ERROR_90010001);
         }

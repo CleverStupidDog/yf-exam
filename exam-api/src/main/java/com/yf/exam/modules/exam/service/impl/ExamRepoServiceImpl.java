@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yf.exam.core.exception.ServiceException;
 import com.yf.exam.core.utils.BeanMapper;
-import com.yf.exam.modules.exam.dto.ExamRepoDTO;
+import com.yf.exam.modules.exam.dto.ext.ExamRepoExtDTO;
 import com.yf.exam.modules.exam.entity.ExamRepo;
 import com.yf.exam.modules.exam.mapper.ExamRepoMapper;
 import com.yf.exam.modules.exam.service.ExamRepoService;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +29,7 @@ public class ExamRepoServiceImpl extends ServiceImpl<ExamRepoMapper, ExamRepo> i
 
     @Transactional(rollbackFor = Exception.class)
     @Override
-    public void saveAll(String examId, List<ExamRepoDTO> list) {
+    public void saveAll(String examId, List<ExamRepoExtDTO> list) {
 
         // 先删除
         QueryWrapper<ExamRepo> wrapper = new QueryWrapper<>();
@@ -51,17 +50,8 @@ public class ExamRepoServiceImpl extends ServiceImpl<ExamRepoMapper, ExamRepo> i
     }
 
     @Override
-    public List<ExamRepoDTO> listByExam(String examId) {
-
-        QueryWrapper<ExamRepo> wrapper = new QueryWrapper<>();
-        wrapper.lambda().eq(ExamRepo::getExamId, examId);
-        List<ExamRepo> list = this.list(wrapper);
-        List<ExamRepoDTO> dtoList = new ArrayList<>();
-
-        if(!CollectionUtils.isEmpty(list)){
-            dtoList = BeanMapper.mapList(list, ExamRepoDTO.class);
-        }
-        return dtoList;
+    public List<ExamRepoExtDTO> listByExam(String examId) {
+        return baseMapper.listByExam(examId);
     }
 
     @Override

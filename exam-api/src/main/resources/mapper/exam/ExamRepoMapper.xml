@@ -20,4 +20,17 @@
         `id`,`exam_id`,`repo_id`,`radio_count`,`radio_score`,`multi_count`,`multi_score`,`judge_count`,`judge_score`
     </sql>
 
+    <resultMap id="ExtResultMap" type="com.yf.exam.modules.exam.dto.ext.ExamRepoExtDTO" extends="BaseResultMap">
+        <result column="totalRadio" property="totalRadio" />
+        <result column="totalMulti" property="totalMulti" />
+        <result column="totalJudge" property="totalJudge" />
+    </resultMap>
+
+    <select id="listByExam" resultMap="ExtResultMap">
+        SELECT ep.*,repo.radio_count AS totalRadio,repo.multi_count AS totalMulti,repo.judge_count AS totalJudge
+        FROM el_exam_repo ep
+        LEFT JOIN el_repo repo ON ep.repo_id=repo.id
+        WHERE ep.exam_id=#{examId}
+    </select>
+
 </mapper>

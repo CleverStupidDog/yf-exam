@@ -30,9 +30,11 @@ import { fetchList } from '@/api/qu/repo'
 export default {
   name: 'RepoSelect',
   props: {
-    multi: Boolean,
-    value: Array,
-    default: String
+    multi: {
+      type: Boolean,
+      default: false
+    },
+    value: String
   },
   data() {
     return {
@@ -62,7 +64,11 @@ export default {
       })
     },
     handlerChange(e) {
-      this.$emit('change', e)
+      const obj = this.dataList.find((item) => {
+        return item.id === e
+      })
+
+      this.$emit('change', obj)
       this.$emit('input', e)
     }
   }

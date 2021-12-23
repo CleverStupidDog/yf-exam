@@ -40,6 +40,11 @@ public class QuAnswer extends Model<QuAnswer> {
     private Boolean isRight;
 
     /**
+     * 选项图片
+     */
+    private String image;
+
+    /**
      * 答案内容
      */
     private String content;

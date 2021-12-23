@@ -30,6 +30,9 @@ public class QuAnswerDTO implements Serializable {
     @ApiModelProperty(value = "是否正确", required=true)
     private Boolean isRight;
 
+    @ApiModelProperty(value = "选项图片", required=true)
+    private String image;
+
     @ApiModelProperty(value = "答案内容", required=true)
     private String content;
 

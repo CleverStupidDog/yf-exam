@@ -22,12 +22,13 @@
     <resultMap id="ListResultMap"
                type="com.yf.exam.modules.paper.dto.ext.PaperQuAnswerExtDTO"
                extends="BaseResultMap">
+        <result column="image" property="image" />
         <result column="content" property="content" />
     </resultMap>
 
 
     <select id="list" resultMap="ListResultMap">
-        SELECT pa.`id`,pa.`paper_id`,pa.`answer_id`,pa.`qu_id`,pa.`checked`,pa.`sort`,pa.`abc`,qa.content
+        SELECT pa.`id`,pa.`paper_id`,pa.`answer_id`,pa.`qu_id`,pa.`checked`,pa.`sort`,pa.`abc`,qa.content,qa.image
         FROM el_paper_qu_answer pa
         LEFT JOIN el_qu_answer qa ON pa.answer_id=qa.id
         WHERE pa.paper_id=#{paperId} AND pa.qu_id=#{quId}
@@ -35,7 +36,7 @@
     </select>
 
     <select id="listForShow" resultMap="ListResultMap">
-        SELECT pa.`id`,pa.`paper_id`,pa.`answer_id`,pa.`qu_id`,pa.`checked`,pa.`sort`,pa.`abc`,qa.content,qa.is_right
+        SELECT pa.`id`,pa.`paper_id`,pa.`answer_id`,pa.`qu_id`,pa.`checked`,pa.`sort`,pa.`abc`,qa.content,qa.is_right,qa.image
         FROM el_paper_qu_answer pa
         LEFT JOIN el_qu_answer qa ON pa.answer_id=qa.id
         WHERE pa.paper_id=#{paperId} AND pa.qu_id=#{quId}

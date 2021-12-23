@@ -21,11 +21,12 @@
         <dozer.version>5.5.1</dozer.version>
         <apache.commons.version>3.8</apache.commons.version>
         <mysql.driver.version>8.0.11</mysql.driver.version>
-        <mybatis-plus.version>3.3.2</mybatis-plus.version>
+        <mybatis-plus.version>3.4.1</mybatis-plus.version>
         <lombok.version>1.18.4</lombok.version>
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <alicloud.version>2.1.1.RELEASE</alicloud.version>
         <poi.version>3.9</poi.version>
+        <log4j2.version>2.16.0</log4j2.version>
     </properties>
 
 
@@ -79,14 +80,6 @@
             <version>${mybatis-plus.version}</version>
         </dependency>
 
-
-        <!-- SpringBoot Redis支持 -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
-        </dependency>
-
-
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -98,12 +91,6 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
@@ -125,12 +112,6 @@
         </dependency>
 
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${swagger.version}</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>swagger-bootstrap-ui</artifactId>
             <version>1.9.3</version>
@@ -142,17 +123,18 @@
             <artifactId>poi</artifactId>
             <version>${poi.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml-schemas</artifactId>
             <version>${poi.version}</version>
         </dependency>
-
 
         <!--JWT-->
         <dependency>
@@ -161,27 +143,11 @@
             <version>3.7.0</version>
         </dependency>
 
-        <!--shiro-->
+        <!-- Shiro -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring-boot-starter</artifactId>
-            <version>1.4.0</version>
-        </dependency>
-        <!-- shiro-redis -->
-        <dependency>
-            <groupId>org.crazycake</groupId>
-            <artifactId>shiro-redis</artifactId>
-            <version>3.1.0</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.shiro</groupId>
-                    <artifactId>shiro-core</artifactId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
+            <version>1.8.0</version>
         </dependency>
 
     </dependencies>

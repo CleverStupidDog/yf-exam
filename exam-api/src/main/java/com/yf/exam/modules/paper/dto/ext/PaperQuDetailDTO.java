@@ -21,6 +21,9 @@ public class PaperQuDetailDTO extends PaperQuDTO {
 
     private static final long serialVersionUID = 1L;
 
+    @ApiModelProperty(value = "图片", required=true)
+    private String image;
+
     @ApiModelProperty(value = "题目内容", required=true)
     private String content;
 

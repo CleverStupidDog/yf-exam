@@ -1,0 +1,2 @@
+ALTER TABLE `el_qu` ADD COLUMN `image` varchar(500) NOT NULL DEFAULT '' COMMENT '题目图片' AFTER `level`;
+ALTER TABLE `el_qu_answer` ADD COLUMN `image` varchar(500) NOT NULL DEFAULT '' COMMENT '选项图片' AFTER `is_right`;

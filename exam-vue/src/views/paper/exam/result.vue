@@ -1,13 +1,13 @@
 <template>
   <div class="app-container">
 
-    <h2 class="text-center">开发人员入职培训考试</h2>
+    <h2 class="text-center">{{paperData.title}}</h2>
     <p class="text-center" style="color: #666">{{ paperData.createTime }}</p>
 
     <el-row :gutter="24" style="margin-top: 50px">
 
       <el-col :span="8" class="text-center">
-        考生姓名：{{paperData.userId_dictText}}
+        考生姓名：{{ paperData.userId_dictText }}
       </el-col>
 
       <el-col :span="8" class="text-center">
@@ -25,9 +25,17 @@
       <div v-for="item in paperData.quList" class="qu-content">
 
         <p>{{ item.sort + 1 }}.{{ item.content }}（得分：{{ item.actualScore }}）</p>
+        <p v-if="item.image!=null && item.image!=''">
+          <el-image :src="item.image" style="max-width:100%;" />
+        </p>
         <div v-if="item.quType === 1 || item.quType===3">
           <el-radio-group v-model="radioValues[item.id]">
-            <el-radio v-for="an in item.answerList" :label="an.id">{{ an.abc }}.{{ an.content }}</el-radio>
+            <el-radio v-for="an in item.answerList" :label="an.id">
+              {{ an.abc }}.{{ an.content }}
+              <div v-if="an.image!=null && an.image!=''" style="clear: both">
+                <el-image :src="an.image" style="max-width:100%;" />
+              </div>
+            </el-radio>
           </el-radio-group>
 
           <el-row :gutter="24">
@@ -66,7 +74,11 @@
 
         <div v-if="item.quType === 2">
           <el-checkbox-group v-model="multiValues[item.id]">
-            <el-checkbox v-for="an in item.answerList" :label="an.id">{{ an.abc }}.{{ an.content }}</el-checkbox>
+            <el-checkbox v-for="an in item.answerList" :label="an.id">{{ an.abc }}.{{ an.content }}
+              <div v-if="an.image!=null && an.image!=''" style="clear: both">
+                <el-image :src="an.image" style="max-width:100%;" />
+              </div>
+            </el-checkbox>
           </el-checkbox-group>
 
           <el-row :gutter="24">

@@ -39,4 +39,13 @@ public class ServiceException extends RuntimeException{
         this.msg = apiError.msg;
     }
 
+    /**
+     * 异常构造
+     * @param msg
+     */
+    public ServiceException(String msg){
+        this.code = 1;
+        this.msg = msg;
+    }
+
 }
