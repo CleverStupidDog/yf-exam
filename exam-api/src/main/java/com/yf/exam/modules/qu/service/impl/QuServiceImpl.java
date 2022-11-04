@@ -1,5 +1,6 @@
 package com.yf.exam.modules.qu.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -12,6 +13,8 @@ import com.yf.exam.modules.qu.dto.export.QuExportDTO;
 import com.yf.exam.modules.qu.dto.ext.QuDetailDTO;
 import com.yf.exam.modules.qu.dto.request.QuQueryReqDTO;
 import com.yf.exam.modules.qu.entity.Qu;
+import com.yf.exam.modules.qu.entity.QuAnswer;
+import com.yf.exam.modules.qu.entity.QuRepo;
 import com.yf.exam.modules.qu.enums.QuType;
 import com.yf.exam.modules.qu.mapper.QuMapper;
 import com.yf.exam.modules.qu.service.QuAnswerService;
@@ -61,9 +64,26 @@ public class QuServiceImpl extends ServiceImpl<QuMapper, Qu> implements QuServic
         return pageData;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
-    public List<Qu> listByRandom(String repoId, Integer quType, Integer level, List<String> excludes, Integer size) {
-        return baseMapper.listByRandom(repoId, quType, level, excludes, size);
+    public void delete(List<String> ids) {
+        // 移除题目
+        this.removeByIds(ids);
+
+        // 移除选项
+        QueryWrapper<QuAnswer> wrapper = new QueryWrapper<>();
+        wrapper.lambda().in(QuAnswer::getQuId, ids);
+        quAnswerService.remove(wrapper);
+
+        // 移除题库绑定
+        QueryWrapper<QuRepo> wrapper1 = new QueryWrapper<>();
+        wrapper1.lambda().in(QuRepo::getQuId, ids);
+        quRepoService.remove(wrapper1);
+    }
+
+    @Override
+    public List<Qu> listByRandom(String repoId, Integer quType, List<String> excludes, Integer size) {
+        return baseMapper.listByRandom(repoId, quType, excludes, size);
     }
 
     @Override
@@ -102,7 +122,6 @@ public class QuServiceImpl extends ServiceImpl<QuMapper, Qu> implements QuServic
 
         // 保存到题库
         quRepoService.saveAll(qu.getId(), qu.getQuType(), reqDTO.getRepoIds());
-
 
     }
 

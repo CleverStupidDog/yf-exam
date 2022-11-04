@@ -27,9 +27,11 @@
     </resultMap>
 
     <select id="listByExam" resultMap="ExtResultMap">
-        SELECT ep.*,repo.radio_count AS totalRadio,repo.multi_count AS totalMulti,repo.judge_count AS totalJudge
+        SELECT ep.*,
+               (SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=ep.repo_id AND qu_type=1) AS totalRadio,
+               (SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=ep.repo_id AND qu_type=2) AS totalMulti,
+               (SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=ep.repo_id AND qu_type=3) AS totalJudge
         FROM el_exam_repo ep
-        LEFT JOIN el_repo repo ON ep.repo_id=repo.id
         WHERE ep.exam_id=#{examId}
     </select>
 

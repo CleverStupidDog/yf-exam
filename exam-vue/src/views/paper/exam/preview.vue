@@ -26,7 +26,7 @@
 
       <el-col :span="24">
 
-        <el-button type="primary" icon="el-icon-caret-right" @click="handleCreate">
+        <el-button :loading="loading" type="primary" icon="el-icon-caret-right" @click="handleCreate">
           开始考试
         </el-button>
 
@@ -41,12 +41,10 @@
 </template>
 
 <script>
-import { Loading } from 'element-ui'
 import { fetchDetail } from '@/api/exam/exam'
 import { createPaper } from '@/api/paper/exam'
 
 export default {
-  name: 'PreExam',
   data() {
     return {
       detailData: {},
@@ -58,7 +56,9 @@ export default {
         password: [
           { required: true, message: '考试密码不能为空！' }
         ]
-      }
+      },
+
+      loading: false
     }
   },
 
@@ -77,30 +77,20 @@ export default {
 
     handleCreate() {
       const that = this
-
-      // 打开
-      const loading = Loading.service({
-        text: '正在努力创建试卷...',
-        background: 'rgba(0, 0, 0, 0.7)'
-      })
+      this.loading = true
 
       createPaper(this.postForm).then(response => {
         console.log(response)
 
         if (response.code === 0) {
-          this.$message({
-            message: '试卷创建成功，即将进入考试！',
-            type: 'success'
-          })
-
           setTimeout(function() {
-            loading.close()
+            this.loading = false
             that.dialogVisible = false
             that.$router.push({ name: 'StartExam', params: { id: response.data.id }})
           }, 1000)
         }
       }).catch(() => {
-        loading.close()
+        this.loading = false
       })
     },
 

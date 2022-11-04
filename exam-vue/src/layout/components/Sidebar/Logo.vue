@@ -1,13 +1,13 @@
 <template>
-  <div class="sidebar-logo-container" :class="{'collapse':collapse}">
+  <div :class="{'collapse':collapse}" class="sidebar-logo-container">
     <transition name="sidebarLogoFade">
-      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <img v-if="siteData.backLogo" :src="backLogo.backLogo" class="sidebar-logo">
-        <h1 v-else class="sidebar-title">{{ siteData.siteName }} </h1>
+      <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/admin/dashboard">
+        <img v-if="siteData.backLogo" :src="siteData.backLogo" class="sidebar-logo">
+        <h1 class="sidebar-title">{{ siteData.siteName }} </h1>
       </router-link>
-      <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <img v-if="siteData.backLogo" :src="backLogo.backLogo" class="sidebar-logo">
-        <h1 class="sidebar-title">{{ siteData.siteName }}</h1>
+      <router-link v-else key="expand" class="sidebar-logo-link" to="/admin/dashboard">
+        <img v-if="siteData.backLogo" :src="siteData.backLogo" class="sidebar-logo">
+        <h1 class="sidebar-title">{{ siteData.siteName }} </h1>
       </router-link>
     </transition>
   </div>
@@ -27,12 +27,6 @@ export default {
     ...mapGetters([
       'siteData'
     ])
-  },
-  data() {
-    return {
-      title: '云帆考试系统',
-      logo: false
-    }
   }
 }
 </script>
@@ -61,8 +55,8 @@ export default {
     width: 100%;
 
     & .sidebar-logo {
-      width: 52px;
-      height: 32px;
+      width: auto;
+      height: 28px;
       vertical-align: middle;
       margin-right: 12px;
     }

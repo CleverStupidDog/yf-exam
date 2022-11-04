@@ -2,6 +2,7 @@
 
   <el-select
     v-model="values"
+    :remote-method="fetchList"
     style="width: 100%"
     multiple
     filterable
@@ -10,7 +11,6 @@
     clearable
     automatic-dropdown
     placeholder="请选择角色"
-    :remote-method="fetchList"
     @change="handlerChange"
   >
     <el-option

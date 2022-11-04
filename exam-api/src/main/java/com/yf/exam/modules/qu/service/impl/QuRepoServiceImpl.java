@@ -171,8 +171,5 @@ public class QuRepoServiceImpl extends ServiceImpl<QuRepoMapper, QuRepo> impleme
             sort++;
         }
         this.updateBatchById(list);
-
-        // 更新统计数量
-        repoService.refreshStat(repoId);
     }
 }

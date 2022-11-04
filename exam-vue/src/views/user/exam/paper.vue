@@ -18,7 +18,7 @@
         </el-col>
 
         <el-col :span="12">
-          是否合格：{{item.userScore > item.qualifyScore ?'是':'否'}}
+          是否合格：{{ item.userScore > item.qualifyScore ?'是':'否' }}
         </el-col>
 
         <el-col :span="12">
@@ -38,15 +38,16 @@
 import { listPaper } from '@/api/paper/paper'
 
 export default {
+
   name: 'UserPaperList',
   props: {
     examId: {
       type: String,
-      defaultValue: ''
+      default: ''
     },
     userId: {
       type: String,
-      defaultValue: ''
+      default: ''
     }
   },
 

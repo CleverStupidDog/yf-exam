@@ -10,16 +10,16 @@
           距离考试结束还有：
           <exam-timer v-model="paperData.leftSeconds" @timeout="doHandler()" />
 
-          <el-button style="float: right; margin-top: -10px" type="primary" icon="el-icon-plus" :loading="loading" @click="handHandExam()">
+          <el-button :loading="loading" style="float: right; margin-top: -10px" type="primary" icon="el-icon-plus" @click="handHandExam()">
             {{ handleText }}
           </el-button>
 
         </el-card>
       </el-col>
 
-      <el-col :span="6" :xs="24" style="margin-bottom: 10px">
+      <el-col :span="5" :xs="24" style="margin-bottom: 10px">
 
-        <el-card>
+        <el-card class="content-h">
 
           <p class="card-title">答题卡</p>
           <el-row :gutter="24" class="card-line" style="padding-left: 10px">
@@ -52,9 +52,9 @@
 
       </el-col>
 
-      <el-col :span="18" :xs="24">
+      <el-col :span="19" :xs="24">
 
-        <el-card class="qu-content">
+        <el-card class="qu-content content-h">
           <p v-if="quData.content">{{ quData.sort + 1 }}.{{ quData.content }}</p>
           <p v-if="quData.image!=null && quData.image!=''">
             <el-image :src="quData.image" style="max-width:100%;" />
@@ -81,18 +81,18 @@
 
           </div>
 
+          <div style="margin-top: 20px">
+            <el-button v-if="showPrevious" type="primary" icon="el-icon-back" @click="handPrevious()">
+              上一题
+            </el-button>
+
+            <el-button v-if="showNext" type="warning" icon="el-icon-right" @click="handNext()">
+              下一题
+            </el-button>
+
+          </div>
+
         </el-card>
-
-        <div style="margin-top: 20px">
-          <el-button v-if="showPrevious" type="primary" icon="el-icon-back" @click="handPrevious()">
-            上一题
-          </el-button>
-
-          <el-button v-if="showNext" type="warning" icon="el-icon-right" @click="handNext()">
-            下一题
-          </el-button>
-
-        </div>
 
       </el-col>
 
@@ -373,10 +373,15 @@ export default {
 
   .qu-content div{
     line-height: 30px;
+    width: 100%;
   }
 
   .el-checkbox-group label,.el-radio-group label{
     width: 100%;
+  }
+
+  .content-h{
+    height: calc(100vh - 110px);
   }
 
   .card-title{
@@ -393,12 +398,13 @@ export default {
     margin: 2px;
   }
 
-  /deep/
+  ::v-deep
   .el-radio, .el-checkbox{
     padding: 9px 20px 9px 10px;
     border-radius: 4px;
     border: 1px solid #dcdfe6;
     margin-bottom: 10px;
+    width: 100%;
   }
 
   .is-checked{
@@ -411,22 +417,22 @@ export default {
     border: #dcdfe6 1px dotted;
   }
 
-  /deep/
+  ::v-deep
   .el-checkbox__inner {
     display: none;
   }
 
-  /deep/
+  ::v-deep
   .el-radio__inner{
     display: none;
   }
 
-  /deep/
+  ::v-deep
   .el-checkbox__label{
     line-height: 30px;
   }
 
-  /deep/
+  ::v-deep
   .el-radio__label{
     line-height: 30px;
   }

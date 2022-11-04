@@ -13,11 +13,11 @@
     <el-table
       ref="table"
       :data="tableData.records"
-      row-key="id"
-      border
       :default-expand-all.sync="defaultExpand"
       :tree-props="{children: 'children', hasChildren: 'hasChildren'}"
       :header-cell-style="{'background':'#f2f3f4', 'color':'#555', 'font-weight':'bold', 'line-height':'32px'}"
+      row-key="id"
+      border
     >
       <el-table-column label="名称" prop="deptName" />
       <el-table-column label="编码" prop="deptCode" />
@@ -42,11 +42,11 @@
     <pagination v-show="tableData.total>0" :total="tableData.total" :page.sync="listQuery.current" :limit.sync="listQuery.size" @pagination="getList" />
 
     <el-dialog
-      title="维护部门"
-      width="30%"
       :close-on-click-modal="false"
       :close-on-press-escape="false"
       :visible.sync="dialogFormVisible"
+      title="维护部门"
+      width="30%"
     >
       <el-form ref="postForm" :model="postForm" :rules="rules" label-width="100px" label-position="left">
         <el-form-item label="部门名称" prop="deptName">

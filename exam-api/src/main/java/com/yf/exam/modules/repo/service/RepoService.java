@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yf.exam.core.api.dto.PagingReqDTO;
 import com.yf.exam.modules.repo.dto.RepoDTO;
+import com.yf.exam.modules.repo.dto.request.RepoReqDTO;
 import com.yf.exam.modules.repo.dto.response.RepoRespDTO;
 import com.yf.exam.modules.repo.entity.Repo;
 
@@ -22,7 +23,7 @@ public interface RepoService extends IService<Repo> {
     * @param reqDTO
     * @return
     */
-    IPage<RepoRespDTO> paging(PagingReqDTO<RepoDTO> reqDTO);
+    IPage<RepoRespDTO> paging(PagingReqDTO<RepoReqDTO> reqDTO);
 
 
     /**
@@ -30,18 +31,4 @@ public interface RepoService extends IService<Repo> {
      * @param reqDTO
      */
     void save(RepoDTO reqDTO);
-
-    /**
-     * 更新统计数量
-     * @param repoId
-     */
-    void refreshStat(String repoId);
-
-
-    /**
-     * 根据名称查找题库
-     * @param name
-     * @return
-     */
-    String findByName(String name);
 }

@@ -20,8 +20,8 @@ export function saveData(data) {
  * 保存题库
  * @param data
  */
-export function fetchList(data) {
-  return post('/exam/api/repo/list', data)
+export function fetchPaging(data) {
+  return post('/exam/api/repo/paging', data)
 }
 
 /**

@@ -31,9 +31,6 @@
             AND a.id NOT IN
             <foreach item="item" collection="excludes" separator="," open="(" close=")" index="">'${item}'</foreach>
         </if>
-        <if test="level!=null and level>0">
-            AND a.`level`=#{level}
-        </if>
         ORDER BY RAND()
         LIMIT ${size}
     </select>

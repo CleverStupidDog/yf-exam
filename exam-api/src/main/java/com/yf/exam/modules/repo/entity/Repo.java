@@ -40,25 +40,6 @@ public class Repo extends Model<Repo> {
     private String title;
 
     /**
-     * 单选数量
-     */
-    @TableField("radio_count")
-    private Integer radioCount;
-
-    /**
-     * 多选数量
-     */
-    @TableField("multi_count")
-    private Integer multiCount;
-
-    /**
-     * 判断数量
-     */
-    @TableField("judge_count")
-    private Integer judgeCount;
-
-
-    /**
      * 题库备注
      */
     private String remark;

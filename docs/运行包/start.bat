@@ -1,1 +1,1 @@
-java -jar exam-api.jar --spring.config.location=application.properties
+java -jar exam-api.jar --spring.config.location=application-local.yml

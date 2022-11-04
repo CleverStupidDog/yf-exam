@@ -45,17 +45,6 @@ public class Exam extends Model<Exam> {
     private Integer openType;
 
     /**
-     * 组题方式1题库,2指定
-     */
-    @TableField("join_type")
-    private Integer joinType;
-
-    /**
-     * 难度:0不限,1普通,2较难
-     */
-    private Integer level;
-
-    /**
      * 考试状态
      */
     private Integer state;

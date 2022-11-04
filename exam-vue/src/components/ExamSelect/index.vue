@@ -2,12 +2,12 @@
 
   <el-select
     v-model="currentValue"
+    :multiple="multi"
+    :remote-method="fetchData"
     filterable
     remote
-    :multiple="multi"
     clearable
     placeholder="选择或搜索考试"
-    :remote-method="fetchData"
     class="filter-item"
     @change="handlerChange"
   >

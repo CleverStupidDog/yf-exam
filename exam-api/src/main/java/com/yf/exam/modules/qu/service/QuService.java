@@ -29,6 +29,12 @@ public interface QuService extends IService<Qu> {
     IPage<QuDTO> paging(PagingReqDTO<QuQueryReqDTO> reqDTO);
 
     /**
+     * 删除试题
+     * @param ids
+     */
+    void delete(List<String> ids);
+
+    /**
      * 随机抽取题库的数据
      * @param repoId
      * @param quType
@@ -39,7 +45,6 @@ public interface QuService extends IService<Qu> {
      */
     List<Qu> listByRandom(String repoId,
                           Integer quType,
-                          Integer level,
                           List<String> excludes,
                           Integer size);
 

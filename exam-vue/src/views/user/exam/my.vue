@@ -65,7 +65,7 @@
 
     </data-table>
 
-    <el-dialog title="考试明细" :visible.sync="dialogVisible" width="60%">
+    <el-dialog :visible.sync="dialogVisible" title="考试明细" width="60%">
 
       <div class="el-dialog-div">
         <my-paper-list :exam-id="examId" :user-id="userId" />

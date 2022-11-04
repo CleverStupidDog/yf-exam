@@ -2,7 +2,6 @@ package com.yf.exam.modules.sys.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.yf.exam.core.annon.LogInject;
 import com.yf.exam.core.api.ApiRest;
 import com.yf.exam.core.api.controller.BaseController;
 import com.yf.exam.core.api.dto.BaseIdsReqDTO;
@@ -46,7 +45,6 @@ public class SysUserController extends BaseController {
      * 用户登录
      * @return
      */
-    @LogInject(title = "登录系统")
     @CrossOrigin
     @ApiOperation(value = "用户登录")
     @RequestMapping(value = "/login", method = {RequestMethod.POST})

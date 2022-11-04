@@ -1,7 +1,7 @@
 package com.yf.exam.config;
 
-import com.yf.exam.modules.shiro.ShiroRealm;
-import com.yf.exam.modules.shiro.aop.JwtFilter;
+import com.yf.exam.ability.shiro.ShiroRealm;
+import com.yf.exam.ability.shiro.aop.JwtFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
 import org.apache.shiro.mgt.DefaultSubjectDAO;

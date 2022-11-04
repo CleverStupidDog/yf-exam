@@ -29,10 +29,10 @@
     <el-table
       v-loading="listLoading"
       :data="dataList.records"
+      :header-cell-style="{'background':'#f2f3f4', 'color':'#555', 'font-weight':'bold', 'line-height':'32px'}"
       border
       fit
       highlight-current-row
-      :header-cell-style="{'background':'#f2f3f4', 'color':'#555', 'font-weight':'bold', 'line-height':'32px'}"
       @selection-change="handleSelection"
     >
 

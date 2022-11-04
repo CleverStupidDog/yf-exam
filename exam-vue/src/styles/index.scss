@@ -189,3 +189,24 @@ aside {
 .multiselect--active {
   z-index: 1000 !important;
 }
+
+
+
+// 标题栏样式
+.title-box{
+  width: 100%;
+  border-bottom: #dfe4ed 2px solid;
+  display: flex;
+  margin-bottom: 30px;
+}
+
+.title-box div{
+  color: #1890ff;
+  font-size: 14px;
+  font-weight: 500;
+  box-sizing: border-box;
+  line-height: 40px;
+  height: 40px;
+  border-bottom: #1890ff 2px solid;
+  margin-bottom: -2px;
+}

@@ -8,8 +8,6 @@
         <result column="title" property="title" />
         <result column="content" property="content" />
         <result column="open_type" property="openType" />
-        <result column="join_type" property="joinType" />
-        <result column="level" property="level" />
         <result column="state" property="state" />
         <result column="time_limit" property="timeLimit" />
         <result column="start_time" property="startTime" />
@@ -84,8 +82,7 @@
         FROM el_exam ex
         LEFT JOIN el_exam_depart dept ON ex.id=dept.exam_id AND ex.open_type=2
         LEFT JOIN sys_user uc ON uc.depart_id=dept.depart_id
-        WHERE (ex.open_type=1 OR ex.open_type=3 OR uc.id='{{userId}}')
-
+        WHERE ex.state=0 AND (ex.open_type=1 OR ex.open_type=3 OR uc.id='{{userId}}')
 
         <if test="query!=null">
             <if test="query.title!=null and query.title!=''">

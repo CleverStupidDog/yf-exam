@@ -91,8 +91,8 @@
     </el-dialog>
 
     <el-dialog
-      title="导入试题"
       :visible.sync="importVisible"
+      title="导入试题"
       width="30%"
     >
 
@@ -243,7 +243,6 @@ export default {
 
     doImport(e) {
       const file = e.target.files[0]
-
 
       importExcel(file).then(res => {
         if (res.code !== 0) {

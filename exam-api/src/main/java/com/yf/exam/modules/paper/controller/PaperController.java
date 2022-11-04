@@ -188,15 +188,14 @@ public class PaperController extends BaseController {
 
 
     /**
-     * 提交阅卷
-     * @param reqDTO
+     * 检测用户有没有中断的考试
      * @return
      */
-    @ApiOperation(value = "提交阅卷")
-    @RequestMapping(value = "/review-paper", method = { RequestMethod.POST})
-    public ApiRest<PaperQuDetailDTO> reviewPaper(@RequestBody ExamResultRespDTO reqDTO) {
-        //根据ID删除
-        baseService.reviewPaper(reqDTO);
-        return super.success();
+    @ApiOperation(value = "检测进行中的考试")
+    @RequestMapping(value = "/check-process", method = { RequestMethod.POST})
+    public ApiRest<PaperDTO> checkProcess() {
+        //复制参数
+        PaperDTO dto = baseService.checkProcess(UserUtils.getUserId());
+        return super.success(dto);
     }
 }

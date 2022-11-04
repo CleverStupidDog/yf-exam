@@ -9,27 +9,27 @@
   >
     <el-tree
       ref="tree"
-      placeholder="选择部门"
-      class="select-tree"
-      check-strictly="false"
-      highlight-current
-      default-expand-all
       :style="`min-width: ${treeWidth}`"
       :data="data"
       :props="props"
       :expand-on-click-node="false"
       :filter-node-method="filterNode"
+      placeholder="选择部门"
+      class="select-tree"
+      check-strictly="false"
+      highlight-current
+      default-expand-all
       @node-click="onClickNode"
     />
     <el-input
       slot="reference"
       ref="input"
       v-model="labelModel"
-      clearable
       :style="`width: ${width}px`"
       :class="{ 'rotate': showStatus }"
-      suffix-icon="el-icon-arrow-down"
       :placeholder="placeholder"
+      clearable
+      suffix-icon="el-icon-arrow-down"
     />
   </el-popover>
 </template>

@@ -68,7 +68,7 @@
       </template>
     </data-table>
 
-    <el-dialog title="添加用户" :visible.sync="dialogVisible" width="500px">
+    <el-dialog :visible.sync="dialogVisible" title="添加用户" width="500px">
 
       <el-form :model="formData" label-position="left" label-width="100px">
 

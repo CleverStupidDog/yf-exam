@@ -118,7 +118,8 @@ export default {
       })
     },
     onCancel() {
-      this.$router.push({ name: 'ListTran' })
+      //this.$router.push({ name: 'ListTran' })
+      this.$router.push({ name: 'BookList'});
     },
 
     handNext() {
@@ -141,7 +142,7 @@ export default {
           this.analysisShow = true
 
           this.$message({
-            message: '很遗憾，又做错了呢，请参考答案解析！',
+            message: '很遗憾，做错了呢，请参考答案解析！',
             type: 'error'
           })
         }

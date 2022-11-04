@@ -11,7 +11,7 @@
 
         <exam-select v-model="listQuery.params.examId" class="filter-item" />
 
-        <depart-tree-select v-model="listQuery.params.departId" class="el-select filter-item el-select--medium " :options="treeData" :props="defaultProps" width="200px" />
+        <depart-tree-select v-model="listQuery.params.departId" :options="treeData" :props="defaultProps" class="el-select filter-item el-select--medium " width="200px" />
         <el-select v-model="listQuery.params.state" placeholder="考试状态" class="filter-item" clearable>
           <el-option
             v-for="item in paperStates"
@@ -137,7 +137,7 @@
 
     </data-table>
 
-    <el-dialog title="考试截图" :visible.sync="dialogVisible" width="500px">
+    <el-dialog :visible.sync="dialogVisible" title="考试截图" width="500px">
 
       <img v-for="item in captureList" :src="item.capture" style="width: 230px">
 

@@ -46,7 +46,7 @@
         </el-form-item>
 
         <el-form-item label="整题解析" prop="oriPrice">
-          <el-input v-model="postForm.analysis" type="textarea" :precision="1" :max="999999" />
+          <el-input v-model="postForm.analysis" :precision="1" :max="999999" type="textarea" />
         </el-form-item>
 
       </el-card>

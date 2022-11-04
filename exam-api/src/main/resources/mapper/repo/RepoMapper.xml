@@ -7,9 +7,6 @@
         <id column="id" property="id" />
         <result column="code" property="code" />
         <result column="title" property="title" />
-        <result column="radio_count" property="radioCount" />
-        <result column="multi_count" property="multiCount" />
-        <result column="judge_count" property="judgeCount" />
         <result column="remark" property="remark" />
         <result column="create_time" property="createTime" />
         <result column="update_time" property="updateTime" />
@@ -24,28 +21,32 @@
     <resultMap id="ListResultMap"
                type="com.yf.exam.modules.repo.dto.response.RepoRespDTO"
                extends="BaseResultMap">
+        <result column="radio_count" property="radioCount" />
+        <result column="multi_count" property="multiCount" />
+        <result column="judge_count" property="judgeCount" />
     </resultMap>
 
     <select id="paging" resultMap="ListResultMap">
-        SELECT * FROM el_repo repo
+        SELECT `id`, `code`, `title`, `remark`, `create_time`, `update_time`,
+        (SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=repo.id AND qu_type=1) AS radio_count,
+        (SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=repo.id AND qu_type=2) AS multi_count,
+        (SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=repo.id AND qu_type=3) AS judge_count
+        FROM el_repo repo
         <where>
             <if test="query!=null">
                 <if test="query.title!=null and query.title!=''">
-                    AND title LIKE '%${query.title}%'
+                    AND repo.title LIKE CONCAT('%',#{query.title}, '%')
+                </if>
+
+                <if test="query.excludes!=null and query.excludes.size()>0">
+                    AND repo.id NOT IN
+                    <foreach collection="query.excludes" open="(" close=")" separator="," item="id">
+                        #{id}
+                    </foreach>
                 </if>
             </if>
         </where>
     </select>
-
-
-    <update id="refreshStat">
-         UPDATE el_repo a
-         SET
-         radio_count=(SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=a.id AND qu_type=1),
-         multi_count=(SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=a.id AND qu_type=2),
-         judge_count=(SELECT COUNT(0) FROM el_qu_repo WHERE repo_id=a.id AND qu_type=3)
-         WHERE a.id=#{repoId}
-    </update>
 
 
 </mapper>

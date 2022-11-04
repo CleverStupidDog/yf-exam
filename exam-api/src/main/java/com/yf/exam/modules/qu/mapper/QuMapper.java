@@ -34,7 +34,6 @@ public interface QuMapper extends BaseMapper<Qu> {
      */
     List<Qu> listByRandom(@Param("repoId") String repoId,
                           @Param("quType") Integer quType,
-                          @Param("level") Integer level,
                           @Param("excludes") List<String> excludes,
                           @Param("size") Integer size);
 

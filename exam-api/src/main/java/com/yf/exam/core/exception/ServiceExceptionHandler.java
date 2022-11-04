@@ -1,15 +1,10 @@
 package com.yf.exam.core.exception;
 
 import com.yf.exam.core.api.ApiRest;
-import com.yf.exam.core.exception.ServiceException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.WebDataBinder;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.InitBinder;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 统一异常处理类
@@ -42,7 +37,6 @@ public class ServiceExceptionHandler {
      * @param e
      * @return
      */
-
     @ExceptionHandler({com.yf.exam.core.exception.ServiceException.class})
     @ResponseStatus(HttpStatus.OK)
     public ApiRest serviceExceptionHandler(ServiceException e) {

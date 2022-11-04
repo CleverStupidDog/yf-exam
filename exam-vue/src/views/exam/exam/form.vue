@@ -8,18 +8,6 @@
 
       <div>
 
-        <!--        <div style="margin-bottom: 20px">-->
-        <!--          <el-select v-model="postForm.level" class="filter-item" placeholder="选择难度等级" clearable="">-->
-        <!--            <el-option-->
-        <!--              v-for="item in levels"-->
-        <!--              :key="item.value"-->
-        <!--              :label="item.label"-->
-        <!--              :value="item.value"-->
-        <!--            />-->
-        <!--          </el-select>-->
-
-        <!--        </div>-->
-
         <el-button class="filter-item" size="small" type="primary" icon="el-icon-plus" @click="handleAdd">
           添加题库
         </el-button>
@@ -35,7 +23,11 @@
             width="200"
           >
             <template slot-scope="scope">
-              <repo-select v-model="scope.row.repoId" :multi="false" @change="repoChange($event, scope.row)" />
+              <repo-select
+                v-model="scope.row.repoId"
+                :multi="false"
+                :excludes="excludes"
+                @change="repoChange($event, scope.row)" />
             </template>
 
           </el-table-column>
@@ -184,16 +176,16 @@
 
         <el-tree
 
-          ref="tree"
           v-loading="treeLoading"
-          empty-text=" "
+          ref="tree"
           :data="treeData"
-          default-expand-all
-          show-checkbox
-          node-key="id"
           :default-checked-keys="postForm.departIds"
           :props="defaultProps"
           :filter-node-method="filterNode"
+          empty-text=" "
+          default-expand-all
+          show-checkbox
+          node-key="id"
           @check-change="handleCheckChange"
         />
 
@@ -219,47 +211,26 @@ export default {
   data() {
     return {
 
-      step: 1,
       treeData: [],
       defaultProps: {
         label: 'deptName'
       },
-      levels: [
-        { value: 0, label: '不限' },
-        { value: 1, label: '普通' },
-        { value: 2, label: '较难' }
-      ],
       filterText: '',
       treeLoading: false,
       dateValues: [],
-      quDialogShow: false,
-      quDialogType: 1,
-      excludes: [],
-
-      scoreDialog: false,
-      scoreBatch: 0,
-
       // 题库
       repoList: [],
-
-      // 题目列表
-      quList: [[], [], [], []],
-      quEnable: [false, false, false, false],
-
+      // 已选择的题库
+      excludes: [],
       postForm: {
         // 总分数
         totalScore: 0,
         // 题库列表
         repoList: [],
-        // 题目列表
-        quList: [],
-        // 组题方式
-        joinType: 1,
         // 开放类型
         openType: 1,
         // 考试班级列表
         departIds: []
-
       },
       rules: {
         title: [
@@ -312,16 +283,19 @@ export default {
 
     // 题库变换
     repoList: {
+
       handler() {
-        const that = this
+        this.postForm.totalScore = 0
+        this.excludes = []
 
-        that.postForm.totalScore = 0
-
-        this.repoList.forEach(function(item) {
-          that.postForm.totalScore += item.radioCount * item.radioScore
-          that.postForm.totalScore += item.multiCount * item.multiScore
-          that.postForm.totalScore += item.judgeCount * item.judgeScore
-        })
+        for (let i = 0; i<this.repoList.length; i++) {
+          const item = this.repoList[i]
+          this.postForm.totalScore += item.radioCount * item.radioScore
+          this.postForm.totalScore += item.multiCount * item.multiScore
+          this.postForm.totalScore += item.judgeCount * item.judgeScore
+          this.excludes.push(item.id)
+          console.log('++++' + item.id)
+        }
 
         // 赋值
         this.postForm.repoList = this.repoList
@@ -332,7 +306,7 @@ export default {
   },
   created() {
     const id = this.$route.params.id
-    if (typeof id !== 'undefined') {
+    if (typeof id !== undefined) {
       this.fetchData(id)
     }
 
@@ -359,52 +333,48 @@ export default {
           return
         }
 
-        if (this.postForm.joinType === 1) {
-          for (let i = 0; i < this.postForm.repoList.length; i++) {
-            const repo = this.postForm.repoList[i]
+        for (let i = 0; i < this.postForm.repoList.length; i++) {
+          const repo = this.postForm.repoList[i]
+          if (!repo.repoId) {
+            this.$notify({
+              title: '提示信息',
+              message: '考试题库选择不正确！',
+              type: 'warning',
+              duration: 2000
+            })
+            return
+          }
 
-            if (!repo.repoId) {
-              this.$notify({
-                title: '提示信息',
-                message: '考试题库选择不正确！',
-                type: 'warning',
-                duration: 2000
-              })
+          if ((repo.radioCount > 0 && repo.radioScore === 0) || (repo.radioCount === 0 && repo.radioScore > 0)) {
+            this.$notify({
+              title: '提示信息',
+              message: '题库第：[' + (i + 1) + ']项存在无效的单选题配置！',
+              type: 'warning',
+              duration: 2000
+            })
 
-              return
-            }
+            return
+          }
 
-            if ((repo.radioCount > 0 && repo.radioScore === 0) || (repo.radioCount === 0 && repo.radioScore > 0)) {
-              this.$notify({
-                title: '提示信息',
-                message: '题库第：[' + (i + 1) + ']项存在无效的单选题配置！',
-                type: 'warning',
-                duration: 2000
-              })
+          if ((repo.multiCount > 0 && repo.multiScore === 0) || (repo.multiCount === 0 && repo.multiScore > 0)) {
+            this.$notify({
+              title: '提示信息',
+              message: '题库第：[' + (i + 1) + ']项存在无效的多选题配置！',
+              type: 'warning',
+              duration: 2000
+            })
 
-              return
-            }
+            return
+          }
 
-            if ((repo.multiCount > 0 && repo.multiScore === 0) || (repo.multiCount === 0 && repo.multiScore > 0)) {
-              this.$notify({
-                title: '提示信息',
-                message: '题库第：[' + (i + 1) + ']项存在无效的多选题配置！',
-                type: 'warning',
-                duration: 2000
-              })
-
-              return
-            }
-
-            if ((repo.judgeCount > 0 && repo.judgeScore === 0) || (repo.judgeCount === 0 && repo.judgeScore > 0)) {
-              this.$notify({
-                title: '提示信息',
-                message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
-                type: 'warning',
-                duration: 2000
-              })
-              return
-            }
+          if ((repo.judgeCount > 0 && repo.judgeScore === 0) || (repo.judgeCount === 0 && repo.judgeScore > 0)) {
+            this.$notify({
+              title: '提示信息',
+              message: '题库第：[' + (i + 1) + ']项存在无效的判断题配置！',
+              type: 'warning',
+              duration: 2000
+            })
+            return
           }
         }
 
@@ -422,7 +392,6 @@ export default {
       const that = this
       // 置空
       this.postForm.departIds = []
-
       const nodes = this.$refs.tree.getCheckedNodes()
       nodes.forEach(function(item) {
         that.postForm.departIds.push(item.id)
@@ -431,7 +400,7 @@ export default {
 
     // 添加子项
     handleAdd() {
-      this.repoList.push({ rowId: new Date().getTime(), radioCount: 0, radioScore: 0, multiCount: 0, multiScore: 0, judgeCount: 0, judgeScore: 0, saqCount: 0, saqScore: 0 })
+      this.repoList.push({ id: '', rowId: new Date().getTime(), radioCount: 0, radioScore: 0, multiCount: 0, multiScore: 0, judgeCount: 0, judgeScore: 0, saqCount: 0, saqScore: 0 })
     },
 
     removeItem(index) {
@@ -439,8 +408,6 @@ export default {
     },
 
     fetchData(id) {
-      const that = this
-
       fetchDetail(id).then(response => {
         this.postForm = response.data
 
@@ -448,19 +415,7 @@ export default {
           this.dateValues[0] = this.postForm.startTime
           this.dateValues[1] = this.postForm.endTime
         }
-
-        // 按分组填充题目
-        if (this.postForm.joinType === 2) {
-          this.postForm.quList.forEach(function(item) {
-            const index = item.quType - 1
-            that.quList[index].push(item)
-            that.quEnable[index] = true
-          })
-        }
-
-        if (this.postForm.joinType === 1) {
-          that.repoList = that.postForm.repoList
-        }
+        this.repoList = this.postForm.repoList
       })
     },
 
@@ -486,20 +441,10 @@ export default {
     },
 
     repoChange(e, row) {
-      if (e != null) {
-        // // 去重移除
-        // const index = this.repoList.findIndex((item) => item.repoId === e.id && row.rowId === item.rowId)
-        // console.log('index', index)
-        // if (index != -1) {
-        //   this.$message({
-        //     message: '不能选择重复的题库！',
-        //     type: 'warning'
-        //   })
-        //   // 移除
-        //   this.repoList.splice(index, 1)
-        //   return
-        // }
+      // 赋值ID
+      row.id = e.id
 
+      if (e != null) {
         row.totalRadio = e.radioCount
         row.totalMulti = e.multiCount
         row.totalJudge = e.judgeCount
@@ -513,8 +458,4 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>
 

@@ -38,13 +38,6 @@ public class ExamDTO implements Serializable {
     @ApiModelProperty(value = "1公开2部门3定员", required=true)
     private Integer openType;
 
-    @ApiModelProperty(value = "组题方式1题库,2指定", required=true)
-    private Integer joinType;
-
-    @ApiModelProperty(value = "难度:0不限,1普通,2较难", required=true)
-    private Integer level;
-
-
     @ApiModelProperty(value = "考试状态", required=true)
     private Integer state;
 

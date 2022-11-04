@@ -14,7 +14,7 @@ import lombok.Data;
 * @since 2020-05-25 13:23
 */
 @Data
-@ApiModel(value="题库分页请求类", description="题库分页请求类")
+@ApiModel(value="题库分页响应类", description="题库分页响应类")
 public class RepoRespDTO extends RepoDTO {
 
     private static final long serialVersionUID = 1L;
