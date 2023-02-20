@@ -5,13 +5,13 @@
     :options="options"
     :list-query="listQuery"
   >
-    <template slot="filter-content">
+    <template #filter-content>
 
       <el-input v-model="listQuery.params.title" placeholder="搜索题库名称" style="width: 200px;" class="filter-item" />
 
     </template>
 
-    <template slot="data-columns">
+    <template #data-columns>
 
       <el-table-column
         label="题库名称"

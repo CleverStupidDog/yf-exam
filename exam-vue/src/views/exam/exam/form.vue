@@ -22,7 +22,7 @@
             label="题库"
             width="200"
           >
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <repo-select
                 v-model="scope.row.repoId"
                 :multi="false"
@@ -36,7 +36,7 @@
             align="center"
           >
 
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-input-number v-model="scope.row.radioCount" :min="0" :max="scope.row.totalRadio" :controls="false" style="width: 100px" /> / {{ scope.row.totalRadio }}
             </template>
 
@@ -46,7 +46,7 @@
             label="单选分数"
             align="center"
           >
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-input-number v-model="scope.row.radioScore" :min="0" :controls="false" style="width: 100%" />
             </template>
           </el-table-column>
@@ -56,7 +56,7 @@
             align="center"
           >
 
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-input-number v-model="scope.row.multiCount" :min="0" :max="scope.row.totalMulti" :controls="false" style="width: 100px" /> / {{ scope.row.totalMulti }}
             </template>
 
@@ -66,7 +66,7 @@
             label="多选分数"
             align="center"
           >
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-input-number v-model="scope.row.multiScore" :min="0" :controls="false" style="width: 100%" />
             </template>
           </el-table-column>
@@ -76,7 +76,7 @@
             align="center"
           >
 
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-input-number v-model="scope.row.judgeCount" :min="0" :max="scope.row.totalJudge" :controls="false" style="width: 100px" />  / {{ scope.row.totalJudge }}
             </template>
 
@@ -86,7 +86,7 @@
             label="判断题分数"
             align="center"
           >
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-input-number v-model="scope.row.judgeScore" :min="0" :controls="false" style="width: 100%" />
             </template>
           </el-table-column>
@@ -96,7 +96,7 @@
             align="center"
             width="80px"
           >
-            <template slot-scope="scope">
+            <template v-slot="scope">
               <el-button type="danger" icon="el-icon-delete" circle @click="removeItem(scope.$index)" />
             </template>
           </el-table-column>

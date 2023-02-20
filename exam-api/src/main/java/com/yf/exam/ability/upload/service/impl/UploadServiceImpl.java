@@ -8,6 +8,7 @@ import com.yf.exam.ability.upload.service.UploadService;
 import com.yf.exam.ability.upload.utils.FileUtils;
 import com.yf.exam.core.exception.ServiceException;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.io.FilenameUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
@@ -17,13 +18,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
 /**
  * 文件上传业务类
- * @author bool 
+ * @author bool
  * @date 2019-07-30 21:02
  */
 @Log4j2
@@ -40,6 +43,14 @@ public class UploadServiceImpl implements UploadService {
         // 文件内容
         MultipartFile file = reqDTO.getFile();
 
+        System.out.println("++++后缀："+FilenameUtils.getExtension(file.getOriginalFilename()));
+
+        // 验证文件后缀
+        boolean allow = FilenameUtils.isExtension(file.getOriginalFilename(), conf.getAllowExtensions());
+        if(!allow){
+            throw new ServiceException("文件类型不允许上传！");
+        }
+
         // 上传文件夹
         String fileDir = conf.getDir();
 
@@ -47,6 +58,7 @@ public class UploadServiceImpl implements UploadService {
         String fullPath;
 
         try {
+
             // 新文件
             String filePath = FileUtils.processPath(file);
             // 文件保存地址
@@ -71,6 +83,13 @@ public class UploadServiceImpl implements UploadService {
 
         // 获取真实的文件路径
         String filePath = this.getRealPath(request.getRequestURI());
+
+        // 处理中文问题
+        try {
+            filePath =  URLDecoder.decode(filePath, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
 
         System.out.println("++++完整路径为："+filePath);
 

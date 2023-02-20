@@ -21,6 +21,30 @@ spring:
     max-open-prepared-statements: 1000
     async-init: true
 
+  # 定时任务配置
+  quartz:
+    # 数据库方式
+    job-store-type: jdbc
+    # quartz 相关属性配置
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: examScheduler
+            instanceId: AUTO
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            isClustered: true
+            clusterCheckinInterval: 10000
+            useProperties: false
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            threadCount: 10
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
+
 # 文件上传配置
 conf:
   upload:
@@ -28,7 +52,9 @@ conf:
     dir: /Users/van/Documents/work/upload/
     # 访问地址，注意不要去除/upload/file/，此节点为虚拟标识符
     # 如：http://localhost:8101/upload/file/exam.jpg，对应物理文件为：/data/upload/exam.jpg
-    url: http://localhost:8111/upload/file/
+    url: http://localhost:8201/upload/file/
+    # 允许上传的文件后缀
+    allow-extensions: jpg,jpeg,png
 
 # 开启文档
 swagger:

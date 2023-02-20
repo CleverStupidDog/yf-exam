@@ -6,7 +6,7 @@ spring:
   main:
     allow-bean-definition-overriding: true
 server:
-  port: 8201
+  port: 8101
   # 启用服务端压缩
   compression:
     enabled: true

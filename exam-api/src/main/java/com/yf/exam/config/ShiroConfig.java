@@ -1,5 +1,6 @@
 package com.yf.exam.config;
 
+import com.yf.exam.ability.shiro.CNFilterFactoryBean;
 import com.yf.exam.ability.shiro.ShiroRealm;
 import com.yf.exam.ability.shiro.aop.JwtFilter;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +39,8 @@ public class ShiroConfig {
 	 */
 	@Bean("shiroFilterFactoryBean")
 	public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
-		ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+		ShiroFilterFactoryBean shiroFilterFactoryBean = new CNFilterFactoryBean();
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
-
 		// 拦截器
 		Map<String, String> map = new LinkedHashMap<>();
 

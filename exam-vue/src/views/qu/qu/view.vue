@@ -6,6 +6,9 @@
       <div class="qu-content">
 
         <p>【{{ quData.quType===1?'单选题':'多选题' }}】{{ quData.content }}</p>
+        <p v-if="quData.image!=null && quData.image!=''">
+          <el-image :src="quData.image" style="max-width:80%;" />
+        </p>
         <div v-if="quData.quType === 1">
           <el-radio-group v-model="radioValues" readonly>
             <el-radio v-for="an in quData.answerList" :label="an.id" readonly>{{ an.content }}</el-radio>
