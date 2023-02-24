@@ -92,4 +92,4 @@ QQ交流群：865330294
 ![输入图片说明](https://images.gitee.com/uploads/images/2020/1019/183047_a31619cd_2189748.jpeg "1212.jpg")
 
 # 开源版&商业版对比
-![输入图片说明](%E8%80%83%E8%AF%95%E7%B3%BB%E7%BB%9F%E5%BC%80%E6%BA%90%E7%89%88%E4%B8%8E%E5%95%86%E4%B8%9A%E7%89%88%E5%AF%B9%E6%AF%94.png)
+![输入图片说明](https://cdn.yfhl.net/lite/compare1.png)

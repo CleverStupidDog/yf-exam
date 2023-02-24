@@ -42,7 +42,7 @@
         </el-form-item>
 
         <el-form-item label="试题图片">
-          <file-upload v-model="postForm.image" />
+          <file-upload v-model="postForm.image" accept=".jpg,.jepg,.png" />
         </el-form-item>
 
         <el-form-item label="整题解析" prop="oriPrice">
@@ -85,6 +85,7 @@
 
               <file-upload
                 v-model="scope.row.image"
+                accept=".jpg,.jepg,.png"
               />
 
             </template>
