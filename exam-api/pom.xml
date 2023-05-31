@@ -26,7 +26,7 @@
         <thymeleaf.version>3.0.11.RELEASE</thymeleaf.version>
         <alicloud.version>2.1.1.RELEASE</alicloud.version>
         <poi.version>3.9</poi.version>
-        <log4j2.version>2.16.0</log4j2.version>
+        <log4j2.version>2.17.2</log4j2.version>
     </properties>
 
 
